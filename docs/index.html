@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Advanced JSON Editor Example</title>
+    <link href="jquery/jquery-ui.css" rel="stylesheet">
+    <!-- Bootstrap Core CSS -->
+     <link href="css/bootstrap.min.css" rel="stylesheet">
+     <!-- Font-Awesome CSS -->
+     <link href="css/font-awesome.min.css" rel="stylesheet">
+     <!-- ACE Editor -->
+     <script src="ace/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+     <script src="jquery/external/jquery/jquery.js" type="text/javascript"></script>
+
+     <script src="js/arrayhash.js"></script>
+	   <script src="js/bootstrap.js"></script>
+
+     <script src="js/arrayhash.js"></script>
+     <script src="js/filesaver.js"></script>
+     <script src="js/localstorage.js"></script>
+     <script src="js/jsoneditor.min.js"></script>
+    <script>
+	var vDataJSON = {};
+    var vFileBase = "class";
+
+     // Set the default CSS theme and icon library globally
+    JSONEditor.defaults.theme = 'bootstrap3';
+    JSONEditor.defaults.iconlib = 'fontawesome4';
+    JSONEditor.plugins.ace.theme = 'xcode';
+
+    function saveFile2HDD(pFilename,pContent) {
+      var file = new File([pContent], {type: "text/plain;charset=utf-8"});
+      saveAs(file,pFilename);
+    }
+
+function saver4JSON(pFile) {
+    var vFile = pFile || vFileBase+".json";
+    exporter4JSON();
+    alert("File: '"+vFile+"' saved!");
+}
+
+function exporter4JSON(pFile) {
+     var vFile = pFile || vFileBase+".json"
+     // Get the value from the editor
+     var vJSON = editor.getValue();
+     var vContent = JSON.stringify(vJSON,null,4);
+    saveFile2HDD(vFile,vContent)
+            console.log("JSON output '"+vFile+"':\n"+vContent);
+};
+
+function exportJavasript() {
+    alert("Export Javascript");
+};
+
+function loader4JSON(pFileID4DOM) {
+     	var fileToLoad = document.getElementById(pFileID4DOM).files[0]; //for input type=file
+     	if (fileToLoad) {
+     		console.log("loader4JSON() - File '"+fileToLoad.name+"' exists.");
+     		$('#load_filename').html(fileToLoad.name); // this.value.replace(/.*[\/\\]/, '')
+     		var fileReader = new FileReader();
+     		// set the onload handler
+     		fileReader.onload = function(fileLoadedEvent){
+     				var vTextFromFileLoaded = fileLoadedEvent.target.result;
+     				//document.getElementById("inputTextToSave").value = textFromFileLoaded;
+     				//alert("textFromFileLoaded="+textFromFileLoaded);
+            try {
+              editor.setValue(JSON.parse(vTextFromFileLoaded));
+              alert("File JSON '"+fileToLoad.name+"' loaded successfully!");
+            } catch(e) {
+              editor.setValue([]); // Init with an empty class
+              alert(e); // error in the above string (in this case, yes)!
+            };
+     			};
+     		//onload handler set now start loading the file
+     		fileReader.readAsText(fileToLoad, "UTF-8");
+     	} else {
+     		alert("File is missing");
+     	};
+     	saveLS(fileToLoad.name);
+    };
+
+    </script>
+    <script src="schema/class_schema.js"></script>
+  </head>
+  <body  style="margin:20px">
+  	<div>
+    	<h1>UML Class Editor - JSON</h1>
+
+  <div data-role="fieldcontain" style="display:none">
+         <input type="file" id="fileJSON" name="fileJSON" value="Select JSON File" id="fileJSON" onchange="loader4JSON(this.id)"/>
+    </div>
+
+  	<div id="divNavigate"  align="center">
+    <!-- the button vOpenJSON generates an onclick event for the fileJSON input file element in the DOM -->
+ 	 	<button id='bOpenJSON' style="color: white;background-color: #225988"  onclick="$( '#fileJSON' ).trigger('click');return false">
+			<i class="fa fa-folder-open-o" aria-hidden="true"></i> Load
+		</button>
+    <button id='bSaveJSON' style="color: white;background-color: #225988"  onclick="saver4JSON();return false">
+			<i class="fa fa-floppy-o" aria-hidden="true"></i> Save
+		</button>
+    <button id='bExportHTML' style="color: white;background-color: #225988"  onclick="exportJavascript();return false">
+			<i class="fa fa-floppy-o" aria-hidden="true"></i> Save JS
+	</button>
+    &nbsp;
+		&nbsp;
+    <b>File: </b>  <tt id="load_filename">class.json</tt>
+		&nbsp;
+		&nbsp;
+		<button id='bAddRecord' style="color: white;background-color: #225988"  onclick="vEditor4JSON.add();return false">
+			<i class="fa fa-plus-square" aria-hidden="true"></i> Add
+		</button>
+		<button id='bDeleteRecord' style="color: white;background-color: #c10303"  onclick="vEditor4JSON.deleteAsk();return false">
+			<i class="fa fa-minus-square" aria-hidden="true"></i> Delete
+		</button>
+    <button id='bInitDB' style="color: white;background-color: #c10303"  onclick="vEditor4JSON.initAsk();return false">
+      <i class="fa fa-minus-square" aria-hidden="true"></i> Init DB
+    </button>
+
+    <span id='valid_indicator'></span>
+	</div>
+	<!-- BEGIN of JSON Editor -->
+    <div id='editor_holder' style="margin:20px"></div>
+	<!-- END of JSON Editor -->
+    <button id='restore' style="display:none">Restore to Default</button>
+    <button id='enable_disable' style="display:none">Disable/Enable Form</button>
+    <button id='submit' style="display:none">Submit (console.log)</button>
+    <button id='bExportJSON'>Export JSON</button>
+    <button id='bExportSchemaJSON'>Export JSON Schema</button>
+
+    <script>
+
+      // This is the starting value for the editor
+      // We will use this to seed the initial editor
+      // and to provide a "Restore to Default" button.
+      var starting_value = [
+       ];
+
+      // Initialize the editor
+      var editor = new JSONEditor(document.getElementById('editor_holder'),{
+        // Enable fetching schemas via ajax
+        ajax: true,
+
+        // The schema for the editor
+        schema: vDataJSON["class_schema"],
+
+        // Seed the form with a starting value
+        //startval: starting_value,
+
+        // Disable additional properties
+        no_additional_properties: true,
+
+        // Require all properties by default
+        required_by_default: true
+      });
+
+      // Hook up the submit button to log to the console
+      document.getElementById('submit').addEventListener('click',function() {
+        // Get the value from the editor
+        var vContent = JSON.stringify(editor.getValue(),null,4);
+        console.log("JSON Data:\n"+vContent);
+      });
+
+      // Hook up the Restore to Default button
+      document.getElementById('restore').addEventListener('click',function() {
+        editor.setValue(starting_value);
+      });
+
+      // Hook up the enable/disable button
+      document.getElementById('enable_disable').addEventListener('click',function() {
+        // Enable form
+        if(!editor.isEnabled()) {
+          editor.enable();
+        }
+        // Disable form
+        else {
+          editor.disable();
+        }
+      });
+
+      // Hook up the validation indicator to update its
+      // status whenever the editor changes
+      editor.on('change',function() {
+        // Get an array of errors from the validator
+        var errors = editor.validate();
+
+        var indicator = document.getElementById('valid_indicator');
+
+        // Not valid
+        if(errors.length) {
+          indicator.style.color = 'red';
+          indicator.textContent = "not valid";
+        }
+        // Valid
+        else {
+          indicator.style.color = 'green';
+          indicator.textContent = "valid";
+        }
+      });
+    </script>
+
+
+        <script>
+          // Hook up the submit button to export JSON
+          document.getElementById('bExportJSON').addEventListener('click',exporter4JSON);
+          document.getElementById('bExportJSON').addEventListener('click',exporter4JSON);
+          // Hook up the submit button to export JSON Schema
+          document.getElementById('bExportSchemaJSON').addEventListener('click',function() {
+            // Get the value from the editor
+            console.log("BEFORE editor.schema:\n"+JSON.stringify(editor.schema,null,4));
+            var vJSON = editor.schema;
+            var vContent = JSON.stringify(vJSON,null,4);
+            var vFile = vFileBase+"_schema.json";
+            console.log("JSON Schema output '"+vFile+"':\n"+vContent);
+            saveFile2HDD(vFile,vContent);
+          });
+        </script>
+
+  </body>
+</html>
