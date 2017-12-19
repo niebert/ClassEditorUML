@@ -1,12 +1,17 @@
 vDataJSON["class_schema"] = {
     "type": "object",
     "title": "Class: MyClass",
-    "headerTemplate": "Class: {{self.name}}",
+    "headerTemplate": "Class: {{self.classname}}",
     "properties": {
-        "name": {
-            "title": "Name:",
-            "type": "string",
-            "default": "MyClass"
+        "classname": {
+          "title": "Class:",
+          "type": "string",
+          "default": "MyClass"
+        },
+        "superclass": {
+          "title": "Super Class",
+          "$ref": "#/definitions/selectclass",
+          "default": ""
         },
         "comment": {
             "title": "Comment:",

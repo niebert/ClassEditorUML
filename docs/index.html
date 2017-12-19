@@ -17,6 +17,7 @@
 
      <script src="js/arrayhash.js"></script>
      <script src="js/filesaver.js"></script>
+     <script src="js/linkparam.js"></script>
      <script src="js/localstorage.js"></script>
      <script src="js/jsoneditor.min.js"></script>
     <script>
@@ -126,6 +127,218 @@ function loader4JSON(pFileID4DOM) {
     <button id='submit' style="display:none">Submit (console.log)</button>
     <button id='bExportJSON'>Export JSON</button>
     <button id='bExportSchemaJSON'>Export JSON Schema</button>
+    <button id='bTemplate' onclick="$('#divTemplates').toggle()">Templates</button>
+
+    <div id="divTemplates" style="display:none">
+      <b>Class Header</b> <tt>[tClassHeader]</tt><br>
+        <textarea id="tClassHeader" name="tClassHeader" cols="125" rows="10">//#################################################################
+    //# Javascript Class: {{classname}}()
+    //#       SuperClass: {{superclass}}
+    //#   Class Filename: {{filename}}
+    //#
+    //# Author of Class:      {{author}}
+    //# email:                {{email}}
+    //# Created:              {{date}}
+    //# Date of Version:      {{moddate}}
+    //# GNU Public License V3 - OpenSource
+    //#
+    //# created with JavaScript Class Creator JSCC
+    //#     https://niebert.github.io/JavascriptClassGenerator
+    //#################################################################
+
+    //---------------------------------------------------------------------
+    //---Store File in Subdirectory /js and import this Class in HTML-File with
+    // SCRIPT-Tag:  LANGUAGE="JavaScript" SRC="js/{{filename}}"
+    //---------------------------------------------------------------------
+    //---Constructor of Class {{classname}}()
+    // Call the constructor for creating an instance of class {{classname}}
+    // by the following command in HTML-file that imports this class
+    // var vMyInstance = new {{classname}}();
+    //---------------------------------------------------------------------
+    //----Attributes-------------------------------------------------------
+    //---------------------------------------------------------------------
+    // If you want to access the attributes of {{classname}}, use
+    // the attribute name with a leading "this." in the definition of attribute of class {{classname}}, e.g.
+    // this.aName = "Hello World";
+    //---------------------------------------------------------------------
+    //----Methods----------------------------------------------------------
+    //---------------------------------------------------------------------
+    // (1) If you want to assign definitions of methods for single instance of the class '{{classname}}'
+    // they are defined with
+    //    this.my_method = function (pPar1,pPar2)
+    // this approach allows to overwrite the method definition of single instances dynamically.
+    //---------------------------------------------------------------------
+    // (2) A prototype definition of methods for '{{name}}' will be set by
+    // use the method's name and extend it with '{{name}}'.
+    //    {{name}}.prototype.my_method = function (pPar1,pPar2)
+    // This approach consumes less memory for instances.
+    //---------------------------------------------------------------------
+
+    {{superclassprototype}}
+
+    function {{name}} () {
+        //---------------------------------------------------------------------
+        //---Attributes of Class "{{classname}}()"
+        //---------------------------------------------------------------------
+{{{attributes}}}
+        //---------------------------------------------------------------------
+        //---Methods of Class "{{classname}}()"
+        //---------------------------------------------------------------------
+{{{methodlist}}}
+{{{methofprivate}}}
+    }
+    //-------------------------------------------------------------------------
+    //---END Constructor of Class "{{classname}}()"
+    //-------------------------------------------------------------------------
+
+{{{methodsprototype}}}
+        </textarea>
+        <hr>
+        <b>Attribute Definition</b> <tt>[tTplAttribute]</tt> Prefix: <tt>this.</tt> or <tt>var</tt><br>
+        <textarea id="tTplAttribute" name="tTplAttribute" cols="125" rows="2">
+    //---{{visibility}}: {{name}} ({{class}}): {{comment}}
+    {{defprefix}}{{name}} = {{init}};
+    </textarea>
+        <hr>
+          <b>Method Constructor Comment</b> <tt>[tTplMethodConstructorComment]</tt><br>
+            <textarea id="tTplMethodConstructorComment" name="tTplMethodConstructorComment" cols="125" rows="4">
+    //----{{visibility}} Method: {{classname}}.{{name}}-----
+    // {{name}}({{paramcall}})  {{return}}
+    // {{comment}}
+    </textarea>
+        <hr>
+        <b>Methods Head Comment</b> <tt>[tTplMethodsHeadComment]</tt><br>
+    <textarea id="tTplMethodsHeadComment" name="tTplMethodsHeadComment" cols="125" rows="3">
+
+    //---------------------------------------------------------------------
+    //---{{classname}}: Methods of Class "{{classname}}()"
+    //---------------------------------------------------------------------
+    </textarea>
+    <hr>
+    <b>Method Prefix:</b>  <tt>[tMethodPrefix]</tt> <input type="text" id="tMethodPrefix" name="tMethodPrefix" value="this." size="7">
+    <b>Prototype Method Prefix:</b> <tt>[tMethodPrefixProto]</tt> <input type="text" id="tMethodPrefixProto" name="tMethodPrefixProto" value="{{name}}.prototype." size="28">
+      <hr>
+      <b>Inherit from SuperClass (Prototype definition)</b> <tt>[tTplSuperClassProto]</tt><br>
+    <textarea id="tTplSuperClassProto" name="tTplSuperClassProto" cols="125" rows="3">//--------------------------------------
+    //---Super Class------------------------
+    // Inheritance: '{{classname}}' inherits from '{{superclass}}'
+    {{classname}}.prototype = new {{superclass}}();
+    // Constructor for instances of {{classname}} has to updated.
+    // Otherwise constructor of {{superclass}} is called
+    {{classname}}.prototype.constructor={{classname}};
+    // see http://phrogz.net/js/classes/OOPinJS2.html for explanation
+    //--------------------------------------
+    </textarea>
+
+    <hr>
+    <b>Inherit from SuperClass</b>  <tt>[tTplSuperClass]</tt><br>
+       <textarea id="tTplSuperClass" name="tTplSuperClass" cols="125" rows="3">
+
+        //--------------------------------------
+        //---Super Class------------------------
+        this.SuperClass = {{superclass}};
+        this.SuperClass();
+        //--------------------------------------
+      </textarea>
+    <hr>
+    <b>Class Tail</b>  <tt>[tTplClassTail]</tt><br>
+      <textarea id="tTplClassTail" name="tTplClassTail" cols="125" rows="3">
+
+    //-------------------------------------------
+    //---End Definition of Class-----------------
+    // JS Class: {{classname}}
+    //-------------------------------------------
+    </textarea>
+    <hr>
+      <b>Method Header</b> <tt>[tTplMethodHeader]</tt><br>
+        <textarea id="tTplMethodHeader" name="tTplMethodHeader" cols="125" rows="10">
+
+    //#################################################################
+    //# {{visibility}} Method: {{name}}()
+    //#    used in Class: {{classname}}
+    //# Parameter:
+    //#    {{parameterlist}}}
+    //# Comment:
+    //#    {{{comment}}}
+    //# {{{returncomment}}}
+    //# created with JSCC  {{date}}
+    //# last modifications {{moddate}}
+    //#################################################################
+
+    {{classname}}.prototype.{{name}} = function ({{paramcall}}) {
+      //----Debugging------------------------------------------
+      // console.log("{{filename}} - Call: {{name}}({{paramcall}})");
+      // alert("{{filename}} - Call: {{name}}({{paramcall}})");
+      //----Create Object/Instance of {{name}}----
+      //    var vMyInstance = new {{name}}();
+      //    vMyInstance.{{name}}({{paramcall}});
+      //-------------------------------------------------------
+
+    {{code}}
+
+    };
+    //----End of Method {{name}} Definition
+
+    </textarea>
+    <hr>
+      <b>Method Private</b> <tt>[tTplMethodPrivate]</tt><br>
+        <textarea id="tTplMethodPrivate" name="tTplMethodPrivate" cols="125" rows="10">
+
+    //#################################################################
+    //# {{visibility}} Method: {{name}}()
+    //#    used in Class: {{classname}}
+    //# Parameter:
+    //#    {{parameterlist}}}
+    //# Comment:
+    //#    {{{comment}}}
+    //# {{{returncomment}}}
+    //# created with JSCC  {{date}}
+    //# last modifications {{moddate}}
+    //#################################################################
+
+    function {{name}}({{paramcall}} {
+      //----Debugging------------------------------------------
+      // console.log("{{visibility}}: {{filename}} - Call: {{name}}({{paramcall}})");
+      // alert("{{filename}} - Call: {{name}}({{paramcall}})");
+      //-------------------------------------------------------
+
+    {{code}}
+
+    };
+    //----End of Private Method {{name}} Definition
+
+    </textarea>
+    <hr>
+      <b>Method Private</b> <tt>[tTplMethodPublic]</tt><br>
+        <textarea id="tTplMethodPublic" name="tTplMethodPublic" cols="125" rows="10">
+
+    //#################################################################
+    //# ___METHODACCESS___ Method: {{name}}()
+    //#    used in Class: {{name}}
+    //# Parameter:
+    //#    ___PARAMETERDEF___
+    //# Comment:
+    //#    ___METHODCOMMENT___
+    //# ___RETURNCOMMENT___
+    //# created with JSCC  ___DATE___
+    //# last modifications {{moddate}}
+    //#################################################################
+
+    this.{{name}} = function (___METHODPARAMETERS___) {
+      //----Debugging------------------------------------------
+      // The following alert-Command is useful for debugging
+      //alert("{{filename}} - Call: ___METHODDEF___")
+      //-------------------------------------------------------
+
+    {{code}}
+
+    };
+    //----End of {{visibility}} Method {{name}} Definition
+
+    </textarea>
+    <hr>
+
+    </div>
 
     <script>
 
@@ -134,7 +347,19 @@ function loader4JSON(pFileID4DOM) {
       // and to provide a "Restore to Default" button.
       var starting_value = [
        ];
-
+       //-------------------------------------------------------
+       // LINK PARAMETER: Evaluation link parameter in JSON Path
+       var vLinkParam = new LinkParam();
+       vLinkParam.init(document);
+       if (vLinkParam.exists("jsondata")) {
+         vParamData = vLinkParam.getValue("jsondata");
+         try {
+           starting_value = JSON.parse(vParamData);
+         } catch (e) {
+           alert("ERROR (JSON): "+e);
+           starting_value = null;
+         };
+       };
       // Initialize the editor
       var editor = new JSONEditor(document.getElementById('editor_holder'),{
         // Enable fetching schemas via ajax
@@ -144,7 +369,7 @@ function loader4JSON(pFileID4DOM) {
         schema: vDataJSON["class_schema"],
 
         // Seed the form with a starting value
-        //startval: starting_value,
+        startval: starting_value,
 
         // Disable additional properties
         no_additional_properties: true,
@@ -213,6 +438,7 @@ function loader4JSON(pFileID4DOM) {
             console.log("JSON Schema output '"+vFile+"':\n"+vContent);
             saveFile2HDD(vFile,vContent);
           });
+
         </script>
 
   </body>
