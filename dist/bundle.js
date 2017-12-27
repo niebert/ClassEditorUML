@@ -1,1 +1,0 @@
-console.error("Error: Cannot find module 'filesaver' from '/Users/niehaus/Nextcloud/Javascript/WebApp/ClassEditorUML/src'");
