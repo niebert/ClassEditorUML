@@ -3,7 +3,7 @@ vJSCC_DB['ClassList']['Generator4JSON'] = {
     "JSCC_init_date": "22.12.2017",
     "JSCC_mod_date": "2017/12/22 11:23:00",
     "tClassname": "Generator4JSON",
-    "tSuperClassname": "Editor4JSON",
+    "tSuperClassname": "JSONEditor",
     "sClassType": "Default",
     "tAuthor": "Engelbert Niehaus",
     "tEMail": "niehaus@uni-landau.de",
@@ -40,23 +40,23 @@ vJSCC_DB['ClassList']['Generator4JSON'] = {
     },
     "MethodParameter": {
         "setTemplate": "pBase:String,pLoop:String",
-        "compile": "pArray:Array"
+        "compileArray": "pArray:Array"
     },
     "MethodReturn": {
         "setTemplate": "",
-        "compile": "String"
+        "compileArray": "String"
     },
     "MethodCode": {
         "setTemplate": "",
-        "compile": ""
+        "compileArray": ""
     },
     "MethodComment": {
         "setTemplate": "Comment for setTemplate",
-        "compile": "Comment for compile"
+        "compileArray": "Comment for compile"
     },
     "MethodAccess": {
         "setTemplate": "public",
-        "compile": "public"
+        "compileArray": "public"
     },
     "sClassList": "Generator4JSON",
     "JSCC_version": "1"

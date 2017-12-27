@@ -14,30 +14,35 @@ Browserify and Watchify are used in this repository to control the WebApp-javasc
 * [Youtube Video about Browserify and Watchify by Kyle Robinson Young 2015/04/16](https://www.youtube.com/watch?v=CTAa8IcQh1U)
 In this repository Browserify and Watchify are used for javascript code development with [NPM Node.js](https://docs.npmjs.com/getting-started/installing-node).
 
-### Global Installation of Browserify and Watchify
-Requirement: [NPM](https://docs.npmjs.com/getting-started/installing-node) is intalled. Now call for global installation of Browserfy and Watchify by:
+### Global Installation of Browserify, Watchify and UglifyJS
+Requirement: [NPM](https://docs.npmjs.com/getting-started/installing-node) is intalled. Now call for global installation of Browserfy, Watchify and UglifyJS by:
 
-___npm install -g browserify watchify___
+___npm install -g browserify watchify uglify-js___
 
-This is recommended because your will not install Browserfy and Watchify for all your repositories separately.
+This is recommended because your will not install Browserfy, Watchify and UglifyJS for all your repositories separately.
+* ***Browserfy*** converts ___node_modules___ in a single library, that can be imported in WebApp. Browserify resolves dependencies and included the required libraries into the bundled javascript code.
+* ***Watchify*** watches changes in the source code and runs the build process whenever it detects changes in the your source code.
+* ***UglifyJS*** compresses the source code of ```class_editor_uml.js``` into ```class_editor_uml.min.js``` to reduce download time and WebApp performance during load.
 
 ### Package Installation of Browserify and Watchify - Alternative
 If your prefer that  browserify and watchify is installed with your ___npm install___ command, save these to modules to your dev-dependecies in your ___package.json___ by calling
 
 * (Install Browsersify) ___npm install browserify --save-dev___
 * (Install Watchify) ___npm install watchify --save-dev___
+* (Install UglifyJS) ___npm install uglify-js --save-dev___
 
 The difference between ___--save___ and ___--save-dev___ is, that development dependencies are installed with ___npm install___ because they are required for the development process of the code but they are not added to the generated Javascript-bundle that are used in the WebApp ClassEditorUML. The ___--save-dev___ commands for ___browserify___ and ___watchify___ will install the two modules with all the the dependencies in ___node_modules___ and add the dev-dependencies to your ___package.json___.
 ```json
 "devDependencies": {
   "browserify": "^14.5.0",
-  "watchify": "^3.9.0"
+  "watchify": "^3.9.0",
+  "uglify-js": "^2.6.2"
 }
 ```
 In the current repository Browserfy and Watchify are expected to be installed globally, because the ___package.json___ does not contain the dev-dependencies mentioned above.
 
 ### Start Watching the Files with Watchify
-Watchify will trigger the ___npm run build___ process if files were change due to alteration of code. To start watching the files, run the npm-watch script by ___npm run watch___, which is defined in ___package.json___ 
+Watchify will trigger the ___npm run build___ process if files were change due to alteration of code. To start watching the files, run the npm-watch script by ___npm run watch___, which is defined in ___package.json___
 
 ## Main Library for Handling the JSON Database
 

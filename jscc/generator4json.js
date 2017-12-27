@@ -43,8 +43,8 @@
 
 //--------------------------------------
 //---Super Class------------------------
-// Inheritance: 'Generator4JSON' inherits from 'Editor4JSON'
-Generator4JSON.prototype = new Editor4JSON();
+// Inheritance: 'Generator4JSON' inherits from 'JSONEditor'
+Generator4JSON.prototype = new JSONEditor();
 // Constructor for instances of Generator4JSON has to updated.
 // Otherwise constructor of Editor4JSON is called
 Generator4JSON.prototype.constructor=Generator4JSON;
@@ -62,12 +62,12 @@ function Generator4JSON () {
     //---Methods of Class "Generator4JSON()"
     //---------------------------------------------------------------------
 	//----PUBLIC Method: Generator4JSON.setTemplate(pBase:String,pLoop:String)-----
-	// setTemplate(pBase,pLoop)  
+	// setTemplate(pBase,pLoop)
 	//	Comment for setTemplate
 	//----PUBLIC Method: Generator4JSON.compile(pArray:Array):String-----
 	// compile(pArray)  Return: String
 	//	Comment for compile
-	
+
 
 
 }
@@ -84,7 +84,7 @@ function Generator4JSON () {
 //#    pLoop:String
 //# Comment:
 //#    Comment for setTemplate
-//# 
+//#
 //# created with JSCC  2017/03/05 18:13:28
 //# last modifications 2017/12/22 11:20:10
 //#################################################################
@@ -105,24 +105,24 @@ Generator4JSON.prototype.setTemplate = function (pBase,pLoop) {
 
 
 //#################################################################
-//# PUBLIC Method: compile()
+//# PUBLIC Method: compileArray()
 //#    used in Class: Generator4JSON
 //# Parameter:
 //#    pArray:Array
 //# Comment:
-//#    Comment for compile
+//#    Comment for compileArray
 //# Return: String
 //# created with JSCC  2017/03/05 18:13:28
 //# last modifications 2017/12/22 11:20:10
 //#################################################################
 
-Generator4JSON.prototype.compile = function (pArray) {
+Generator4JSON.prototype.compileArray = function (pArray) {
   //----Debugging------------------------------------------
-  // console.log("js/generator4json.js - Call: compile(pArray:Array):String");
+  // console.log("js/generator4json.js - Call: compileArray(pArray:Array):String");
   // alert("js/generator4json.js - Call: compile(pArray:Array):String");
   //----Create Object/Instance of Generator4JSON----
   //    var vMyInstance = new Generator4JSON();
-  //    vMyInstance.compile(pArray);
+  //    vMyInstance.compileArray(pArray);
   //-------------------------------------------------------
 
   //----------- INSERT YOUR CODE HERE ---------------
@@ -131,7 +131,7 @@ Generator4JSON.prototype.compile = function (pArray) {
 //----End of Method compile Definition
 
 
-    
+
 //-------------------------------------------
 //---End Definition of Class-----------------
 // JS Class: Generator4JSON

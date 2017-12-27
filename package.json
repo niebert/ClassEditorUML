@@ -7,8 +7,10 @@
     "doc": "docs"
   },
   "scripts": {
-    "build": "browseriy",
-    "test": "firefox docs/index.html"
+    "watch": "watchify src/main.js -o dist/bundle.js -v",
+    "build": "browserify src/main.js  | uglifyjs -mc warnings=false > dist/bundle.js",
+    "test": "firefox docs/index.html",
+    "compress": "uglifyjs dist/class_editor_uml.js --compress -o docs/js/class_editor_uml.min.js"
   },
   "repository": {
     "type": "git",
