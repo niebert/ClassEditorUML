@@ -39,7 +39,7 @@ This is recommended because your will not install Browserfy, Watchify and Uglify
 * ***Browserfy*** converts `node_modules` in a single library, that can be imported in WebApp. Browserify resolves dependencies and included the required libraries into the bundled javascript code.
 * ***Watchify*** watches changes in the source code and runs the build process whenever it detects changes in the your source code.
 * ***UglifyJS*** compresses the source code of ```class_editor_uml.js``` into ```class_editor_uml.min.js``` to reduce download time and WebApp performance during load.
-* ***DocToc*** is used to create a helpful table of contents in the README (see [DocToc-Installation]https://github.com/thlorenz/doctoc#installation) for further details on [NPM DocToc](https://www.npmjs.com/package/doctoc) ). Run `doctoc README.md` for updating the table of contents. 
+* ***DocToc*** is used to create a helpful table of contents in the README (see [DocToc-Installation]https://github.com/thlorenz/doctoc#installation) for further details on [NPM DocToc](https://www.npmjs.com/package/doctoc) ). Run `doctoc README.md` for updating the table of contents.
 
 ### Package Installation of Browserify and Watchify - Alternative
 If your prefer that  browserify and watchify is installed with your `npm install` command, save these to modules to your dev-dependecies in your `package.json` by calling
@@ -55,10 +55,11 @@ The difference between `--save` and `--save-dev` is, that development dependenci
   "browserify": "^14.5.0",
   "watchify": "^3.9.0",
   "uglify-js": "^2.6.2",
-  "doctoc":"^1.3.0"
+  "doctoc":"^1.3.0",
+  "lint": "^1.1.2"  
 }
 ```
-In the current repository Browserfy and Watchify are expected to be installed globally, because the `package.json` does not contain the dev-dependencies mentioned above.
+In the current repository `Browserfy` and `Watchify` are expected to be installed globally, because the `package.json` does not contain the dev-dependencies mentioned above.
 
 ### Start Watching the Files with Watchify
 Watchify will trigger the `npm run build` process if files were change due to alteration of code. To start watching the files, run the npm-watch script by `npm run watch`, which is defined in `package.json`
