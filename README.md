@@ -40,6 +40,7 @@ This is recommended because your will not install Browserfy, Watchify and Uglify
 * ***Watchify*** watches changes in the source code and runs the build process whenever it detects changes in the your source code.
 * ***UglifyJS*** compresses the source code of ```class_editor_uml.js``` into ```class_editor_uml.min.js``` to reduce download time and WebApp performance during load.
 * ***DocToc*** is used to create a helpful table of contents in the README (see [DocToc-Installation]https://github.com/thlorenz/doctoc#installation) for further details on [NPM DocToc](https://www.npmjs.com/package/doctoc) ). Run `doctoc README.md` for updating the table of contents.
+* ***jsLint*** is used to check the Javascript code, quality of code can be improved by application of jsLint
 
 ### Package Installation of Browserify and Watchify - Alternative
 If your prefer that  browserify and watchify is installed with your `npm install` command, save these to modules to your dev-dependecies in your `package.json` by calling
@@ -48,6 +49,7 @@ If your prefer that  browserify and watchify is installed with your `npm install
 * (Install Watchify) `npm install watchify --save-dev`
 * (Install UglifyJS) `npm install uglify-js --save-dev`
 * (Install DocToc) `npm install doctoc --save-dev`
+* (Install jslint) `npm install node-lint --save-dev`
 
 The difference between `--save` and `--save-dev` is, that development dependencies are installed with `npm install` because they are required for the development process of the code but they are not added to the generated Javascript-bundle that are used in the WebApp ClassEditorUML. The `--save-dev` commands for `browserify` and `watchify` will install the two modules with all the the dependencies in `node_modules` and add the dev-dependencies to your `package.json`.
 ```json
