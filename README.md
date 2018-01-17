@@ -38,7 +38,7 @@ Requirement: [NPM](https://docs.npmjs.com/getting-started/installing-node) is in
 This is recommended because your will not install Browserfy, Watchify and UglifyJS for all your repositories separately.
 * ***Browserfy*** converts `node_modules` in a single library, that can be imported in WebApp. Browserify resolves dependencies and included the required libraries into the bundled javascript code.
 * ***Watchify*** watches changes in the source code and runs the build process whenever it detects changes in the your source code.
-* ***UglifyJS*** compresses the source code of ```class_editor_uml.js``` into ```class_editor_uml.min.js``` to reduce download time and WebApp performance during load.
+* ***UglifyJS*** compresses the source code of `dist/class_editor_uml.js` into ```class_editor_uml.min.js``` to reduce download time and WebApp performance during load.
 * ***DocToc*** is used to create a helpful table of contents in the README (see [DocToc-Installation]https://github.com/thlorenz/doctoc#installation) for further details on [NPM DocToc](https://www.npmjs.com/package/doctoc) ). Run `doctoc README.md` for updating the table of contents.
 * ***jsLint*** is used to check the Javascript code, quality of code can be improved by application of jsLint
 
@@ -65,6 +65,13 @@ In the current repository `Browserfy` and `Watchify` are expected to be installe
 
 ### Start Watching the Files with Watchify
 Watchify will trigger the `npm run build` process if files were change due to alteration of code. To start watching the files, run the npm-watch script by `npm run watch`, which is defined in `package.json`
+
+## Source JS file and development bundle output
+The main JS source file for the build process is `src/main.js`. The ouput library (resp. output file of build process) is stored in distrubtion library for browser based web-development in `dist/bundle.js`. Compressed code is generated with `UglifyJS`. It takes the `dist/bundle.js` as input file and creates the compressed file `dist/bundle.min.js`.
+The compression of `dist/bundle.js` into `dist/bundle.min.js` can be started by
+
+  `npm run compress`
+
 
 ## Main Library for Handling the JSON Database
 
