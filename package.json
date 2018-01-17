@@ -17,7 +17,7 @@
     "watch": "watchify src/main.js -o dist/class_editor_uml.js -v",
     "build": "browserify src/main.js  | uglifyjs -mc warnings=false > dist/class_editor_uml.min.js",
     "test": "node-lint dist/class_editor_uml.js",
-    "compress": "uglifyjs dist/class_editor_uml.js --compress -o docs/js/class_editor_uml.min.js"
+    "compress": "uglifyjs dist/class_editor_uml.js --compress -o dist/class_editor_uml.min.js"
   },
   "repository": {
     "type": "git",
