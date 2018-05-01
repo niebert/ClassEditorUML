@@ -1,3 +1,7 @@
-require("../docs/js/jsoneditor.js");
-require("../jscc/generator4json.js");
-require("filesaver");
+// ToDo Check Export principles of Libraries
+module.exports = {
+  require("jquery");
+  require("blob");
+  require("filesaver");
+  require("linkparam");
+}

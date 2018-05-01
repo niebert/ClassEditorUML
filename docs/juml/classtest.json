@@ -1,0 +1,66 @@
+{
+    "classname": "MyClass",
+    "superclassname": "LinkParam",
+    "reposinfo": {
+        "require_classes": "yes",
+        "author": "My Name",
+        "email": "name@example.com",
+        "created": "23.4.2018",
+        "modified": "23.4.2018"
+    },
+    "comment": "What does the class do?",
+    "attributes": [
+        {
+            "visibility": "public",
+            "name": "aMyAttrib",
+            "init": "0.0",
+            "class": "Float",
+            "comment": "What do you stored in this attribute?"
+        },
+        {
+            "visibility": "public",
+            "name": "aMyAttrib2",
+            "init": "{}",
+            "class": "Hash",
+            "comment": "What do you stored in this attribute?"
+        }
+    ],
+    "methods": [
+        {
+            "visibility": "public",
+            "name": "myMethod",
+            "parameter": [
+                {
+                    "name": "pVar1",
+                    "class": "String",
+                    "comment": "What is stored in the parameter pVar1?"
+                },
+                {
+                    "name": "pVar2",
+                    "class": "RegularExp",
+                    "comment": "REG Line\nEX Line\nWhat do you stored in this parameter?"
+                }
+            ],
+            "return": "Boolean",
+            "comment": "What kind of process does this method perform?",
+            "code": "pVar2 = pVar1 + pVar2;"
+        }
+    ],
+    "repository": "https://www.github.com/author/MyClass",
+    "classlist": [
+        "",
+        "App ",
+        "AppAbstract ",
+        "Array",
+        "Boolean",
+        "Document",
+        "Float",
+        "Function",
+        "Hash",
+        "Integer",
+        "LinkParam ",
+        "Object",
+        "RegularExp",
+        "String"
+    ]
+}

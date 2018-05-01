@@ -16,12 +16,16 @@
 	   <script src="js/bootstrap.js"></script>
 
      <script src="js/arrayhash.js"></script>
+     <script src="js/date.js"></script>
      <script src="js/filesaver.js"></script>
-     <script src="js/linkparam.js"></script>
+     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.amd.js"></script> -->
      <script src="js/localstorage.js"></script>
      <script src="js/jsoneditor.min.js"></script>
     <script>
-	var vDataJSON = {};
+    var vProgLanguage = "javascript";
+    var vDataJSON = {};
+    vDataJSON["tpl"] = {};
+    vDataJSON["out"] = {};
     var vFileBase = "class";
 
      // Set the default CSS theme and icon library globally
@@ -29,59 +33,32 @@
     JSONEditor.defaults.iconlib = 'fontawesome4';
     JSONEditor.plugins.ace.theme = 'xcode';
 
-    function saveFile2HDD(pFilename,pContent) {
-      var file = new File([pContent], {type: "text/plain;charset=utf-8"});
-      saveAs(file,pFilename);
-    }
-
-function saver4JSON(pFile) {
-    var vFile = pFile || vFileBase+".json";
-    exporter4JSON();
-    alert("File: '"+vFile+"' saved!");
-}
-
-function exporter4JSON(pFile) {
-     var vFile = pFile || vFileBase+".json"
-     // Get the value from the editor
-     var vJSON = editor.getValue();
-     var vContent = JSON.stringify(vJSON,null,4);
-    saveFile2HDD(vFile,vContent)
-            console.log("JSON output '"+vFile+"':\n"+vContent);
-};
-
-function exportJavasript() {
-    alert("Export Javascript");
-};
-
-function loader4JSON(pFileID4DOM) {
-     	var fileToLoad = document.getElementById(pFileID4DOM).files[0]; //for input type=file
-     	if (fileToLoad) {
-     		console.log("loader4JSON() - File '"+fileToLoad.name+"' exists.");
-     		$('#load_filename').html(fileToLoad.name); // this.value.replace(/.*[\/\\]/, '')
-     		var fileReader = new FileReader();
-     		// set the onload handler
-     		fileReader.onload = function(fileLoadedEvent){
-     				var vTextFromFileLoaded = fileLoadedEvent.target.result;
-     				//document.getElementById("inputTextToSave").value = textFromFileLoaded;
-     				//alert("textFromFileLoaded="+textFromFileLoaded);
-            try {
-              editor.setValue(JSON.parse(vTextFromFileLoaded));
-              alert("File JSON '"+fileToLoad.name+"' loaded successfully!");
-            } catch(e) {
-              editor.setValue([]); // Init with an empty class
-              alert(e); // error in the above string (in this case, yes)!
-            };
-     			};
-     		//onload handler set now start loading the file
-     		fileReader.readAsText(fileToLoad, "UTF-8");
-     	} else {
-     		alert("File is missing");
-     	};
-     	saveLS(fileToLoad.name);
-    };
-
     </script>
-    <script src="schema/class_schema.js"></script>
+    <script src="js/classeditor.js"></script>
+    <!-- ### UML Default File  ##################### -->
+    <script src="db/uml_default.js"></script>
+    <!-- ### UML Loaded File  ##################### -->
+    <script src="db/umljs.js"></script>
+    <!-- ### HANDLEBARS TEMPLATE  ##################### -->
+    <script src="tpl/javascript_class_tpl.js"></script>
+    <!-- ### COMPILE HANDLEBARS TEMPLATES  ############ -->
+    <script src="js/handlebars.js"></script>
+    <script src="js/handlebars_helper.js"></script>
+
+    <script>
+    // create for all templates in the hash vDataJSON["tpl"] a Handlebars compiler
+    // e.g. vDataJSON["tpl"]["javascript"] is a Handlebars template for Javascript
+    // Code generation. Following iteration will create a compliler
+    // in vDataJSON["out"]["javascript"]
+    for (var tplID in vDataJSON.tpl) {
+      if (vDataJSON["tpl"].hasOwnProperty(tplID)) {
+        vDataJSON["out"][tplID] = Handlebars.compile(vDataJSON["tpl"][tplID])
+      }
+    }
+    </script>
+    <!-- ### SCHEMA LOADER ############################ -->
+    <script src="schema/class_schema_selectize.js"></script>
+    <!-- ############################################## -->
   </head>
   <body  style="margin:20px">
   	<div>
@@ -107,10 +84,12 @@ function loader4JSON(pFileID4DOM) {
     <b>File: </b>  <tt id="load_filename">class.json</tt>
 		&nbsp;
 		&nbsp;
+    <!--
 		<button id='bAddRecord' style="color: white;background-color: #225988"  onclick="vEditor4JSON.add();return false">
 			<i class="fa fa-plus-square" aria-hidden="true"></i> Add
 		</button>
-		<button id='bDeleteRecord' style="color: white;background-color: #c10303"  onclick="vEditor4JSON.deleteAsk();return false">
+    -->
+		<button id='bDeleteClass' style="color: white;background-color: #c10303"  onclick="deleteClass();return false">
 			<i class="fa fa-minus-square" aria-hidden="true"></i> Delete
 		</button>
     <button id='bInitDB' style="color: white;background-color: #c10303"  onclick="vEditor4JSON.initAsk();return false">
@@ -128,225 +107,32 @@ function loader4JSON(pFileID4DOM) {
     <button id='bExportJSON'>Export JSON</button>
     <button id='bExportSchemaJSON'>Export JSON Schema</button>
     <button id='bTemplate' onclick="$('#divTemplates').toggle()">Templates</button>
-
+<hr>
+<center>
+  <a href="https://github.com/niebert/ClassEditorUML/archive/master.zip" target="_blank">Download GitHub (2018)</a>
+</center>
     <div id="divTemplates" style="display:none">
-      <b>Class Header</b> <tt>[tClassHeader]</tt><br>
-        <textarea id="tClassHeader" name="tClassHeader" cols="125" rows="10">//#################################################################
-    //# Javascript Class: {{classname}}()
-    //#       SuperClass: {{superclass}}
-    //#   Class Filename: {{filename}}
-    //#
-    //# Author of Class:      {{author}}
-    //# email:                {{email}}
-    //# Created:              {{date}}
-    //# Date of Version:      {{moddate}}
-    //# GNU Public License V3 - OpenSource
-    //#
-    //# created with JavaScript Class Creator JSCC
-    //#     https://niebert.github.io/JavascriptClassGenerator
-    //#################################################################
-
-    //---------------------------------------------------------------------
-    //---Store File in Subdirectory /js and import this Class in HTML-File with
-    // SCRIPT-Tag:  LANGUAGE="JavaScript" SRC="js/{{filename}}"
-    //---------------------------------------------------------------------
-    //---Constructor of Class {{classname}}()
-    // Call the constructor for creating an instance of class {{classname}}
-    // by the following command in HTML-file that imports this class
-    // var vMyInstance = new {{classname}}();
-    //---------------------------------------------------------------------
-    //----Attributes-------------------------------------------------------
-    //---------------------------------------------------------------------
-    // If you want to access the attributes of {{classname}}, use
-    // the attribute name with a leading "this." in the definition of attribute of class {{classname}}, e.g.
-    // this.aName = "Hello World";
-    //---------------------------------------------------------------------
-    //----Methods----------------------------------------------------------
-    //---------------------------------------------------------------------
-    // (1) If you want to assign definitions of methods for single instance of the class '{{classname}}'
-    // they are defined with
-    //    this.my_method = function (pPar1,pPar2)
-    // this approach allows to overwrite the method definition of single instances dynamically.
-    //---------------------------------------------------------------------
-    // (2) A prototype definition of methods for '{{name}}' will be set by
-    // use the method's name and extend it with '{{name}}'.
-    //    {{name}}.prototype.my_method = function (pPar1,pPar2)
-    // This approach consumes less memory for instances.
-    //---------------------------------------------------------------------
-
-    {{superclassprototype}}
-
-    function {{name}} () {
-        //---------------------------------------------------------------------
-        //---Attributes of Class "{{classname}}()"
-        //---------------------------------------------------------------------
-{{{attributes}}}
-        //---------------------------------------------------------------------
-        //---Methods of Class "{{classname}}()"
-        //---------------------------------------------------------------------
-{{{methodlist}}}
-{{{methofprivate}}}
-    }
-    //-------------------------------------------------------------------------
-    //---END Constructor of Class "{{classname}}()"
-    //-------------------------------------------------------------------------
-
-{{{methodsprototype}}}
-        </textarea>
-        <hr>
-        <b>Attribute Definition</b> <tt>[tTplAttribute]</tt> Prefix: <tt>this.</tt> or <tt>var</tt><br>
-        <textarea id="tTplAttribute" name="tTplAttribute" cols="125" rows="2">
-    //---{{visibility}}: {{name}} ({{class}}): {{comment}}
-    {{defprefix}}{{name}} = {{init}};
-    </textarea>
-        <hr>
-          <b>Method Constructor Comment</b> <tt>[tTplMethodConstructorComment]</tt><br>
-            <textarea id="tTplMethodConstructorComment" name="tTplMethodConstructorComment" cols="125" rows="4">
-    //----{{visibility}} Method: {{classname}}.{{name}}-----
-    // {{name}}({{paramcall}})  {{return}}
-    // {{comment}}
-    </textarea>
-        <hr>
-        <b>Methods Head Comment</b> <tt>[tTplMethodsHeadComment]</tt><br>
-    <textarea id="tTplMethodsHeadComment" name="tTplMethodsHeadComment" cols="125" rows="3">
-
-    //---------------------------------------------------------------------
-    //---{{classname}}: Methods of Class "{{classname}}()"
-    //---------------------------------------------------------------------
-    </textarea>
-    <hr>
-    <b>Method Prefix:</b>  <tt>[tMethodPrefix]</tt> <input type="text" id="tMethodPrefix" name="tMethodPrefix" value="this." size="7">
-    <b>Prototype Method Prefix:</b> <tt>[tMethodPrefixProto]</tt> <input type="text" id="tMethodPrefixProto" name="tMethodPrefixProto" value="{{name}}.prototype." size="28">
+      <b>Output</b> <tt>[tOutput]</tt><br>
+      <textarea id="tOutput" name="tOutput" cols="125" rows="10"></textarea>
       <hr>
-      <b>Inherit from SuperClass (Prototype definition)</b> <tt>[tTplSuperClassProto]</tt><br>
-    <textarea id="tTplSuperClassProto" name="tTplSuperClassProto" cols="125" rows="3">//--------------------------------------
-    //---Super Class------------------------
-    // Inheritance: '{{classname}}' inherits from '{{superclass}}'
-    {{classname}}.prototype = new {{superclass}}();
-    // Constructor for instances of {{classname}} has to updated.
-    // Otherwise constructor of {{superclass}} is called
-    {{classname}}.prototype.constructor={{classname}};
-    // see http://phrogz.net/js/classes/OOPinJS2.html for explanation
-    //--------------------------------------
-    </textarea>
-
-    <hr>
-    <b>Inherit from SuperClass</b>  <tt>[tTplSuperClass]</tt><br>
-       <textarea id="tTplSuperClass" name="tTplSuperClass" cols="125" rows="3">
-
-        //--------------------------------------
-        //---Super Class------------------------
-        this.SuperClass = {{superclass}};
-        this.SuperClass();
-        //--------------------------------------
-      </textarea>
-    <hr>
-    <b>Class Tail</b>  <tt>[tTplClassTail]</tt><br>
-      <textarea id="tTplClassTail" name="tTplClassTail" cols="125" rows="3">
-
-    //-------------------------------------------
-    //---End Definition of Class-----------------
-    // JS Class: {{classname}}
-    //-------------------------------------------
-    </textarea>
-    <hr>
-      <b>Method Header</b> <tt>[tTplMethodHeader]</tt><br>
-        <textarea id="tTplMethodHeader" name="tTplMethodHeader" cols="125" rows="10">
-
-    //#################################################################
-    //# {{visibility}} Method: {{name}}()
-    //#    used in Class: {{classname}}
-    //# Parameter:
-    //#    {{parameterlist}}}
-    //# Comment:
-    //#    {{{comment}}}
-    //# {{{returncomment}}}
-    //# created with JSCC  {{date}}
-    //# last modifications {{moddate}}
-    //#################################################################
-
-    {{classname}}.prototype.{{name}} = function ({{paramcall}}) {
-      //----Debugging------------------------------------------
-      // console.log("{{filename}} - Call: {{name}}({{paramcall}})");
-      // alert("{{filename}} - Call: {{name}}({{paramcall}})");
-      //----Create Object/Instance of {{name}}----
-      //    var vMyInstance = new {{name}}();
-      //    vMyInstance.{{name}}({{paramcall}});
-      //-------------------------------------------------------
-
-    {{code}}
-
-    };
-    //----End of Method {{name}} Definition
-
-    </textarea>
-    <hr>
-      <b>Method Private</b> <tt>[tTplMethodPrivate]</tt><br>
-        <textarea id="tTplMethodPrivate" name="tTplMethodPrivate" cols="125" rows="10">
-
-    //#################################################################
-    //# {{visibility}} Method: {{name}}()
-    //#    used in Class: {{classname}}
-    //# Parameter:
-    //#    {{parameterlist}}}
-    //# Comment:
-    //#    {{{comment}}}
-    //# {{{returncomment}}}
-    //# created with JSCC  {{date}}
-    //# last modifications {{moddate}}
-    //#################################################################
-
-    function {{name}}({{paramcall}} {
-      //----Debugging------------------------------------------
-      // console.log("{{visibility}}: {{filename}} - Call: {{name}}({{paramcall}})");
-      // alert("{{filename}} - Call: {{name}}({{paramcall}})");
-      //-------------------------------------------------------
-
-    {{code}}
-
-    };
-    //----End of Private Method {{name}} Definition
-
-    </textarea>
-    <hr>
-      <b>Method Private</b> <tt>[tTplMethodPublic]</tt><br>
-        <textarea id="tTplMethodPublic" name="tTplMethodPublic" cols="125" rows="10">
-
-    //#################################################################
-    //# ___METHODACCESS___ Method: {{name}}()
-    //#    used in Class: {{name}}
-    //# Parameter:
-    //#    ___PARAMETERDEF___
-    //# Comment:
-    //#    ___METHODCOMMENT___
-    //# ___RETURNCOMMENT___
-    //# created with JSCC  ___DATE___
-    //# last modifications {{moddate}}
-    //#################################################################
-
-    this.{{name}} = function (___METHODPARAMETERS___) {
-      //----Debugging------------------------------------------
-      // The following alert-Command is useful for debugging
-      //alert("{{filename}} - Call: ___METHODDEF___")
-      //-------------------------------------------------------
-
-    {{code}}
-
-    };
-    //----End of {{visibility}} Method {{name}} Definition
-
-    </textarea>
+      <b>JSON</b> <tt>[tOutJSON]</tt><br>
+      <textarea id="tOutJSON" name="tOutJSON" cols="125" rows="10"></textarea>
+      <hr>
+      <b>JSON Errors</b> <tt>[tErrors]</tt><br>
+      <textarea id="tErrors" name="tCErrors" cols="125" rows="10">
+        </textarea>
     <hr>
 
     </div>
+    <script src="js/linkparam.js"></script>
 
     <script>
 
       // This is the starting value for the editor
       // We will use this to seed the initial editor
       // and to provide a "Restore to Default" button.
-      var starting_value = [
-       ];
+      var starting_value = vDataJSON["UMLJS"];
+      console.log("Start JSON:\n"+JSON.stringify(starting_value,null,3));
        //-------------------------------------------------------
        // LINK PARAMETER: Evaluation link parameter in JSON Path
        var vLinkParam = new LinkParam();
@@ -357,10 +143,12 @@ function loader4JSON(pFileID4DOM) {
            starting_value = JSON.parse(vParamData);
          } catch (e) {
            alert("ERROR (JSON): "+e);
-           starting_value = null;
+           starting_value = vDataJSON["UMLJS"];
          };
        };
       // Initialize the editor
+      document.getElementById("load_filename").innerHTML = class2filename(starting_value.classname)
+      console.log("Start JSON:\n"+JSON.stringify(starting_value,null,3));
       var editor = new JSONEditor(document.getElementById('editor_holder'),{
         // Enable fetching schemas via ajax
         ajax: true,
@@ -405,26 +193,16 @@ function loader4JSON(pFileID4DOM) {
       // Hook up the validation indicator to update its
       // status whenever the editor changes
       editor.on('change',function() {
-        // Get an array of errors from the validator
-        var errors = editor.validate();
-
-        var indicator = document.getElementById('valid_indicator');
-
-        // Not valid
-        if(errors.length) {
-          indicator.style.color = 'red';
-          indicator.textContent = "not valid";
-        }
-        // Valid
-        else {
-          indicator.style.color = 'green';
-          indicator.textContent = "valid";
-        }
+        validate_errors();
+        update_editor();
       });
+
     </script>
 
 
         <script>
+
+
           // Hook up the submit button to export JSON
           document.getElementById('bExportJSON').addEventListener('click',exporter4JSON);
           document.getElementById('bExportJSON').addEventListener('click',exporter4JSON);
@@ -440,6 +218,7 @@ function loader4JSON(pFileID4DOM) {
           });
 
         </script>
+
 
   </body>
 </html>

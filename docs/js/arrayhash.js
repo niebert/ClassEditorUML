@@ -13,6 +13,18 @@ function cloneJSON(pJSON) {
   return vJSON
 };
 
+function concat_array( a, b ) {
+  var c = [];
+  for (var i = 0; i < a.length; i++) {
+    c.push(a[i])
+  };
+  for (var i = 0; i < b.length; i++) {
+    c.push(b[i])
+  };
+  return c;
+}
+
+
 function extendHash( a, b ) {
   for( var i in b ) {
     a[ i ] = b[ i ];
