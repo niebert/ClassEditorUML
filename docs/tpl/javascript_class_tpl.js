@@ -30,7 +30,7 @@ const {{superclassname}} = require('{{filename superclassname}}');
 //---Constructor of Class {{classname}}()
 // Call the constructor for creating an instance of class {{classname}}
 // by the following command in HTML-file that imports this class
-// var vInstanceOf{{classname}} = new {{classname}}();
+// var v{{classname}} = new {{classname}}();
 //---------------------------------------------------------------------
 //----Attributes-------------------------------------------------------
 //---------------------------------------------------------------------
@@ -74,9 +74,9 @@ function {{classname}} () {
 {{#each attributes}}
     // ------------------------------------------
     // {{visibility}}: {{name}} ({{class}})
-    this.{{name}} = {{init}}; // Class: {{class}}
     {{#codeindent comment indent="    // "}}
     {{/codeindent}}
+    this.{{name}} = {{init}}; // Class: {{class}}
 {{/each}}
     //---------------------------------------------------------------------
     //---Methods of Class "{{classname}}()"
@@ -86,25 +86,25 @@ function {{classname}} () {
 
     //#################################################################
     //# {{visibility}} Method: {{name}}()
-    //#    used in Class: {{classname}}
+    //#    used in Class: {{../classname}}
     //# Parameter:
     //#    {{parameterlist parameter "    //#    "}}
     //# Comment:
     //#    {{{comment}}}
     //# {{{returncomment}}}
-    //# created with JSCC  {{date}}
-    //# last modifications {{moddate}}
+    //# created with JSCC  {{../reposinfo.created}}
+    //# last modifications {{../reposinfo.modified}}
     //#################################################################
 
-    {{classname}}.prototype.{{name}} = function ({{paramcall}}) {
+    {{../classname}}.prototype.{{name}} = function ({{paramcall}}) {
       //----Debugging------------------------------------------
-      // console.log("{{filename classname}}.js - Call: {{name}}({{#paramcall parameter}}{{/paramcall}})");
-      // alert("{{filename classname}}.js - Call: {{name}}({{#paramcall parameter}}{{/paramcall}})");
+      // console.log("{{filename ../classname}}.js - Call: {{name}}({{#paramcall parameter}}{{/paramcall}})");
+      // alert("{{filename ../classname}}.js - Call: {{name}}({{#paramcall parameter}}{{/paramcall}})");
       //----Create Object/Instance of {{name}}----
-      //    var v{{classname}} = new {{classname}}();
-      //    v{{classname}}.{{name}}({{#paramcall parameter}}{{/paramcall}});
+      //    var v{{../classname}} = new {{../classname}}();
+      //    v{{../classname}}.{{name}}({{#paramcall parameter}}{{/paramcall}});
       //-------------------------------------------------------
-      {{#codeindent jscode indent="      "}}
+      {{#codeindent code indent="      "}}
       {{/codeindent}}
 {{/each}}
 }

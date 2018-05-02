@@ -107,13 +107,10 @@ Handlebars.registerHelper('codeindent', function(pContext, options) {
     vText = pContext;
   };
   //vIndent = "\n" + vIndent;
-  var vLineSplit = vText.split("\n");
-  for (var i = 0; i < vLineSplit.length; i++) {
-    vText += vCR + vIndent + vLineSplit[i];
-    vCR = "\n";
+  if (vText != "") {
+    vText = vText.replace(/\n/g,"\n"+vIndent+"  ");
   };
-  //  vText = vLineSplit.join(vIndent);
-  return vText+"\n";
+  return vIndent+"  "+vText+"\n";
 });
 
 /*
@@ -152,13 +149,15 @@ Handlebars.registerHelper('parameterlist', function(pParamArray,pIndent) {
   var ret = "";
   var vNewLine = "";
   var vComment = "";
+  var vExtraIndent = "  "
   for(var i=0, j=pParamArray.length; i<j; i++) {
     ret += vNewLine +  pParamArray[i].name + ":"+pParamArray[i].class;
     vNewLine = "\n"+pIndent;
     vComment = pParamArray[i].comment;
     if (vComment != "") {
+      vComment = vComment.replace(/\n/g,vNewLine+vExtraIndent);
       // Split comment at "\n" and inject the vNewLine indent with additional spaces for the comment
-      ret += vNewLine + (vComment.split("\n",vComment)).join(vNewLine+"  ");
+      ret += vNewLine + vExtraIndent + vComment;
     };
   };
   return ret;

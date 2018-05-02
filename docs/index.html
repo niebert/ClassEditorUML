@@ -76,25 +76,28 @@
     <button id='bSaveJSON' style="color: white;background-color: #225988"  onclick="saver4JSON();return false">
 			<i class="fa fa-floppy-o" aria-hidden="true"></i> Save
 		</button>
-    <button id='bExportHTML' style="color: white;background-color: #225988"  onclick="exportJavascript();return false">
-			<i class="fa fa-floppy-o" aria-hidden="true"></i> Save JS
-	</button>
-    &nbsp;
+   &nbsp;
 		&nbsp;
     <b>File: </b>  <tt id="load_filename">class.json</tt>
 		&nbsp;
 		&nbsp;
+    <button id='bExportHTML' style="color: white;background-color: #225988"  onclick="exportJavascript();return false">
+			<i class="fa fa-floppy-o" aria-hidden="true"></i> Export Code
+	 </button>
+   <button id='bExportDoc' style="color: white;background-color: #225988"  onclick="exportDocumentation();return false">
+     <i class="fa fa-floppy-o" aria-hidden="true"></i> Export Documentaion
+  </button>
     <!--
 		<button id='bAddRecord' style="color: white;background-color: #225988"  onclick="vEditor4JSON.add();return false">
 			<i class="fa fa-plus-square" aria-hidden="true"></i> Add
 		</button>
-    -->
-		<button id='bDeleteClass' style="color: white;background-color: #c10303"  onclick="deleteClass();return false">
-			<i class="fa fa-minus-square" aria-hidden="true"></i> Delete
-		</button>
     <button id='bInitDB' style="color: white;background-color: #c10303"  onclick="vEditor4JSON.initAsk();return false">
       <i class="fa fa-minus-square" aria-hidden="true"></i> Init DB
     </button>
+    -->
+		<button id='bDeleteClass' style="color: white;background-color: #c10303"  onclick="deleteClass();return false">
+			<i class="fa fa-minus-square" aria-hidden="true"></i> Delete Class
+		</button>
 
     <span id='valid_indicator'></span>
 	</div>
@@ -201,21 +204,10 @@
 
 
         <script>
-
-
           // Hook up the submit button to export JSON
           document.getElementById('bExportJSON').addEventListener('click',exporter4JSON);
-          document.getElementById('bExportJSON').addEventListener('click',exporter4JSON);
           // Hook up the submit button to export JSON Schema
-          document.getElementById('bExportSchemaJSON').addEventListener('click',function() {
-            // Get the value from the editor
-            console.log("BEFORE editor.schema:\n"+JSON.stringify(editor.schema,null,4));
-            var vJSON = editor.schema;
-            var vContent = JSON.stringify(vJSON,null,4);
-            var vFile = vFileBase+"_schema.json";
-            console.log("JSON Schema output '"+vFile+"':\n"+vContent);
-            saveFile2HDD(vFile,vContent);
-          });
+          document.getElementById('bExportSchemaJSON').addEventListener('click',exporter4Schema);
 
         </script>
 

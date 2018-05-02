@@ -46,6 +46,15 @@ function saver4JSON(pFile) {
   alert("File: '"+vFile+"' saved!");
 };
 
+function exporter4Schema() {
+    // Get the value from the editor
+    console.log("BEFORE editor.schema:\n"+JSON.stringify(editor.schema,null,4));
+    var vJSON = editor.schema;
+    var vContent = JSON.stringify(vJSON,null,4);
+    var vFile = "uml_schema.json";
+    console.log("JSON Schema output '"+vFile+"':\n"+vContent);
+    saveFile2HDD(vFile,vContent);
+}
 
 function exporter4JSON(pFile) {
  // Get the value from the editor
