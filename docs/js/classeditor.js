@@ -32,12 +32,30 @@ function validate_errors() {
   document.getElementById("tErrors").value = vErrors;
 }
 
-function update_editor() {
-  var vJSON = editor.getValue();
-  $('#load_filename').html(class2filename(vJSON.classname));
-  vJSON.classlist = concat_array(vJSON.baseclasslist,vJSON.extendedclasslist);
+function update_editor(pJSON) {
+  var vJSON = pJSON || editor.getValue();
+  $('#load_filename').html(class2filename(vJSON.data.classname,".json"));
+  var c = vJSON.settings;
+  var vRequired_Classes = concat_array(c.remoteclasslist,c.localclasslist);
+  //console.log("vRequired_Classes: "+vRequired_Classes.join(","));
+  c.classlist = concat_array(c.baseclasslist,vRequired_Classes);
+  console.log("vRequired_Classes: ('"+c.classlist.join("','")+"')");
+  //vRequired_Classes.sort();
+  c.classlist.sort();
+  var vEditNode = editor.getEditor('root.settings');
+  // `getEditor` will return null if the path is invalid
+  if(vEditNode) {
+    vEditNode.setValue(c);
+  } else {
+    console.log("Update 'root.settings' undefined");
+  };
+  vEditNode = editor.getEditor('root.data');
+  if(vEditNode) {
+    vEditNode.setValue(vJSON.data);
+  } else {
+    console.log("Update 'root.data' undefined");
+  };
   editor.setValue(vJSON);
-
 }
 
 function saver4JSON(pFile) {
@@ -59,40 +77,67 @@ function exporter4Schema() {
 function exporter4JSON(pFile) {
  // Get the value from the editor
  var vJSON = editor.getValue();
- var vFile = class2filename(vJSON.classname);
+ var vFile = class2filename(vJSON.data.classname,".json");
 // set modified date in reposinfo.modified
  updateModified(vJSON);
  var vContent = JSON.stringify(vJSON,null,4);
- saveFile2HDD(vFile,vContent)
-        console.log("JSON output '"+vFile+"':\n"+vContent);
+ saveFile2HDD(vFile,vContent);
+ console.log("JSON output '"+vFile+"':\n"+vContent);
 };
 
 function updateModified(pJSON) {
   if (pJSON) {
     if (pJSON.reposinfo) {
       pJSON.reposinfo.modified = getDateTime();
+      console.log("reposinfo.modified updated: '"+pJSON.reposinfo.modified+"'");
     }
   };
 
 };
 
-function class2filename(pClassName) {
-  var vFilename = pClassName.toLowerCase();
+function class2filename(pClassName,pExt) {
+  var vExt = pExt || "";
+  var vFilename = pClassName || "Undefined Class";
+  vFilename = vFilename.toLowerCase();
   vFilename = vFilename.replace(/[^a-z0-9]/g,"_");
   vFilename = vFilename.replace(/_[_]+/g,"_");
-  return vFilename+".json";
+  return vFilename+vExt;
 }
 
-function exportJavascript() {
-  alert("Export Javascript");
+function exportCode() {
   //-- Javascript Class Output --
-  var vOutNode = document.getElementById("tOutput");
+  //-- Template: tpl/javascript_class_tpl.js
   var vJSON = editor.getValue();
   updateModified(vJSON);
-  vOutNode.value = vDataJSON["out"]["javascript"](vJSON);
+  //-- HandleBars: Compile with javascript-template ---
+  // vDataJSON["out"]["javascript"] is HandleBars compiler function
+  // Compile functions was generated from "tpl/javascript_class_tpl.js"
+  var vContent = vDataJSON["out"]["javascript"](vJSON);
+  //--Textarea Output----------------
+  var vOutNode = document.getElementById("tOutput");
+  vOutNode.value = vContent;
   //--JSON Output----------------
-  vOutNode = document.getElementById("tOutJSON");
-  vOutNode.value = JSON.stringify(vJSON,null,4);
+  var vFile = class2filename(vJSON.data.classname,vJSON.settings.extension4code);
+  saveFile2HDD(vFile,vContent);
+  alert("Export Code for Class to '"+vFile+"'");
+};
+
+function exportDocumentation() {
+  //-- GitHub Class Documentation Output in GitHub Markdown--
+  //-- Template: tpl/docu4github_tpl.js
+  var vJSON = editor.getValue();
+  updateModified(vJSON);
+  //-- HandleBars: Compile with javascript-template ---
+  // vDataJSON["out"]["javascript"] is HandleBars compiler function
+  // Compile functions was generated from "tpl/docu4github_tpl.js"
+  var vContent = vDataJSON["out"]["docugithub"](vJSON);
+  //--Textarea Output----------------
+  var vOutNode = document.getElementById("tOutput");
+  vOutNode.value = vContent;
+  //--JSON Output----------------
+  var vFile = "README_"+class2filename(vJSON.classname,".md");
+  saveFile2HDD(vFile,vContent);
+  alert("Export GitHub Documentation for Class to '"+vFile+"'");
 };
 
 function loader4JSON(pFileID4DOM) {

@@ -25,6 +25,7 @@ vDataJSON["tpl"]["javascript"] = `
 // NodeJS: require the super class
 const {{superclassname}} = require('{{filename superclassname}}');
 {{/ifcond}}
+{{{require_class_list attributes methods baseclasslist extendedclasslist reposinfo.require_path}}}
 {{/ifcond}}
 //---------------------------------------------------------------------
 //---Constructor of Class {{classname}}()
@@ -92,11 +93,11 @@ function {{classname}} () {
     //# Comment:
     //#    {{{comment}}}
     //# {{{returncomment}}}
-    //# created with JSCC  {{../reposinfo.created}}
-    //# last modifications {{../reposinfo.modified}}
+    //# created with ClassEditorUML {{../reposinfo.created}}
+    //# last modifications          {{../reposinfo.modified}}
     //#################################################################
 
-    {{../classname}}.prototype.{{name}} = function ({{paramcall}}) {
+    {{../classname}}.prototype.{{name}} = function ({{#paramcall parameter}}{{/paramcall}}) {
       //----Debugging------------------------------------------
       // console.log("{{filename ../classname}}.js - Call: {{name}}({{#paramcall parameter}}{{/paramcall}})");
       // alert("{{filename ../classname}}.js - Call: {{name}}({{#paramcall parameter}}{{/paramcall}})");
@@ -112,9 +113,12 @@ function {{classname}} () {
 //---END Constructor of Class "{{classname}}()"
 //-------------------------------------------------------------------------
 
-// NodeJS: export class constructor for module {{filename classname}}.js
+{{#ifcond reposinfo.require_classes "==" "yes"}}
+
+// NodeJS: export class constructor '{{classname}}' for module {{filename classname}}.js
 // -------
-// module.exports = {{filename classname}};
+module.exports = {{classname}};
+{{/ifcond}}
 `;
 
 // NodeJS: uncomment modules.export in last line

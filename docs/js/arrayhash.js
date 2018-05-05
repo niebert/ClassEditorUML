@@ -24,6 +24,20 @@ function concat_array( a, b ) {
   return c;
 }
 
+function value_in_array( pValue, pArray ) {
+  var ret = -1;
+  if (pArray) {
+    for (var i = 0; i < pArray.length; i++) {
+      if (pValue == pArray[i]) {
+        ret = i;
+      }
+    };
+  } else {
+    console.log("value_in_array()-Call pArray undefined");
+  };
+  return ret;
+}
+
 
 function extendHash( a, b ) {
   for( var i in b ) {

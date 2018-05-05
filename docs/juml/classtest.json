@@ -14,14 +14,14 @@
             "visibility": "public",
             "name": "aMyAttrib",
             "init": "0.0",
-            "class": "Float",
+            "attclass": "Float",
             "comment": "What do you stored in this attribute?"
         },
         {
             "visibility": "public",
             "name": "aMyAttrib2",
             "init": "{}",
-            "class": "Hash",
+            "attclass": "Hash",
             "comment": "What do you stored in this attribute?"
         }
     ],
@@ -62,5 +62,5 @@
         "Object",
         "RegularExp",
         "String"
-    ]
+    ],
 }

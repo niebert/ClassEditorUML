@@ -1,13 +1,55 @@
  vDataJSON["class_schema"] = {
     "type": "object",
-    "title": "Class: MyClass",
-    "headerTemplate": "Class: {{self.classname}}",
+    "title": "UML Definition",
     "properties": {
+      "type": "object",
+      "title": "Class: MyClass",
+      "headerTemplate": "Class: {{self.classname}}",
+      "properties": {
         "classname": {
           "title": "Class:",
           "type": "string",
           "default": "MyClass"
         },
+      },
+      "type": "object",
+      "title": "Settings UML Editor",
+      "properties": {
+        "classlist": {
+          "type": "array",
+          "title": "List of Classes",
+          "format": 'table',
+          "items": {
+            "title":"Classes",
+            "type": "string"
+          },
+          "default": [
+              "",
+              "App",
+              "AppAbstract",
+              "Array",
+              "Boolean",
+              "Document",
+              "Float",
+              "Function",
+              "Hash",
+              "Integer",
+              "LinkParam",
+              "Object",
+              "RegularExp",
+              "String"
+            ],
+          "options": {
+            "collapsed": true,
+            "hidden": true
+          }
+        },
+      }
+    }
+    "type": "object",
+    "title": "Class: MyClass",
+    "headerTemplate": "Class: {{self.classname}}",
+    "properties": {
         "superclassname": {
           "title": "Super Class",
           // "$ref": "#/definitions/selectclass",
@@ -15,6 +57,13 @@
           "watch": {
             "possible_classes": "root.classlist"
           }
+        },
+        "comment": {
+            "title": "Comment:",
+            "type": "string",
+            "$ref": "#/definitions/comment",
+            "default": "What does the class do?",
+            "description": "Decribe the purpose of the class, so that other developers know, why you implemented this class"
         },
         "reposinfo": {
             "title": "Repository Info",
@@ -55,11 +104,6 @@
               collapsed: true
             }
         },
-        "comment": {
-            "title": "Comment:",
-            "$ref": "#/definitions/comment",
-            "default": "What does the class do?"
-        },
         "attributes": {
             "title": "Attribute",
             "type": "array",
@@ -70,7 +114,7 @@
                 "type": "object",
                 "uniqueItems": true,
                 "headerTemplate": "{{self.name}}",
-            	"format": "table",
+            	  "format": "table",
                 "properties": {
                     "visibility": {
                         "title": "Visibility",
@@ -89,7 +133,7 @@
                         "title": "Class",
                         "enumSource": "possible_classes",
                         "watch": {
-                          "possible_classes": "root.classlist"
+                          "possible_classes": "root.config.classlist"
                         },
                         "default": ""
                         //"$ref": "#/definitions/selectclass"
@@ -118,7 +162,7 @@
                     "parameter",
                     "return",
                     "comment",
-                    "jscode"
+                    "code"
                 ],
                 "properties": {
                     "visibility": {
@@ -150,7 +194,7 @@
                                     "title": "Class",
                                     "enumSource": "possible_classes",
                                     "watch": {
-                                      "possible_classes": "root.classlist"
+                                      "possible_classes": "root.config.classlist"
                                     },
                                     //"$ref": "#/definitions/selectclass"
                                 },
@@ -163,13 +207,13 @@
                         },
                         "options": {
                           "collapsed": true
-                        }
+                        },
                     },
                     "return": {
                         "title": "Return",
                         "enumSource": "possible_classes",
                         "watch": {
-                          "possible_classes": "root.classlist"
+                          "possible_classes": "root.config.classlist"
                         },
                         //"$ref": "#/definitions/selectclass"
                         "default": ""
@@ -192,68 +236,20 @@
           "type": "string",
           "default": "https://www.github.com/author/MyClass"
         },
-        "classlist": {
-          "type": "array",
-          "title": "List of Classes",
-          "format": 'table',
-          "items": {
-            "title":"Classes",
-            "type": "string"
-          },
-          "default": [
-              "",
-              "App",
-              "AppAbstract",
-              "Array",
-              "Boolean",
-              "Document",
-              "Float",
-              "Function",
-              "Hash",
-              "Integer",
-              "LinkParam",
-              "Object",
-              "RegularExp",
-              "String"
-            ],
-          "options": {
-            "collapsed": true,
-            "hidden": true
-          }
-        },
-        "extendedclasslist": {
-          "type": "array",
-          "title": "Extended List of Classes",
-          "description": "The list of all extended classes, that are available as additional libraries/modules in the language '"+vProgLanguage+"'.",
-          "format": 'table',
-          "items": {
-            "title":"Classes",
-            "type": "string"
-          },
-          "default": [
-              "App",
-              "AppAbstract",
-              "Document",
-              "LinkParam",
-              "JSONEditor"
-            ],
-          "options": {
-            "collapsed": true
-          }
-        },
         "baseclasslist": {
           "type": "array",
           "title": "List of Base Classes",
           "format": 'table',
           "description": "The list of all base classes, that are provided by the programming language '"+vProgLanguage+"' itself.",
           "items": {
-            "title":"Base Classes",
+            "title":"Base Class",
             "type": "string"
           },
           "default": [
               "",
               "Array",
               "Boolean",
+              "Document",
               "Float",
               "Function",
               "Hash",
@@ -265,40 +261,73 @@
           "options": {
             "collapsed": true
           }
+        },
+        "extendedclasslist": {
+          "type": "array",
+          "title": "Extended List of Classes",
+          "description": "The list of all extended classes, that are available locally as additional libraries/modules in the language '"+vProgLanguage+"'.",
+          "format": 'table',
+          "items": {
+            "title":"Extended Class",
+            "type": "string"
+          },
+          "default": [
+              "App",
+              "AppAbstract"
+            ],
+          "options": {
+            "collapsed": true
+          }
+        },
+        "remoteclasslist": {
+          "type": "array",
+          "title": "Remote List of Classes",
+          "description": "The list of all remotely available classes, that are embedded from a package manager (like NPM) for the language '"+vProgLanguage+"'.",
+          "format": 'table',
+          "items": {
+            "title":"Remote Class",
+            "type": "string"
+          },
+          "default": [
+              "LinkParam",
+              "JSONEditor"
+            ],
+          "options": {
+            "collapsed": true
+          }
         }
-    },
+    }
+    */
+    ,
     "definitions": {
-        // "selectclass" can be removed
-        // when editable classes are fully used
-        // in JSON Schema
         "selectclass": {
             "type": "string",
             "enum": [
                 "",
-                "App",
-                "AppAbstract",
+                "App ",
+                "AppAbstract ",
                 "Array",
                 "Boolean",
-                "CheckBoxList",
-                "DOMVar",
-                "DOMVarList",
+                "CheckBoxList ",
+                "DOMVar ",
+                "DOMVarList ",
                 "Database ",
-                "DatabaseList",
+                "DatabaseList ",
                 "Document",
-                "Editor4JSON",
+                "Editor4JSON ",
                 "Float",
                 "Function",
-                "FuzzyController",
-                "FuzzyLayer",
+                "FuzzyController ",
+                "FuzzyLayer ",
                 "Hash",
                 "Integer",
-                "LinkParam",
+                "LinkParam ",
                 "Object",
-                "ParserHTML",
+                "ParserHTML ",
                 "RegularExp",
-                "Server",
+                "Server ",
                 "String",
-                "WrapJSON"
+                "WrapJSON "
             ]
         },
         "comment": {

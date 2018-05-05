@@ -1,3 +1,22 @@
+/* vDataJSON is the main JSON data storage defined in index.html
+  vDataJSON is provided as parameter to createHandleBarsCompiler(pDataJSON)
+   * createHandleBarsCompiler() expects a hash key "tpl" containing the templates.
+   * createHandleBarsCompiler() generates HandleBars compiler functions
+     in pDataJSON["out"] for all keys pDataJSON["tpl"]
+  create for all templates in the hash vDataJSON["tpl"] a Handlebars compiler
+  e.g. vDataJSON["tpl"]["javascript"] is a Handlebars template for Javascript
+  Code generation. Following iteration will create a compliler
+  in vDataJSON["out"]["javascript"]
+*/
+
+function createHandleBarsCompiler(pDataJSON) {
+  for (var tplID in pDataJSON.tpl) {
+    if (pDataJSON["tpl"].hasOwnProperty(tplID)) {
+      pDataJSON["out"][tplID] = Handlebars.compile(pDataJSON["tpl"][tplID])
+    }
+  }
+}
+
 // Use helper in Template with:
 // {{#ifcond var1 '==' var2}}
 //   ...
@@ -123,17 +142,85 @@ Handlebars.registerHelper('lowercase', function(pString) {
   return new Handlebars.SafeString(vString);
 });
 
+Handlebars.registerHelper('require_class_list', function(pAttribs,pMethods,pBaseClasses,pExtendedClasses,pRequirePath) {
+  var ret = "";
+  // vRequire is a Hash that collects all classes
+  // that are needed to create attributes or
+  // create a return class of the type.
+  var vRequire = {};
+  var vLib = "";
+  for (var i=0; i<pAttribs.length; i++) {
+    // populate vRequire with classes that a needed as
+    // constructors for attributes
+    vLib = pAttribs[i].class;
+    if (vLib != "") {
+      // constructors are required if the class is NOT a base class
+      // so class/library is added if an only if it is not a base class
+      if (value_in_array(vLib,pBaseClasses) >= 0) {
+        console.log("Library '"+vLib+"' is a Base Class - no required");
+      } else {
+        if (value_in_array(vLib,pExtendedClasses) >= 0) {
+          console.log("Library '"+vLib+"' is an Exte Class - no required");
+          // vLib is a local library
+          vRequire[vLib] = pRequirePath + name2filename(vLib);
+        } else {
+          vRequire[vLib] = name2filename(vLib);
+        };
+      };
+    };
+  };
+  for (var i=0; i<pMethods.length; i++) {
+    // populate vRequire with classes that a needed as
+    // constructors for returned instances of those classes
+    vLib = pMethods[i].return;
+    if (vLib != "") {
+      // constructors are required if the class is NOT a base class
+      // so class/library is added if an only if it is not a base class
+      if (value_in_array(vLib,pBaseClasses) == true) {
+        if (value_in_array(vLib,pExtendedClasses) == true) {
+          // vLib is a local library
+          vRequire[vLib] = pRequirePath + name2filename(vLib);
+        } else {
+          vRequire[vLib] = name2filename(vLib);
+        };
+      };
+    };
+  };
+  // vRequire is a Hash therefore double usage of classes
+  // in attributes and returns of methods lead just to one
+  // require call in the list
+  var vSep = "";
+  for (var iLib in vRequire) {
+    if (vRequire.hasOwnProperty(iLib)) {
+      ret += vSep + "const " + iLib + " = require('" + vRequire[iLib]+"');";
+      vSep = "\n";
+    }
+  };
+  return ret;
+});
 
-Handlebars.registerHelper('filename', function(pString) {
-   var vText = pString || "no_filename";
-   vText = vText.toLowerCase();
-   vText = vText.replace(/[^a-z0-9\/\-]/g,"_");
-   vText = vText.replace(/_[_]+/g,"_");
-   return vText;
+Handlebars.registerHelper('removereturn', function(pString) {
+  var vString = pString.replace(/\n/g," - ");
+  return new Handlebars.SafeString(vString);
 });
 
 
-Handlebars.registerHelper('paramcall', function(pParamArray) {
+function name2filename(pName) {
+  var vFilename = pName.toLowerCase();
+  vFilename = vFilename.replace(/[^a-z0-9]/g,"_");
+  vFilename = vFilename.replace(/_[_]+/g,"_");
+  return vFilename;
+}
+
+
+Handlebars.registerHelper('filename', function(pString) {
+   var vText = pString || "no_filename";
+   return name2filename(vText);
+});
+
+// -----------
+
+function paramCallString(pParamArray) {
   var ret = "";
   var vComma = "";
 
@@ -143,9 +230,115 @@ Handlebars.registerHelper('paramcall', function(pParamArray) {
   };
 
   return ret;
-});
+}
 
-Handlebars.registerHelper('parameterlist', function(pParamArray,pIndent) {
+Handlebars.registerHelper('paramcall', paramCallString);
+
+// -----------
+
+function paramTypeString(pParamArray) {
+  // creates from JSON parameters of a method the variable list with types
+  var ret = "";
+  var vComma = "";
+  if (pParamArray) {
+    for(var i=0, j=pParamArray.length; i<j; i++) {
+      ret += vComma +  pParamArray[i].name+":"+pParamArray[i].class;
+      vComma = ",";
+    };
+  } else {
+    console.log("No pParamArray in 'paramcall' helper.");
+  }
+
+  return ret;
+}
+
+Handlebars.registerHelper('paramtype', paramTypeString);
+// -----------
+
+function attribs4UMLString(pArray) {
+  // pArray contains the array of Attributes
+  var ret = "";
+  var vSep = "";
+  var vVis = "-";
+  for(var i=0, j=pArray.length; i<j; i++) {
+    switch (pArray[i].visibility) {
+      case "public":
+        vVis = "+";
+      break;
+      case "public":
+        vVis = "-";
+      break;
+      default:
+        vVis = "-";
+    };
+    ret += vSep + " " + vVis + " " + pArray[i].name+":"+pArray[i].class;
+    vSep = "<br>";
+  };
+  return ret;
+}
+
+Handlebars.registerHelper('require_attribs', attribs4UMLString);
+
+// -----------
+
+function attribs4UMLString(pArray) {
+  // pArray contains the array of Attributes
+  var ret = "";
+  var vSep = "";
+  var vVis = "-";
+  for(var i=0, j=pArray.length; i<j; i++) {
+    switch (pArray[i].visibility) {
+      case "public":
+        vVis = "+";
+      break;
+      case "public":
+        vVis = "-";
+      break;
+      default:
+        vVis = "-";
+    };
+    ret += vSep + " " + vVis + " " + pArray[i].name+":"+pArray[i].class;
+    vSep = "<br>";
+  };
+  return ret;
+}
+
+Handlebars.registerHelper('attribs_uml', attribs4UMLString);
+
+// -----------
+
+function methods4UMLString(pArray) {
+  // pArray contains the array of Attributes
+  var ret = "";
+  var vSep = "";
+  var vVis = "-";
+  for(var i=0, j=pArray.length; i<j; i++) {
+    switch (pArray[i].visibility) {
+      case "public":
+        vVis = "+";
+      break;
+      case "public":
+        vVis = "-";
+      break;
+      default:
+        vVis = "-";
+    };
+    ret += vSep + " " + vVis + " " + pArray[i].name+"(";
+    ret += paramTypeString(pArray[i].parameter);
+    ret += ")";
+    if (pArray[i].return != "") {
+      ret += ":"+pArray[i].return
+    };
+    vSep = "<br>";
+  };
+  return ret;
+}
+
+Handlebars.registerHelper('methods_uml', methods4UMLString);
+
+// -----------
+
+function parameterListString(pParamArray,pIndent) {
   var ret = "";
   var vNewLine = "";
   var vComment = "";
@@ -161,4 +354,8 @@ Handlebars.registerHelper('parameterlist', function(pParamArray,pIndent) {
     };
   };
   return ret;
-});
+}
+
+Handlebars.registerHelper('parameterlist', parameterListString);
+
+// -----------
