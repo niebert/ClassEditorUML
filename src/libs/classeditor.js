@@ -64,24 +64,26 @@ function update_editor(pJSON) {
 }
 
 function saver4JSON(pFile) {
-  var vFile = pFile || vFileBase+".json";
-  exporter4JSON();
-  alert("File: '"+vFile+"' saved!");
+  //var vFile = pFile || vFileBase+".json";
+  vJSONEditor.saveJSON();
+  //alert("File: '"+vFile+"' saved!");
 };
 
 function exporter4Schema(pFilename) {
     // Get the value from the editor
-    console.log("BEFORE editor.schema:\n"+JSON.stringify(editor.schema,null,4));
-    var vJSON = editor.schema;
-    var vContent = JSON.stringify(vJSON,null,4);
+    /*
+    console.log("BEFORE editor.schema:\n"+JSON.stringify(vDataJSON["class_schema"],null,4));
+    var vContent = vDataJSON["class_schema"];
     var vFile = pFilename || "uml_schema.json";
     console.log("JSON Schema output '"+vFile+"':\n"+vContent);
     saveFile2HDD(vFile,vContent);
+    */
+    vJSONEditor.saveSchema();
 }
 
 function exporter4JSON(pFile) {
  // Get the value from the editor
- var vJSON = editor.getValue();
+ var vJSON = vJSONEditor.getValue();
  var vFile = class2filename(vJSON.data.classname,".json");
 // set modified date in reposinfo.modified
  updateModified(vJSON);

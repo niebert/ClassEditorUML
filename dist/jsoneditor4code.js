@@ -2967,16 +2967,15 @@ function update_editor(pJSON) {
 }
 
 function saver4JSON(pFile) {
-  var vFile = pFile || vFileBase+".json";
-  exporter4JSON();
-  alert("File: '"+vFile+"' saved!");
+  //var vFile = pFile || vFileBase+".json";
+  vJSONEditor.saveJSON();
+  //alert("File: '"+vFile+"' saved!");
 };
 
 function exporter4Schema(pFilename) {
     // Get the value from the editor
-    console.log("BEFORE editor.schema:\n"+JSON.stringify(editor.schema,null,4));
-    var vJSON = editor.schema;
-    var vContent = JSON.stringify(vJSON,null,4);
+    console.log("BEFORE editor.schema:\n"+JSON.stringify(vDataJSON["class_schema"],null,4));
+    var vContent = vDataJSON["class_schema"];
     var vFile = pFilename || "uml_schema.json";
     console.log("JSON Schema output '"+vFile+"':\n"+vContent);
     saveFile2HDD(vFile,vContent);
@@ -2984,7 +2983,7 @@ function exporter4Schema(pFilename) {
 
 function exporter4JSON(pFile) {
  // Get the value from the editor
- var vJSON = editor.getValue();
+ var vJSON = vJSONEditor.getValue();
  var vFile = class2filename(vJSON.data.classname,".json");
 // set modified date in reposinfo.modified
  updateModified(vJSON);
@@ -8281,7 +8280,7 @@ function paramCallString(pParamArray) {
     vComma = ",";
   };
 
-  return ret;
+  return new Handlebars.SafeString(ret);
 }
 
 Handlebars.registerHelper('paramcall', paramCallString);
@@ -8326,7 +8325,7 @@ function attribs4UMLString(pArray) {
     ret += vSep + " " + vVis + " " + pArray[i].name+":"+pArray[i].class;
     vSep = "<br>";
   };
-  return ret;
+  return new Handlebars.SafeString(ret);
 }
 
 Handlebars.registerHelper('require_attribs', attribs4UMLString);
@@ -8352,7 +8351,7 @@ function attribs4UMLString(pArray) {
     ret += vSep + " " + vVis + " " + pArray[i].name+":"+pArray[i].class;
     vSep = "<br>";
   };
-  return ret;
+  return new Handlebars.SafeString(ret);
 }
 
 Handlebars.registerHelper('attribs_uml', attribs4UMLString);
@@ -8383,7 +8382,7 @@ function methods4UMLString(pArray) {
     };
     vSep = "<br>";
   };
-  return ret;
+  return new Handlebars.SafeString(ret);
 }
 
 Handlebars.registerHelper('methods_uml', methods4UMLString);
@@ -8405,7 +8404,7 @@ function parameterListString(pParamArray,pIndent) {
       ret += vNewLine + vExtraIndent + vComment;
     };
   };
-  return ret;
+  return new Handlebars.SafeString(ret);
 }
 
 Handlebars.registerHelper('parameterlist', parameterListString);
@@ -17310,6 +17309,7 @@ function JSONEditor4Code (pDocument) {
   //---- attributes ----
   this.aDoc = pDocument;
   this.aJSON = {};
+  this.aDefaultJSON = {};
   this.aSchema = null;
   this.aOptions = Options = {
     "editor_id": "editor_holder",
@@ -17460,10 +17460,9 @@ function JSONEditor4Code (pDocument) {
     		} else {
     			console.log("JSON-DB for UML class '"+this.aJSON.data.classname+"' not saved - data deleted!");
     		};
-    		this.aJSON = this.aDefaultJSON; // defined e.g. in /db/uml_default.js
+    		this.setValue(this.aDefaultJSON); // defined e.g. in /db/uml_default.js
     		console.log("JSON-DB initalized with UML class '"+this.aJSON.data.classname+"'!");
     		//save changes to Local Storage
-        setTimeout(this.aOptions.editor_var+".create_editor()",1000);
     } else {
         console.log("initialize JSON-DB cancelled")
     };

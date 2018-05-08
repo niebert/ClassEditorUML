@@ -2,6 +2,7 @@ function JSONEditor4Code (pDocument) {
   //---- attributes ----
   this.aDoc = pDocument;
   this.aJSON = {};
+  this.aDefaultJSON = {};
   this.aSchema = null;
   this.aOptions = Options = {
     "editor_id": "editor_holder",
@@ -152,10 +153,9 @@ function JSONEditor4Code (pDocument) {
     		} else {
     			console.log("JSON-DB for UML class '"+this.aJSON.data.classname+"' not saved - data deleted!");
     		};
-    		this.aJSON = this.aDefaultJSON; // defined e.g. in /db/uml_default.js
+    		this.setValue(this.aDefaultJSON); // defined e.g. in /db/uml_default.js
     		console.log("JSON-DB initalized with UML class '"+this.aJSON.data.classname+"'!");
     		//save changes to Local Storage
-        setTimeout(this.aOptions.editor_var+".create_editor()",1000);
     } else {
         console.log("initialize JSON-DB cancelled")
     };

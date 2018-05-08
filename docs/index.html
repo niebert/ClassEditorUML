@@ -90,7 +90,7 @@
       <i class="fa fa-minus-square" aria-hidden="true"></i> Init DB
     </button>
     -->
-		<button id='bDeleteClass' style="color: white;background-color: #c10303"  onclick="vJSONEditor.init_ask();return false">
+		<button id='bDeleteClass' style="color: white;background-color: #c10303;display:none"  onclick="vJSONEditor.init_ask();return false">
 			<i class="fa fa-minus-square" aria-hidden="true"></i> Delete Class
 		</button>
 
@@ -104,7 +104,11 @@
     <button id='submit' style="display:none">Submit (console.log)</button>
     <button id='bExportJSON'>Export JSON</button>
     <button id='bExportSchemaJSON'>Export JSON Schema</button>
-    <button id='bTemplate' onclick="$('#divTemplates').toggle()">Debug Output</button>
+    <button id='bUpdateSchema' style="color: white;background-color: #225988;display:none"  onclick="vJSONEditor.create_editor();return false">
+      <i class="fa fa-refresh" aria-hidden="true"></i>
+      Update Schema
+    </button>
+		<button id='bTemplate' onclick="$('#divTemplates').toggle()">Debug Output</button>
 <hr>
 <center>
   <a href="https://github.com/niebert/ClassEditorUML/archive/master.zip" target="_blank">Download GitHub (2018)</a>
