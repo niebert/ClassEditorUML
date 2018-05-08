@@ -291,14 +291,16 @@ vDataJSON["class_schema"] = {
                                 "type": "string",
                                 "id": "/properties/data/properties/methods/items/properties/visibility",
                                 "title": "Visibility",
-                                "$ref": "#/definitions/visibility"
+                                "propertyOrder": 10,
+                    						"$ref": "#/definitions/visibility"
                             },
                             "name": {
                                 "type": "string",
                                 "id": "/properties/data/properties/methods/items/properties/name",
                                 "title": "Method Name",
                                 "default": "myMethod",
-                                "format": "text"
+                                "propertyOrder": 20,
+                    						"format": "text"
                             },
                             "parameter": {
                                 "title": "Parameter",
@@ -306,7 +308,8 @@ vDataJSON["class_schema"] = {
                                 "id": "/properties/data/properties/methods/items/properties/parameter",
                                 //"format": "tabs",
                                 "format": "table",
-                                "uniqueItems": true,
+                                "propertyOrder": 30,
+                    						"uniqueItems": true,
                                 "options": {
                                   "collapsed": true
                                 },
@@ -326,19 +329,22 @@ vDataJSON["class_schema"] = {
                                             "title": "Parameter",
                                             "default": "pVar",
                                             "minLength": 1,
-                                            "format": "text"
+                                            "propertyOrder": 10,
+                                						"format": "text"
                                         },
                                         "class": {
                                             "type": "string",
                                             "id": "/properties/data/properties/methods/items/properties/parameter/items/properties/class",
                                             "title": "Class",
-                                            "$ref": "#/definitions/selectorclass"
+                                            "propertyOrder": 20,
+                                						"$ref": "#/definitions/selectorclass"
                                         },
                                         "comment": {
                                             "type": "string",
                                             "id": "/properties/data/properties/methods/items/properties/parameter/items/properties/comment",
                                             "$ref": "#/definitions/comment",
-                                            "default": "the parameter stores ..."
+                                            "propertyOrder": 30,
+                                						"default": "the parameter stores ..."
                                             //"format": "text"
                                         }
                                     }
@@ -348,14 +354,16 @@ vDataJSON["class_schema"] = {
                                 "type": "string",
                                 "id": "/properties/data/properties/methods/items/properties/return",
                                 "title": "Return",
-                                "$ref": "#/definitions/selectorclass"
+                                "propertyOrder": 40,
+                    						"$ref": "#/definitions/selectorclass"
                             },
                             "code": {
                                 "type": "string",
                                 "id": "/properties/data/properties/methods/items/properties/code",
                                 "title": "Code - Language: '"+vProgLanguage+"'",
                                 "default": "// insert your code here",
-                                "format": vProgLanguage
+                                "propertyOrder": 50,
+                    						"format": vProgLanguage
                             },
                             "comment": {
                                 "type": "string",
@@ -364,7 +372,8 @@ vDataJSON["class_schema"] = {
                                 "format":"textarea",
                                 "$ref": "#/definitions/comment",
                                 "default": "the method performs ...",
-                                "description": "Describe the purpose of the method. This description will be used to generate a documentation of the UML definition."
+                                "propertyOrder": 60,
+                    						"description": "Describe the purpose of the method. This description will be used to generate a documentation of the UML definition."
                             }
 
                         }
@@ -393,7 +402,8 @@ vDataJSON["class_schema"] = {
                   "title": "Extension for Generated Code:",
                   "default": ".js",
                   "format": "text",
-                  "size":12,
+                  "propertyOrder": 10,
+      						"size":12,
                   "description": "When ClassEditorUML generates code, it stores a generated file in the programming language '"+vProgLanguage+"' with this file extension"
                 },
                 "classlist": {
@@ -401,7 +411,8 @@ vDataJSON["class_schema"] = {
                     //"id": "/properties/settings/properties/classlist",
                     "title": "Select List of Classes",
                     "format": "table",
-                    "options": {
+                    "propertyOrder": 20,
+        						"options": {
                       "collapsed": true,
                       "hidden": true
                     },
@@ -432,7 +443,8 @@ vDataJSON["class_schema"] = {
                     "title": "Local List of Classes",
                     "description":"A local class is a module required from local repository. The path name defined in the 'Repository Info' is used as prefix to require those local definition of classes.",
                     "format": "table",
-                    "options": {
+                    "propertyOrder": 30,
+        						"options": {
                       "collapsed": true
                     },
                     "items": {
@@ -452,7 +464,8 @@ vDataJSON["class_schema"] = {
                     "id": "/properties/settings/properties/remoteclasslist",
                     "title": "Remote List of Classes",
                     "format": "table",
-                    "options": {
+                    "propertyOrder": 40,
+        						"options": {
                       "collapsed": true
                     },
                     "description":"A remote class is a module required from a package manager like NPM.",
@@ -473,7 +486,8 @@ vDataJSON["class_schema"] = {
                     "id": "/properties/settings/properties/baseclasslist",
                     "title": "List of Base Classes",
                     "format": "table",
-                    "options": {
+                    "propertyOrder": 50,
+        						"options": {
                       "collapsed": true
                     },
                     "description":"A base class is provide by the programming language '"+vProgLanguage+"' itself, so using these classes in a module does not imply that the special module must be required locally of from a package manager.",
