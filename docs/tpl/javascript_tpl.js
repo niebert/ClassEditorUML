@@ -1,103 +1,110 @@
 vDataJSON["tpl"]["javascript"] = `
 //#################################################################
-//# Javascript Class: {{classname}}()
-//#       SuperClass: {{superclassname}}
-//#   Class Filename: {{filename classname}}.js
+//# Javascript Class: {{data.classname}}()
+{{#ifcond data.superclassname "!=" ""}}
+//#       SuperClass: {{data.superclassname}}
+{{/ifcond}}
+//#   Class Filename: {{filename data.classname}}.js
 //#
-//# Author of Class:      {{reposinfo.author}}
-//# email:                {{reposinfo.email}}
-//# Created:              {{reposinfo.created}}
-//# Modified              {{reposinfo.modified}}
+//# Author of Class:      {{data.reposinfo.author}}
+//# email:                {{data.reposinfo.email}}
+//# Created:              {{data.reposinfo.created}}
+//# Modified              {{data.reposinfo.modified}}
 //# GNU Public License V3 - OpenSource
 //#
-//# created with JavaScript Class Creator JSCC
-//#     https://niebert.github.io/JavascriptClassGenerator
+//# created with JavaScript ClassEditorUML
+//#     https://niebert.github.io/ClassEditorUML
 //#################################################################
 
-{{#ifcond reposinfo.require_classes "==" "no"}}
+{{#ifcond data.reposinfo.require_classes "==" "no"}}
 //---------------------------------------------------------------------
 //---Store File in Subdirectory /js and import this Class in HTML-File with
 // SCRIPT-Tag:  LANGUAGE="JavaScript" SRC="js/{{filename classname}}.js"
 {{/ifcond}}
-{{#ifcond reposinfo.require_classes "==" "yes"}}
-{{#ifcond superclassname "!=" ""}}
+{{#ifcond data.reposinfo.require_classes "==" "yes"}}
+{{#ifcond data.superclassname "!=" ""}}
 //---------------------------------------------------------------------
 // NodeJS: require the super class
-const {{superclassname}} = require('{{filename superclassname}}');
+const {{data.superclassname}} = require('{{filename data.superclassname}}');
 {{/ifcond}}
-{{{require_class_list attributes methods baseclasslist extendedclasslist reposinfo.require_path}}}
+{{{require_class_list data.superclassname data.attributes data.methods settings.baseclasslist settings.extendedclasslist data.reposinfo.require_path}}}
 {{/ifcond}}
 //---------------------------------------------------------------------
-//---Constructor of Class {{classname}}()
-// Call the constructor for creating an instance of class {{classname}}
+//---Constructor of Class {{data.classname}}()
+// Call the constructor for creating an instance of class {{data.classname}}
 // by the following command in HTML-file that imports this class
-// var v{{classname}} = new {{classname}}();
+// var v{{data.classname}} = new {{data.classname}}();
 //---------------------------------------------------------------------
 //----Attributes-------------------------------------------------------
 //---------------------------------------------------------------------
-// If you want to access the attributes of {{classname}} in the code for methods, use
-// the attribute name with a leading "this." in the definition of method of {{classname}}, e.g.
+// If you want to access the attributes of {{data.classname}} in the code for methods, use
+// the attribute name with a leading "this." in the definition of method of {{data.classname}}, e.g.
 // this.aName = "Hello World";
 //---------------------------------------------------------------------
 //----Methods----------------------------------------------------------
 //---------------------------------------------------------------------
-// (1) If you want to assign definitions of methods for single instance of the class '{{classname}}'
+// (1) If you want to assign definitions of methods for single instance of the class '{{data.classname}}'
 // they are defined with
 //    this.my_method = function (pPar1,pPar2)
 // this approach allows to overwrite the method definition of single instances dynamically.
 //---------------------------------------------------------------------
-// (2) A prototype definition of methods for '{{classname}}' will be set by
-// use the method's name and extend it with '{{classname}}'.
-//    {{classname}}.prototype.my_method = function (pPar1,pPar2)
+// (2) A prototype definition of methods for '{{data.classname}}' will be set by
+// use the method's name and extend it with '{{data.classname}}'.
+//    {{data.classname}}.prototype.my_method = function (pPar1,pPar2)
 // This approach consumes less memory for instances.
 //---------------------------------------------------------------------
 
-{{#ifcond superclassname "==" ""}}
-    // superclass undefined
-{{/ifcond}}
-{{#ifcond superclassname "!=" ""}}
+{{#ifcond data.superclassname "!=" ""}}
 //--------------------------------------
 //---Super Class------------------------
-// Inheritance: '{{classname}}' inherits from '{{superclassname}}'
-{{classname}}.prototype = new {{superclassname}}();
-// Constructor for instances of {{classname}} has to updated.
-// Otherwise constructor of '{{superclassname}}' is called
-{{classname}}.prototype.constructor={{classname}};
+// Inheritance: '{{data.classname}}' inherits from '{{data.superclassname}}'
+{{data.classname}}.prototype = new {{data.superclassname}}();
+// Constructor for instances of {{data.classname}} has to updated.
+// Otherwise constructor of '{{data.superclassname}}' is called
+{{data.classname}}.prototype.constructor={{data.classname}};
 // see http://phrogz.net/js/classes/OOPinJS2.html for explanation
 //--------------------------------------
 {{/ifcond}}
 
 
-function {{classname}} () {
+function {{data.classname}} () {
     //---------------------------------------------------------------------
-    //---Attributes of Class "{{classname}}()"
+    //---Attributes of Class "{{data.classname}}()"
     //---------------------------------------------------------------------
-{{#each attributes}}
+{{#each data.attributes}}
     // ------------------------------------------
-    // {{visibility}}: {{name}} ({{class}})
-    {{#codeindent comment indent="    // "}}
-    {{/codeindent}}
-    this.{{name}} = {{init}}; // Class: {{class}}
+    // {{visibility}}: {{name}}   Class: {{class}}
+{{#ifcond comment "!=" ""}}
+{{#indent comment indent="    // " text=comment}}{{/indent}}
+{{/ifcond}}
+{{#ifcond visibility "==" "public"}}
+    this.{{name}} = {{init}};   // Class: {{class}}
+{{/ifcond}}
+{{#ifcond visibility "==" "private"}}
+    var {{name}} = {{init}};   // Class: {{class}}
+{{/ifcond}}
 {{/each}}
     //---------------------------------------------------------------------
-    //---Methods of Class "{{classname}}()"
+    //---Methods of Class "{{data.classname}}()"
     //---------------------------------------------------------------------
 
-{{#each methods}}
+{{#each data.methods}}
 
     //#################################################################
-    //# {{visibility}} Method: {{name}}()
-    //#    used in Class: {{../classname}}
+    //# {{visibility}} Method: {{name}}()  Class: {{../classname}}
     //# Parameter:
     //#    {{parameterlist parameter "    //#    "}}
     //# Comment:
-    //#    {{{comment}}}
+{{#indent comment indent="    //#    " text=comment}}{{/indent}}
     //# {{{returncomment}}}
-    //# created with ClassEditorUML {{../reposinfo.created}}
-    //# last modifications          {{../reposinfo.modified}}
     //#################################################################
 
+{{#ifcond visibility "==" "public"}}
     {{../classname}}.prototype.{{name}} = function ({{#paramcall parameter}}{{/paramcall}}) {
+{{/ifcond}}
+{{#ifcond visibility "==" "private"}}
+    function {{name}}({{#paramcall parameter}}{{/paramcall}}) {
+{{/ifcond}}
       //----Debugging------------------------------------------
       // console.log("{{filename ../classname}}.js - Call: {{name}}({{#paramcall parameter}}{{/paramcall}})");
       // alert("{{filename ../classname}}.js - Call: {{name}}({{#paramcall parameter}}{{/paramcall}})");
@@ -105,19 +112,20 @@ function {{classname}} () {
       //    var v{{../classname}} = new {{../classname}}();
       //    v{{../classname}}.{{name}}({{#paramcall parameter}}{{/paramcall}});
       //-------------------------------------------------------
-      {{#codeindent code indent="      "}}
-      {{/codeindent}}
+{{#indent code indent="      " text=code}}{{/indent}}
+    }
+    // ---- Method: {{name}}() Class: {{../classname}} ------
 {{/each}}
 }
 //-------------------------------------------------------------------------
-//---END Constructor of Class "{{classname}}()"
+//---END Constructor of Class "{{data.classname}}()"
 //-------------------------------------------------------------------------
 
-{{#ifcond reposinfo.require_classes "==" "yes"}}
+{{#ifcond data.reposinfo.require_classes "==" "yes"}}
 
-// NodeJS: export class constructor '{{classname}}' for module {{filename classname}}.js
+// NodeJS: export class constructor '{{data.classname}}' for module {{filename data.classname}}.js
 // -------
-module.exports = {{classname}};
+module.exports = {{data.classname}};
 {{/ifcond}}
 `;
 

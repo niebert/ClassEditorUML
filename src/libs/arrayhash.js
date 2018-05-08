@@ -10,14 +10,15 @@ function cloneJSON(pJSON) {
   } else {
     console.log("ERROR: cloneJSON(pJSON) - pJSON undefined!");
   };
-  return vJSON
-};
+  return vJSON;
+}
 
 function concat_array( a, b ) {
   var c = [];
   for (var i = 0; i < a.length; i++) {
     c.push(a[i])
-  };
+  }
+
   for (var i = 0; i < b.length; i++) {
     c.push(b[i])
   };
@@ -50,14 +51,14 @@ function extendHash( a, b ) {
 */
 function isHash(pObject) {
    return pObject && (typeof(pObject)  === "object");
-};
+}
 
 /**
 * Check if element is an Array
 */
 function isArray(pObj) {
   return isHash(pObj) && (pObj instanceof Array);
-};
+}
 
 function makeMap(str){
   var obj = {};
@@ -77,7 +78,7 @@ function lengthHash(pHash) {
     };
   };
   return vLength;
-};
+}
 
 function getDeleteBoolean4Hash(pHash) {
   var vDelHash = {};
@@ -118,7 +119,7 @@ function updateHash4NewIDs(pHash,pArrID_NEW,pDefaultValue) {
       delete pHash[vID];
     };
   };
-};
+}
 
 function updateHashSourceDestination(pSource,pDest) {
 
@@ -153,7 +154,7 @@ function firstKey4Hash(pHash) {
     };
   };
   return vKey;
-};
+}
 
 function createHash4Array(pArr,pHash) {
   // general call createHash4Array(pArr)
@@ -166,7 +167,7 @@ function createHash4Array(pArr,pHash) {
     };
   };
   return vHash;
-};
+}
 
 function createArray4HashID(pHash) {
   var vArr = [];
@@ -176,7 +177,7 @@ function createArray4HashID(pHash) {
     };
   };
   return vArr;
-};
+}
 
 function isValidJSON(str) {
   try {

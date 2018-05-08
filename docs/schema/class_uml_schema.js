@@ -2,7 +2,9 @@ vDataJSON["class_schema"] = {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "additionalProperties": true,
     "options":{
-
+      "disable_collapse": false,
+      "disable_properties": true,
+      "disable_edit_json": false
     },
     "title": "Unified Modelling Language - UML",
     "definitions": {
@@ -64,6 +66,10 @@ vDataJSON["class_schema"] = {
             "type": "object",
             "headerTemplate": "Class: {{self.classname}}",
             "id": "/properties/data",
+            "options": {
+              "collapsed": false,
+              "disable_properties": true
+            },
             "defaultProperties": [
                 "classname",
                 "superclassname",
@@ -100,9 +106,12 @@ vDataJSON["class_schema"] = {
                     "title": "Repository Info",
                     "id": "/properties/data/properties/reposinfo",
                     "options": {
-                      "collapsed": true
+                      "collapsed": true,
+                      "disable_properties": true
                     },
                     "defaultProperties": [
+                        "JSCC_type",
+                        "JSCC_version",
                         "repository",
                         "require_classes",
                         "author",
@@ -112,6 +121,28 @@ vDataJSON["class_schema"] = {
                         "requirelist"
                     ],
                     "properties": {
+                        "JSCC_type": {
+                          "type": "string",
+                          "id": "/properties/data/properties/reposinfo/properties/JSCC_type",
+                          "title": "JSCC Type",
+                          "options": {
+                            "hidden": true
+                          },
+                          "default": "CLASS",
+                          "format": "text",
+                          "description": "Hidden JSON attribute to handle with JavascriptClassCreator JSCC as CLASS - allows integration into UML based Software Development Framework"
+                        },
+                        "JSCC_version": {
+                          "type": "string",
+                          "id": "/properties/data/properties/reposinfo/properties/JSCC_type",
+                          "title": "JSCC Version",
+                          "options": {
+                            "hidden": true
+                          },
+                          "default": "2",
+                          "format": "text",
+                          "description": "Hidden JSON attribute to handle the version of JSON with JavascriptClassCreator JSCC as CLASS - allows integration into UML based Software Development Framework"
+                        },
                         "repository": {
                             "type": "string",
                             "id": "/properties/data/properties/reposinfo/properties/repository",
@@ -244,6 +275,7 @@ vDataJSON["class_schema"] = {
                     },
                     "items": {
                         "type": "object",
+                        "title": "Method",
                         "headerTemplate": "{{self.name}}()",
                         "id": "/properties/data/properties/methods/items",
                         "defaultProperties": [
@@ -329,6 +361,7 @@ vDataJSON["class_schema"] = {
                                 "type": "string",
                                 "id": "/properties/data/properties/methods/items/properties/comment",
                                 "title":"Comment",
+                                "format":"textarea",
                                 "$ref": "#/definitions/comment",
                                 "default": "the method performs ...",
                                 "description": "Describe the purpose of the method. This description will be used to generate a documentation of the UML definition."
@@ -347,6 +380,7 @@ vDataJSON["class_schema"] = {
               "collapsed": true
             },
             "defaultProperties": [
+                "extension4code",
                 "classlist",
                 "localclasslist",
                 "remoteclasslist",
@@ -359,6 +393,7 @@ vDataJSON["class_schema"] = {
                   "title": "Extension for Generated Code:",
                   "default": ".js",
                   "format": "text",
+                  "size":12,
                   "description": "When ClassEditorUML generates code, it stores a generated file in the programming language '"+vProgLanguage+"' with this file extension"
                 },
                 "classlist": {

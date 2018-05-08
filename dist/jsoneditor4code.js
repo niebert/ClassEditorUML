@@ -17744,7 +17744,3 @@ function JSONEditor4Code (pDocument) {
     };
   }
 }; // end JSONEditor4Code
-
-
-// -------NPM Export Variable: JSONEditor4Code---------------
-module.exports = JSONEditor4Code;

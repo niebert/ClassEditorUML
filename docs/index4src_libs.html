@@ -11,9 +11,16 @@
      <!-- ACE Editor -->
      <script src="ace/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
      <script src="jquery/external/jquery/jquery.js" type="text/javascript"></script>
-     <!-- JSON Editor for Code Generation -->
-     <script src="js/jsoneditor4code.js"></script>
 
+     <script src="../src/libs/arrayhash.js"></script>
+	   <script src="../src/libs/bootstrap.js"></script>
+
+     <script src="../src/libs/arrayhash.js"></script>
+     <script src="../src/libs/date.js"></script>
+     <script src="../src/libs/filesaver.js"></script>
+     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.amd.js"></script> -->
+     <script src="../src/libs/localstorage.js"></script>
+     <script src="../src/libs/jsoneditor.min.js"></script>
     <script>
     // vDataJSON is the main JSON storage for the privacy friendly WebApp
     // File Loaded into vDataJSON by script tag
@@ -30,9 +37,8 @@
     JSONEditor.plugins.ace.theme = 'xcode';
 
     </script>
-    <!-- ### UML Default File  #####################
-    used for initializing afte delete class command
-    -->
+    <script src="../src/libs/classeditor.js"></script>
+    <!-- ### UML Default File  ##################### -->
     <script src="db/uml_default.js"></script>
     <!-- ### UML Loaded File  ##################### -->
     <script src="db/umljs.js"></script>
@@ -40,16 +46,31 @@
     Template ID: "javascript"
     Template: vDataJSON["tpl"]["javascript"]
     -->
-    <script src="tpl/javascript_tpl.js"></script>
+    <script src="tpl/javascript_class_tpl.js"></script>
     <!-- ### COMPILE HANDLEBARS TEMPLATES  ############
     Template ID: "docu4github"
     Template: vDataJSON["tpl"]["docu4github"]
     -->
     <script src="tpl/docu4github_tpl.js"></script>
-    <!-- ### SCHEMA LOADER ############################
-    script tag stores the JSON schema in
-    vDataJSON["class_schema"]
-    -->
+    <!-- HandleBars used as Template Engine -->
+    <script src="../src/libs/handlebars.js"></script>
+    <!-- HandleBars helpers are used for code and docu generator -->
+    <script src="../src/libs/handlebars_helper.js"></script>
+
+    <script>
+    /* vDataJSON is the main JSON data storage defined in index.html
+      vDataJSON is provided as parameter to createHandleBarsCompiler(pDataJSON)
+       * createHandleBarsCompiler() expects a hash key "tpl" containing the templates.
+       * createHandleBarsCompiler() generates HandleBars compiler functions
+         in pDataJSON["out"] for all keys pDataJSON["tpl"]
+      create for all templates in the hash vDataJSON["tpl"] a Handlebars compiler
+      e.g. vDataJSON["tpl"]["javascript"] is a Handlebars template for Javascript
+      Code generation. Following iteration will create a compliler
+      in vDataJSON["out"]["javascript"]
+    */
+    createHandleBarsCompiler(vDataJSON); // defined in file js/handlebars_helper.js
+    </script>
+    <!-- ### SCHEMA LOADER ############################ -->
     <script src="schema/class_uml_schema.js"></script>
     <!-- ############################################## -->
   </head>
@@ -66,20 +87,20 @@
  	 	<button id='bOpenJSON' style="color: white;background-color: #225988"  onclick="$( '#fileJSON' ).trigger('click');return false">
 			<i class="fa fa-folder-open-o" aria-hidden="true"></i> Load
 		</button>
-    <button id='bSaveJSON' style="color: white;background-color: #225988"  onclick="vJSONEditor.saveJSON();return false">
+    <button id='bSaveJSON' style="color: white;background-color: #225988"  onclick="saver4JSON();return false">
 			<i class="fa fa-floppy-o" aria-hidden="true"></i> Save
 		</button>
    &nbsp;
 		&nbsp;
-    <b>File: </b>  <tt id="display_filename">class.json</tt>
+    <b>File: </b>  <tt id="load_filename">class.json</tt>
 		&nbsp;
 		&nbsp;
     <!-- Function: exportCode() is defined in js/classeditor.js -->
-    <button id='bExportHTML' style="color: white;background-color: #225988"  onclick="vJSONEditor.save4Template('javascript','.js','Javascript Code for Class');return false">
+    <button id='bExportHTML' style="color: white;background-color: #225988"  onclick="exportCode();return false">
 			<i class="fa fa-floppy-o" aria-hidden="true"></i> Export Code
 	 </button>
    <!-- Function: exportDocumentation() is defined in js/classeditor.js -->
-   <button id='bExportDoc' style="color: white;background-color: #225988"  onclick="vJSONEditor.save4Template('docu4github','_github.md','Github Documentation for Class');return false">
+   <button id='bExportDoc' style="color: white;background-color: #225988"  onclick="exportDocumentation();return false">
      <i class="fa fa-floppy-o" aria-hidden="true"></i> Export Documentaion
   </button>
     <!--
@@ -90,7 +111,7 @@
       <i class="fa fa-minus-square" aria-hidden="true"></i> Init DB
     </button>
     -->
-		<button id='bDeleteClass' style="color: white;background-color: #c10303"  onclick="vJSONEditor.init_ask();return false">
+		<button id='bDeleteClass' style="color: white;background-color: #c10303"  onclick="deleteClass();return false">
 			<i class="fa fa-minus-square" aria-hidden="true"></i> Delete Class
 		</button>
 
@@ -111,54 +132,42 @@
 </center>
     <div id="divTemplates" style="display:none">
       <b>Output</b> <tt>[tOutput]</tt><br>
-      <form id="fSubmitJSONdata" action="jsondata2submit.html" method="get" target="_blank">
-        <textarea id="tOutput" name="jsondata" cols="125" rows="10"></textarea>
-        <br>
-        <input type="submit">
-      </form>
+      <textarea id="tOutput" name="tOutput" cols="125" rows="10"></textarea>
       <hr>
       <b>JSON</b> <tt>[tOutJSON]</tt><br>
       <textarea id="tOutJSON" name="tOutJSON" cols="125" rows="10"></textarea>
       <hr>
       <b>JSON Errors</b> <tt>[tErrors]</tt><br>
-      <textarea id="tErrors" name="tErrors" cols="125" rows="10">
-      </textarea>
+      <textarea id="tErrors" name="tCErrors" cols="125" rows="10">
+        </textarea>
     <hr>
 
     </div>
+    <script src="../src/libs/linkparam.js"></script>
 
     <script>
 
       // This is the starting value for the editor
       // We will use this to seed the initial editor
       // and to provide a "Restore to Default" button.
-      var vJSON = vDataJSON["umljs"]; //see file "db/umljs.js"
-      var vJSONEditor = new JSONEditor4Code(document);
-      /*
-      "editor_id": DOM id where the editor will be injected,
-      "load_file_id" : "display_filename",
-      */
-      var vOptions = {
-        "editor_var": "vJSONEditor",
-        "editor_id": "editor_holder",
-        "validator_id":"valid_indicator",
-        "filejson_id" : "fileJSON",
-        "filename_id" : "display_filename",
-        "out_json": "tOutJSON",
-        "out_code": "tOutput",
-        "out_errors": "tErrors"
-      };
-      var vDefaultJSON = vDataJSON["uml_default"]; //see file "db/uml_default.js"
-      //console.log("Edit JSON:\n"+JSON.stringify(vJSON,null,3));
-      vJSONEditor.init(vJSON,
-        vDefaultJSON,
-        vDataJSON["class_schema"],
-        vDataJSON["tpl"],
-        vOptions);
+      var vInitJSON = vDataJSON["UMLJS"];
+      console.log("Start JSON:\n"+JSON.stringify(vInitJSON,null,3));
+       //-------------------------------------------------------
+       // LINK PARAMETER: Evaluation link parameter in JSON Path
+       var vLinkParam = new LinkParam();
+       vLinkParam.init(document);
+       if (vLinkParam.exists("jsondata")) {
+         vParamData = vLinkParam.getValue("jsondata");
+         try {
+           vInitJSON = JSON.parse(vParamData);
+         } catch (e) {
+           alert("ERROR (JSON): "+e);
+           vInitJSON = vDataJSON["UMLJS"];
+         };
+       };
       // Initialize the editor
-      //document.getElementById("display_filename").innerHTML = class2filename(vJSON.data.classname);
-      /*
-      console.log("Start JSON:\n"+JSON.stringify(vJSON,null,3));
+      document.getElementById("load_filename").innerHTML = class2filename(vInitJSON.classname)
+      console.log("Start JSON:\n"+JSON.stringify(vInitJSON,null,3));
       var editor = new JSONEditor(document.getElementById('editor_holder'),{
         // Enable fetching schemas via ajax
         ajax: true,
@@ -175,7 +184,7 @@
         // Require all properties by default
         required_by_default: true
       });
-      update_editor(vJSON);
+      update_editor(vInitJSON);
       // Hook up the submit button to log to the console
       document.getElementById('submit').addEventListener('click',function() {
         // Get the value from the editor
@@ -207,7 +216,6 @@
         //update_editor();
       });
 
-*/
     </script>
 
 

@@ -1,4 +1,4 @@
-vDataJSON["UML_DEFAULT"]={
+vDataJSON["uml_default"]={
     "data":{
       "classname": "MyClass",
       "superclassname": "",
@@ -15,7 +15,8 @@ vDataJSON["UML_DEFAULT"]={
       "attributes": [],
       "methods": []
     },
-    "config":{
+    "settings":{
+      "extension4code":".js",
       "classlist": [
           "",
           "Array",
@@ -34,11 +35,10 @@ vDataJSON["UML_DEFAULT"]={
           "JSONEditor"
       ],
       "localclasslist": [
-          "App",
-          "AppAbstract"
+          "LoadSaver",
+          "LinkParam"
       ],
       "remoteclasslist": [
-          "LinkParam",
           "JSONEditor"
       ],
       "baseclasslist": [

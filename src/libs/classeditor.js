@@ -1,13 +1,15 @@
+
 function saveFile2HDD(pFilename,pContent) {
   var file = new File([pContent], {type: "text/plain;charset=utf-8"});
   saveAs(file,pFilename);
 }
 
 function deleteClass() {
-  editor.setValue(vDataJSON["UML_DEFAULT"]);
+  vJSONEditor.initAsk();
+  //editor.setValue(vDataJSON["UML_DEFAULT"]);
 }
 
-function validate_errors() {
+function X_validate_errors() {
   // Get an array of errors from the validator
   var errors = editor.validate();
 
@@ -34,7 +36,7 @@ function validate_errors() {
 
 function update_editor(pJSON) {
   var vJSON = pJSON || editor.getValue();
-  $('#load_filename').html(class2filename(vJSON.data.classname,".json"));
+  $('#display_filename').html(class2filename(vJSON.data.classname,".json"));
   var c = vJSON.settings;
   var vRequired_Classes = concat_array(c.remoteclasslist,c.localclasslist);
   //console.log("vRequired_Classes: "+vRequired_Classes.join(","));
@@ -50,7 +52,10 @@ function update_editor(pJSON) {
     console.log("Update 'root.settings' undefined");
   };
   vEditNode = editor.getEditor('root.data');
-  if(vEditNode) {
+  if (vEditNode) {
+    if (vJSON.data.hasOwnProperty("reposinfo")) {
+        vJSON.data.reposinfo.modified = getDateTime();
+    };
     vEditNode.setValue(vJSON.data);
   } else {
     console.log("Update 'root.data' undefined");
@@ -64,12 +69,12 @@ function saver4JSON(pFile) {
   alert("File: '"+vFile+"' saved!");
 };
 
-function exporter4Schema() {
+function exporter4Schema(pFilename) {
     // Get the value from the editor
     console.log("BEFORE editor.schema:\n"+JSON.stringify(editor.schema,null,4));
     var vJSON = editor.schema;
     var vContent = JSON.stringify(vJSON,null,4);
-    var vFile = "uml_schema.json";
+    var vFile = pFilename || "uml_schema.json";
     console.log("JSON Schema output '"+vFile+"':\n"+vContent);
     saveFile2HDD(vFile,vContent);
 }
@@ -104,7 +109,8 @@ function class2filename(pClassName,pExt) {
   return vFilename+vExt;
 }
 
-function exportCode() {
+
+function X_exportCode() {
   //-- Javascript Class Output --
   //-- Template: tpl/javascript_class_tpl.js
   var vJSON = editor.getValue();
@@ -113,16 +119,19 @@ function exportCode() {
   // vDataJSON["out"]["javascript"] is HandleBars compiler function
   // Compile functions was generated from "tpl/javascript_class_tpl.js"
   var vContent = vDataJSON["out"]["javascript"](vJSON);
+  //--JSON Output----------------
+  var vExt = vJSON.settings.extension4code || ".json";
+  var vFile = class2filename(vJSON.data.classname,vExt);
+  vContent = postProcessHandlebars(vContent,vJSON);
   //--Textarea Output----------------
   var vOutNode = document.getElementById("tOutput");
   vOutNode.value = vContent;
-  //--JSON Output----------------
-  var vFile = class2filename(vJSON.data.classname,vJSON.settings.extension4code);
   saveFile2HDD(vFile,vContent);
   alert("Export Code for Class to '"+vFile+"'");
 };
 
-function exportDocumentation() {
+
+function X_exportDocumentation() {
   //-- GitHub Class Documentation Output in GitHub Markdown--
   //-- Template: tpl/docu4github_tpl.js
   var vJSON = editor.getValue();
@@ -131,6 +140,7 @@ function exportDocumentation() {
   // vDataJSON["out"]["javascript"] is HandleBars compiler function
   // Compile functions was generated from "tpl/docu4github_tpl.js"
   var vContent = vDataJSON["out"]["docugithub"](vJSON);
+  vContent = postProcessHandlebars(vContent,vJSON);
   //--Textarea Output----------------
   var vOutNode = document.getElementById("tOutput");
   vOutNode.value = vContent;
@@ -144,7 +154,7 @@ function loader4JSON(pFileID4DOM) {
   var fileToLoad = document.getElementById(pFileID4DOM).files[0]; //for input type=file
   if (fileToLoad) {
     console.log("loader4JSON() - File '"+fileToLoad.name+"' exists.");
-    $('#load_filename').html(fileToLoad.name); // this.value.replace(/.*[\/\\]/, '')
+    $('#display_filename').html(fileToLoad.name); // this.value.replace(/.*[\/\\]/, '')
     var fileReader = new FileReader();
     // set the onload handler
     fileReader.onload = function(fileLoadedEvent){

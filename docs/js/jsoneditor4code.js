@@ -8281,7 +8281,7 @@ function paramCallString(pParamArray) {
     vComma = ",";
   };
 
-  return ret;
+  return new Handlebars.SafeString(ret);
 }
 
 Handlebars.registerHelper('paramcall', paramCallString);
@@ -8326,7 +8326,7 @@ function attribs4UMLString(pArray) {
     ret += vSep + " " + vVis + " " + pArray[i].name+":"+pArray[i].class;
     vSep = "<br>";
   };
-  return ret;
+  return new Handlebars.SafeString(ret);
 }
 
 Handlebars.registerHelper('require_attribs', attribs4UMLString);
@@ -8352,7 +8352,7 @@ function attribs4UMLString(pArray) {
     ret += vSep + " " + vVis + " " + pArray[i].name+":"+pArray[i].class;
     vSep = "<br>";
   };
-  return ret;
+  return new Handlebars.SafeString(ret);
 }
 
 Handlebars.registerHelper('attribs_uml', attribs4UMLString);
@@ -8383,7 +8383,7 @@ function methods4UMLString(pArray) {
     };
     vSep = "<br>";
   };
-  return ret;
+  return new Handlebars.SafeString(ret);
 }
 
 Handlebars.registerHelper('methods_uml', methods4UMLString);
@@ -8405,7 +8405,7 @@ function parameterListString(pParamArray,pIndent) {
       ret += vNewLine + vExtraIndent + vComment;
     };
   };
-  return ret;
+  return new Handlebars.SafeString(ret);
 }
 
 Handlebars.registerHelper('parameterlist', parameterListString);
@@ -17744,7 +17744,3 @@ function JSONEditor4Code (pDocument) {
     };
   }
 }; // end JSONEditor4Code
-
-
-// -------NPM Export Variable: JSONEditor4Code---------------
-module.exports = JSONEditor4Code;

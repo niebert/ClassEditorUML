@@ -1,4 +1,4 @@
-vDataJSON["UMLJS"]= {
+vDataJSON["umljs"]= {
   "data": {
     "classname": "JSONEditor4Code",
     "superclassname": "",
@@ -108,6 +108,7 @@ vDataJSON["UMLJS"]= {
     ]
   },
   "settings": {
+    "extension4code":".js",
     "classlist": [
       "",
       "App",

@@ -46,21 +46,17 @@ The prototype definition for methods consumes less memory for instances.
 
 ### Attributes: \`{{data.classname}}\`
 For class \`{{data.classname}}\` the following attributes are defined:
-{{#each data.attributes}}
+{{#eachparam data.attributes}}
 
 #### Attribute \`{{name}} : {{class}}\`
 {{comment}}
 * Visibility: \`{{visibility}}\`
 * Class: \`{{class}}\`
 {{#ifcond visibility "==" "public"}}
-* Default Init: \`{{init}}\` set by \`my_instance.{{name}} = {{init}};\`
+* Default Init: \`{{init}}\` set by \`v{{{../classname}}}.{{name}} = {{init}};\`
 * Access of attribute in the code of methods by \`this.{{name}} = {{init}};\`
 {{/ifcond}}
-{{#ifcond visibility "==" "private"}}
-* Default Init: \`{{init}}\` set inside class by \`{{name}} = {{init}};\`
-* Access of attribute in the code of methods by \`{{name}} = {{init}};\`
-{{/ifcond}}
-{{/each}}
+{{/eachparam}}
 
 ### Methods: \`{{data.classname}}\`
 For class \`{{data.classname}}\` the following methods are defined:
@@ -68,11 +64,11 @@ For class \`{{data.classname}}\` the following methods are defined:
 
 #### Method \`{{name}}({{#paramcall parameter}}{{/paramcall}})\`
 {{comment}}
-* Visibility: \`{{visibility}}\`
+* Visibility: \`{{visibility}}\` {{../classname}}
 {{#ifcond return "!=" ""}}
 * Returns: \`{{return}}\`
 {{#ifcond visibility "==" "public"}}
-* Call: \`var v{{return}}Ret = v{{../classname}}.{{name}}({{#paramcall parameter}}{{/paramcall}});\` where \`v{{../classname}} = new {{../classname}}()\` is an instance of the class \`= {{../classname}}\`.
+* Call: \`var v{{return}}Ret = v{{../classname}}.{{name}}({{#paramcall parameter}}{{/paramcall}});\` where \`v{{../classname}}\` is an instance of the class \`{{../classname}}\`.
 {{/ifcond}}
 {{#ifcond visibility "==" "private"}}
 * Call: \`var v{{return}}Ret = {{name}}({{#paramcall parameter}}{{/paramcall}});\`
@@ -80,7 +76,7 @@ For class \`{{data.classname}}\` the following methods are defined:
 {{/ifcond}}
 {{#ifcond return "==" ""}}
 {{#ifcond visibility "==" "public"}}
-* Call: \`v{{../classname}}.{{name}}({{#paramcall parameter}}{{/paramcall}});\` where \`v{{../classname}} = new {{../classname}}()\` is an instance of the class \`{{../classname}}\`.
+* Call: \`v{{../classname}}.{{name}}({{#paramcall parameter}}{{/paramcall}});\` where \`v{{../classname}}\` is an instance of the class \`{{../classname}}\`.
 {{/ifcond}}
 {{#ifcond visibility "==" "private"}}
 * Call: \`{{name}}({{#paramcall parameter}}{{/paramcall}});\`

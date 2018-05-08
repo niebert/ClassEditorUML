@@ -9,13 +9,71 @@
   in vDataJSON["out"]["javascript"]
 */
 
+var vCodeCompiler = {};
+
+function preProcessHandlebars(pText,pDataJSON) {
+  console.log("pretProcessHandlebars(pText,pDataJSON) Call");
+  var vText = pText ||"undefined postprocessing text";
+  vText = replaceString(vText,"{{../classname}}","___classname___");
+  vText = replaceString(vText,"{{filename ../classname}}","___filename___");
+
+  return vText;
+};
+
+function postProcessHandlebars(pText,pDataJSON) {
+  console.log("postProcessHandlebars(pText,pDataJSON) Call");
+  var vText = pText ||"undefined postprocessing text";
+  var vClassname = pDataJSON.data.classname || "Undefined Class";
+  var vFilename = name2filename(vClassname);
+  vText = replaceString(vText,"___classname___",vClassname);
+  vText = replaceString(vText,"___filename___",vFilename);
+
+  return vText;
+};
+
 function createHandleBarsCompiler(pDataJSON) {
+  var vTemplate = "";
   for (var tplID in pDataJSON.tpl) {
     if (pDataJSON["tpl"].hasOwnProperty(tplID)) {
-      pDataJSON["out"][tplID] = Handlebars.compile(pDataJSON["tpl"][tplID])
+      vTemplate = pDataJSON["tpl"][tplID];
+      vTemplate = preProcessHandlebars(vTemplate,pDataJSON)
+      vCodeCompiler[tplID] = Handlebars.compile(vTemplate);
     }
-  }
+  };
+  pDataJSON["out"] = vCodeCompiler;
+};
+
+function compileCode(pTplID,pJSON) {
+  // pJSON is JSON data of the UML Class
+  var vCode = vCodeCompiler[pTplID](pJSON);
+  vCode = postProcessHandlebars(vCode,pJSON);
+  return vCode;
+};
+
+function replaceString(pString,pSearch,pReplace)
+//###### replaces in the string "pString" multiple substrings "pSearch" by "pReplace"
+{
+	//alert("cstring.js - replaceString() "+pString);
+	if (pString != '') {
+		var vHelpString = '';
+        var vN = pString.indexOf(pSearch);
+		var vReturnString = '';
+		while (vN >= 0)
+		{
+			if (vN > 0)
+				vReturnString += pString.substring(0, vN);
+			vReturnString += pReplace;
+            if (vN + pSearch.length < pString.length) {
+				pString = pString.substring(vN+pSearch.length, pString.length);
+			} else {
+				pString = ''
+			}
+			vN = pString.indexOf(pSearch);
+		};
+	};
+	return vReturnString + pString;
 }
+
 
 // Use helper in Template with:
 // {{#ifcond var1 '==' var2}}
@@ -97,6 +155,22 @@ no hash arguments, Handlebars will automatically pass an empty object ({}),
 so you don't need to check for the existence of hash arguments.
 */
 
+Handlebars.registerHelper('eachparam', function(context, pClassname,options) {
+
+  var vText =  context.map(function(item) {
+    return "" + options.fn(item) + "";
+  }).join("\n");
+
+  for (var varID in options.hash) {
+    if (options.hash.hasOwnProperty(varID)) {
+      console.log("eachparam options.hash['"+varID+"']='"+options.hash[varID]+"'");
+      vText = vText.replace(new RegExp('{{' + varID + '}}', 'g'), options.hash[varID])
+    }
+  };
+  return vText
+});
+
+
 Handlebars.registerHelper('listhtmlattr', function(context, options) {
   var attrs = Object.keys(options.hash).map(function(key) {
     return key + '="' + options.hash[key] + '"';
@@ -111,25 +185,46 @@ Handlebars.registerHelper('codeindent', function(pContext, options) {
   var vIndent = "";
   var vText = "";
   var vCR = "";
-  if (options) {
+  if (options && options.hasOwnProperty("hash")) {
     if (options.hash.hasOwnProperty("indent")) {
       vIndent = options.hash["indent"];
-      console.log("Indent for Code Coments in HandleBars: '"+vIndent+"'");
+      console.log("[codeindent] Indent for Code in HandleBars: '"+vIndent+"'");
     };
     vText = options.fn(pContext);
-    console.log("pContext: "+pContext);
+    console.log("[codeindent] vText="+vText.substr(0,120)+"...");
   } else {
-    console.log("options in helper 'commentindent' undefined");
-  };
-  if (pContext) {
-    console.log("Type: "+typeof(pContext)+" '"+pContext+"'");
-    vText = pContext;
+    console.log("[codeindent] options in helper undefined");
   };
   //vIndent = "\n" + vIndent;
-  if (vText != "") {
+  if (vText && (vText != "")) {
     vText = vText.replace(/\n/g,"\n"+vIndent+"  ");
   };
-  return vIndent+"  "+vText+"\n";
+  return new Handlebars.SafeString(vIndent+"  "+vText+"\n");
+});
+
+Handlebars.registerHelper('indent', function(pContext, options) {
+  var vIndent = "";
+  var vText = "";
+  var vCR = "";
+  if (options && options.hasOwnProperty("hash")) {
+    if (options.hash.hasOwnProperty("text")) {
+      console.log("text='"+options.hash["text"]+"'");
+      vText = options.hash["text"];
+    };
+    if (options.hash.hasOwnProperty("indent")) {
+      vIndent = options.hash["indent"];
+      console.log("[indent] Indent for Code in HandleBars: '"+vIndent+"'");
+    };
+    //vText = options.fn(pContext);
+    console.log("codeindent: vText="+vText.substr(0,120)+"...");
+  } else {
+    console.log("[indent] options in helper undefined");
+  };
+  //vIndent = "\n" + vIndent;
+  if (vText && (vText != "")) {
+    vText = vText.replace(/\n/g,"\n"+vIndent);
+  };
+  return new Handlebars.SafeString(vIndent+vText);
 });
 
 /*
@@ -142,7 +237,7 @@ Handlebars.registerHelper('lowercase', function(pString) {
   return new Handlebars.SafeString(vString);
 });
 
-Handlebars.registerHelper('require_class_list', function(pAttribs,pMethods,pBaseClasses,pExtendedClasses,pRequirePath) {
+Handlebars.registerHelper('require_class_list', function(pSuperClass,pAttribs,pMethods,pBaseClasses,pExtendedClasses,pRequirePath) {
   var ret = "";
   // vRequire is a Hash that collects all classes
   // that are needed to create attributes or
@@ -159,13 +254,15 @@ Handlebars.registerHelper('require_class_list', function(pAttribs,pMethods,pBase
       if (value_in_array(vLib,pBaseClasses) >= 0) {
         console.log("Library '"+vLib+"' is a Base Class - no required");
       } else {
-        if (value_in_array(vLib,pExtendedClasses) >= 0) {
-          console.log("Library '"+vLib+"' is an Exte Class - no required");
-          // vLib is a local library
-          vRequire[vLib] = pRequirePath + name2filename(vLib);
-        } else {
-          vRequire[vLib] = name2filename(vLib);
-        };
+        if (vLib != pSuperClass) {
+          if (value_in_array(vLib,pExtendedClasses) >= 0) {
+            console.log("Library '"+vLib+"' is an Exte Class - no required");
+            // vLib is a local library
+            vRequire[vLib] = pRequirePath + name2filename(vLib);
+          } else {
+            vRequire[vLib] = name2filename(vLib);
+          };
+        }
       };
     };
   };
@@ -196,7 +293,7 @@ Handlebars.registerHelper('require_class_list', function(pAttribs,pMethods,pBase
       vSep = "\n";
     }
   };
-  return ret;
+  return new Handlebars.SafeString(ret);
 });
 
 Handlebars.registerHelper('removereturn', function(pString) {
@@ -205,8 +302,9 @@ Handlebars.registerHelper('removereturn', function(pString) {
 });
 
 
-function name2filename(pName) {
-  var vFilename = pName.toLowerCase();
+function name2filename(pFilename) {
+  var vFilename = pFilename || "undefined file";
+  vFilename = vFilename.toLowerCase(vFilename);
   vFilename = vFilename.replace(/[^a-z0-9]/g,"_");
   vFilename = vFilename.replace(/_[_]+/g,"_");
   return vFilename;
@@ -215,7 +313,7 @@ function name2filename(pName) {
 
 Handlebars.registerHelper('filename', function(pString) {
    var vText = pString || "no_filename";
-   return name2filename(vText);
+   return new Handlebars.SafeString(name2filename(vText));
 });
 
 // -----------
@@ -229,7 +327,7 @@ function paramCallString(pParamArray) {
     vComma = ",";
   };
 
-  return ret;
+  return new Handlebars.SafeString(ret);
 }
 
 Handlebars.registerHelper('paramcall', paramCallString);
@@ -274,7 +372,7 @@ function attribs4UMLString(pArray) {
     ret += vSep + " " + vVis + " " + pArray[i].name+":"+pArray[i].class;
     vSep = "<br>";
   };
-  return ret;
+  return new Handlebars.SafeString(ret);
 }
 
 Handlebars.registerHelper('require_attribs', attribs4UMLString);
@@ -300,7 +398,7 @@ function attribs4UMLString(pArray) {
     ret += vSep + " " + vVis + " " + pArray[i].name+":"+pArray[i].class;
     vSep = "<br>";
   };
-  return ret;
+  return new Handlebars.SafeString(ret);
 }
 
 Handlebars.registerHelper('attribs_uml', attribs4UMLString);
@@ -331,7 +429,7 @@ function methods4UMLString(pArray) {
     };
     vSep = "<br>";
   };
-  return ret;
+  return new Handlebars.SafeString(ret);
 }
 
 Handlebars.registerHelper('methods_uml', methods4UMLString);
@@ -353,7 +451,7 @@ function parameterListString(pParamArray,pIndent) {
       ret += vNewLine + vExtraIndent + vComment;
     };
   };
-  return ret;
+  return new Handlebars.SafeString(ret);
 }
 
 Handlebars.registerHelper('parameterlist', parameterListString);

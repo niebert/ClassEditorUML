@@ -1,6 +1,6 @@
 {
-  "name": "class_editor_uml",
-  "version": "0.0.1",
+  "name": "jsoneditor4code",
+  "version": "0.9.1",
   "description": "Class Editor for UML Diagrams developed with Javascript Code Templates based on JSON Editor of Jeremy Dorn",
   "main": "src/main.js",
   "directories": {
@@ -15,10 +15,10 @@
     "watchify": "^3.9.0"
   },
   "scripts": {
-    "watch": "watchify src/main.js -o dist/class_editor_uml.js -v",
-    "build4main": "browserify src/main.js  | uglifyjs -mc warnings=false > dist/class_editor_uml.min.js",
-    "test": "node-lint dist/class_editor_uml.js",
-    "build": "node build.js; uglifyjs dist/class_editor_uml.js --compress -o dist/class_editor_uml.min.js"
+    "watch": "watchify src/main.js -o dist/jsoneditor4code.js -v",
+    "build4main": "browserify src/main.js  | uglifyjs -mc warnings=false > dist/jsoneditor4code.min.js",
+    "test": "node-lint dist/jsoneditor4code.js",
+    "build": "node build.js; uglifyjs dist/jsoneditor4code.js --compress -o dist/jsoneditor4code.min.js"
   },
   "repository": {
     "type": "git",
@@ -41,7 +41,7 @@
   "bugs": {
     "url": "https://github.com/niebert/ClassEditorUML/issues"
   },
-  "homepage": "https://github.com/niebert/ClassEditorUML#readme",
+  "homepage": "https://niebert.github.io/ClassEditorUML",
   "dependencies": {
     "handlebars": "^4.0.11",
     "linkparam": "^1.0.8"
