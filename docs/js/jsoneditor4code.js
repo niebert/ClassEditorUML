@@ -17310,6 +17310,7 @@ LinkParam.prototype.param2DOM = function (pLinkID,pDOMID,pOutType) {
 //-------------------------------------------
 function JSONEditor4Code (pDocument) {
   //---- attributes ----
+  this.aLinkParam = new LinkParam();
   this.aDoc = pDocument;
   this.aJSON = {};
   this.aDefaultJSON = {};
@@ -17325,7 +17326,7 @@ function JSONEditor4Code (pDocument) {
   this.aEditor = null;
   //----  methods ----
   this.initDoc = function (pDoc) {
-    this.aDoc = pDoct;
+    this.aDoc = pDoc;
   };
 
   this.loadParamStorage = function (pInitJSON,pLSID) {
@@ -17341,11 +17342,9 @@ function JSONEditor4Code (pDocument) {
     //console.log("loadParamStorage(pInitJSON,'"+vLSID+"' - JSON:\n"+(JSON.stringify(vJSON,null,3)).substr(0,120)+"...");
     //-------------------------------------------------------
     // LINK PARAMETER: Evaluation link parameter in JSON Path
-    var vLinkParam = new LinkParam();
-    vLinkParam.init(document);
-    if (vLinkParam.exists("jsondata")) {
+    if (this.aLinkParam.exists("jsondata")) {
        console.log("LinkParameter provides 'jsondata'  with value");
-       vJSONstring = vLinkParam.getValue("jsondata");
+       vJSONstring = this.aLinkParam.getValue("jsondata");
        try {
          vJSON = JSON.parse(vJSONstring);
        } catch (e) {
@@ -17369,6 +17368,20 @@ function JSONEditor4Code (pDocument) {
      console.log("Loaded JSON:\n"+JSON.stringify(vJSON,null,3));
   }
 
+  this.submit2callback = function() {
+    var vJSONstring = JSON.stringify(this.getValue());
+    var vLink = "receiver.html"; // is a default HTML as callback
+    // to check the LinkParam communication between HTML documents
+    if (this.aLinkParam.exists("callback")) {
+      vLink = this.aLinkParam.getValue("callback");
+      console.log("Callback defined in LinkParam:\n  "+vLink);
+    };
+    this.aLinkParam.setValue("jsondata",vJSONstring);
+    this.aLinkParam.deleteValue("callback");
+    // send current JSON data back to callback URL
+    document.location.href = vLink + this.aLinkParam.getParam4URL();
+  };
+
   /*
   el-method is used to replace calls
   document.getElementById
@@ -17386,9 +17399,14 @@ function JSONEditor4Code (pDocument) {
     return vCode;
   };
   */
+  JSONEditor.defaults.theme = 'bootstrap3';
+  JSONEditor.defaults.iconlib = 'fontawesome4';
+  JSONEditor.plugins.ace.theme = 'xcode';
+
   this.compileCode = {};
 
   this.init = function (pJSON,pDefaultJSON,pSchema,pTemplates,pOptions) {
+    this.aLinkParam.init(this.aDoc);
     this.aJSON = pJSON || {};
     this.aDefaultJSON = pDefaultJSON;
     this.aSchema = pSchema;
@@ -17405,6 +17423,9 @@ function JSONEditor4Code (pDocument) {
     this.loadParamStorage(pJSON);
     this.create_compiler4tpl();
     this.create_editor();
+    JSONEditor.defaults.theme = pOptions.theme;
+    JSONEditor.defaults.iconlib = pOptions.iconlib;
+    JSONEditor.plugins.ace.theme = pOptions.ace_theme;
   };
 
 
@@ -17463,13 +17484,29 @@ function JSONEditor4Code (pDocument) {
     		} else {
     			console.log("JSON-DB for UML class '"+this.aJSON.data.classname+"' not saved - data deleted!");
     		};
-    		this.setValue(this.aDefaultJSON); // defined e.g. in /db/uml_default.js
+    		this.aEditor.setValue(this.aDefaultJSON); // defined e.g. in /db/uml_default.js
     		console.log("JSON-DB initalized with UML class '"+this.aJSON.data.classname+"'!");
     		//save changes to Local Storage
     } else {
         console.log("initialize JSON-DB cancelled")
     };
   }
+
+  this.toggleEnable = function () {
+    if(this.aEditor.isEnabled()) {
+      this.aEditor.enable()
+    } else {
+      this.aEditor.enable()
+    };
+  };
+
+  this.enable = function () {
+    this.aEditor.enable();
+  };
+
+  this.disable = function () {
+    this.aEditor.disable();
+  };
 
   this.init_buttons = function () {
     var vThis = this; // "vThis" used because "this" is not available in function
@@ -17514,6 +17551,7 @@ function JSONEditor4Code (pDocument) {
   }
 
   this.update = function () {
+    alert("update Schema changes for the JSONEditor4Code")
     this.create_editor();
   }
 

@@ -18,17 +18,56 @@
     // vDataJSON is the main JSON storage for the privacy friendly WebApp
     // File Loaded into vDataJSON by script tag
     var vDataJSON = {};
-    vDataJSON["tpl"] = {};
-    vDataJSON["out"] = {};
+    vDataJSON.tpl = {};
+    /* TEMPLATES
+    vDataJSON.tpl contains the following templates:
+      * vDataJSON.tpl["javascript"] File: tpl/javascript_tpl.js
+        for creating the the Source Code for the UML class in javascript
+      * vDataJSON.tpl["docu4github"] File: tpl/docu4github_tpl.js
+        for creating the GitHub documentation from the UML source of the class
+    */
+
+    vDataJSON.out = {};
+    /* HANDLEBARS COMPILERS
+    vDataJSON.tpl contains the Handlebars compilers:
+      * vDataJSON.out["javascript"] Compiler for template: tpl/javascript_tpl.js
+        This compiler is used in the compileCode() method
+        var mySource = vJSONEditor.compileCode.javascript(pJSON)
+        creates the source code for the UML class in javascript
+      * vDataJSON.out["docu4github"] Compiler for template: tpl/docu4github_tpl.js
+        This compiler is used in the compileCode() method
+        var mySource = vJSONEditor.compileCode.docu4github(pJSON)
+    */
     var vFileBase = "class";
     // ACE Editor is used in JSONEditor for Code Editor
     var vProgLanguage = "javascript";
-    // Defined the Syntax Highlighting for ACE Editor - Used in Schema "schema/class_schema.js"
-    // Set the default CSS theme and icon library globally
-    JSONEditor.defaults.theme = 'bootstrap3';
-    JSONEditor.defaults.iconlib = 'fontawesome4';
-    JSONEditor.plugins.ace.theme = 'xcode';
-
+    /*
+    Defined the Syntax Highlighting for ACE Editor - Used in Schema "schema/class_schema.js"
+      * set the default CSS theme and icon library globally
+      * see https://www.github.com/niebert/json-editor for further details
+    */
+    //---- Initialize Editor with JSON --------------
+    // The JSON data is defined in file "db/umljs.js"
+    var vJSON = vDataJSON["umljs"];
+    //---- Create one JSON Editor for Code ---------
+    var vJSONEditor = new JSONEditor4Code(document);
+    /*
+      "editor_id": DOM id where the editor will be injected,
+    */
+    var vOptions = {
+            "editor_var": "vJSONEditor",
+            "editor_id": "editor_holder",
+            "validator_id":"valid_indicator",
+            "filejson_id" : "fileJSON",
+            "filename_id" : "display_filename",
+            "out_json": "tOutJSON",
+            "out_code": "tOutput",
+            "out_errors": "tErrors"
+    };
+    // Delete JSON load the following default JSON into JSON Editor for Code
+    var vDefaultJSON = vDataJSON["uml_default"]; //see file "db/uml_default.js"
+    //console.log("Edit JSON:\n"+JSON.stringify(vJSON,null,3));
+    // vJSONEditor.init(...) will be called at very end of this file
     </script>
     <!-- ### UML Default File  #####################
     used for initializing afte delete class command
@@ -99,19 +138,19 @@
 	<!-- BEGIN of JSON Editor -->
     <div id='editor_holder' style="margin:20px"></div>
 	<!-- END of JSON Editor -->
-    <button id='restore' style="display:none">Restore to Default</button>
-    <button id='enable_disable' style="display:none">Disable/Enable Form</button>
-    <button id='submit' style="display:none">Submit (console.log)</button>
-    <button id='bExportJSON'>Export JSON</button>
-    <button id='bExportSchemaJSON'>Export JSON Schema</button>
-    <button id='bUpdateSchema' style="color: white;background-color: #225988;display:none"  onclick="vJSONEditor.create_editor();return false">
+    <button id='restore' style="display:none" onclick="vJSONEditor.restore();return false">Restore to Default</button>
+    <button id='enable_disable' style="display:none" onclick="vJSONEditor.toggleEnable();return false">Disable/Enable</button>
+    <button id='submit' Xstyle="display:none" onclick="vJSONEditor.submit2callback();return false">Submit</button>
+    <button id='bExportJSON' onclick="vJSONEditor.saveJSON();return false">Export JSON</button>
+    <button id='bExportSchemaJSON'  onclick="vJSONEditor.saveSchema();return false">Export JSON Schema</button>
+    <button id='bUpdateSchema' style="color: white;background-color: #225988;display:none"  onclick="vJSONEditor.update();return false">
       <i class="fa fa-refresh" aria-hidden="true"></i>
       Update Schema
     </button>
 		<button id='bTemplate' onclick="$('#divTemplates').toggle()">Debug Output</button>
 <hr>
 <center>
-  <a href="https://github.com/niebert/ClassEditorUML/archive/master.zip" target="_blank">Download GitHub (2018)</a>
+  <a href="https://github.com/niebert/ClassEditorUML" target="_blank">Repository on GitHub</a> - <a href="https://github.com/niebert/ClassEditorUML/archive/master.zip" target="_blank">Download ZIP from GitHub</a> - (2018)
 </center>
     <div id="divTemplates" style="display:none">
       <b>Output</b> <tt>[tOutput]</tt><br>
@@ -132,28 +171,12 @@
     </div>
 
     <script>
+      //---- Initialize the JSONEditor for Code ----------
+      // Initialization expect certain DOM nodes to be available,
+      // so that event handlers can assigned e.g. to buttons.
+      // Therefore the init method is called
+      // at the very end of the HTML file.
 
-      // This is the starting value for the editor
-      // We will use this to seed the initial editor
-      // and to provide a "Restore to Default" button.
-      var vJSON = vDataJSON["umljs"]; //see file "db/umljs.js"
-      var vJSONEditor = new JSONEditor4Code(document);
-      /*
-      "editor_id": DOM id where the editor will be injected,
-      "load_file_id" : "display_filename",
-      */
-      var vOptions = {
-        "editor_var": "vJSONEditor",
-        "editor_id": "editor_holder",
-        "validator_id":"valid_indicator",
-        "filejson_id" : "fileJSON",
-        "filename_id" : "display_filename",
-        "out_json": "tOutJSON",
-        "out_code": "tOutput",
-        "out_errors": "tErrors"
-      };
-      var vDefaultJSON = vDataJSON["uml_default"]; //see file "db/uml_default.js"
-      //console.log("Edit JSON:\n"+JSON.stringify(vJSON,null,3));
       vJSONEditor.init(vJSON,
         vDefaultJSON,
         vDataJSON["class_schema"],
@@ -161,14 +184,6 @@
         vOptions);
     </script>
 
-
-        <script>
-          // Hook up the submit button to export JSON
-          document.getElementById('bExportJSON').addEventListener('click',exporter4JSON);
-          // Hook up the submit button to export JSON Schema
-          document.getElementById('bExportSchemaJSON').addEventListener('click',exporter4Schema);
-
-        </script>
 
 
   </body>
