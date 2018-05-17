@@ -20,7 +20,8 @@
     "build2dist": "node ./build.js; browserify src/main.js > docs/js/jsoneditor4code.js",
     "buildmin": "uglifyjs dist/jsoneditor4code.js --compress -o dist/jsoneditor4code.min.js",
     "test": "jshint dist/jsoneditor4code.js",
-    "build": "node ./build.js; browserify src/main.js > docs/js/jsoneditor4code.js"
+    "build": "node ./build.js; browserify src/main.js > docs/js/jsoneditor4code.js",
+    "compress": "node ./build.js;browserify docs/js/jsoneditor4code.js  | uglifyjs -mc warnings=false > dist/jsoneditor4code.min.js"
   },
   "repository": {
     "type": "git",
