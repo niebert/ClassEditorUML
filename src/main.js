@@ -1,7 +1,7 @@
 /* ---------------------------------------
  Exported Module Variable: JSONEditor4Code
  Package:  jsoneditor4code
- Version:  0.9.1  Date: 2018/05/17 22:28:00
+ Version:  0.9.1  Date: 2018/05/17 22:47:17
  Homepage: https://niebert.github.io/ClassEditorUML
  Author:   Engelbert Niehaus
  License:  MIT
@@ -3116,6 +3116,22 @@ function getTimeIndex() {
 };
 /*! @source http://purl.eligrey.com/github/FileSaver.js/blob/master/FileSaver.js */
 var saveAs=saveAs||function(e){"use strict";if(typeof e==="undefined"||typeof navigator!=="undefined"&&/MSIE [1-9]\./.test(navigator.userAgent)){return}var t=e.document,n=function(){return e.URL||e.webkitURL||e},r=t.createElementNS("http://www.w3.org/1999/xhtml","a"),o="download"in r,a=function(e){var t=new MouseEvent("click");e.dispatchEvent(t)},i=/constructor/i.test(e.HTMLElement)||e.safari,f=/CriOS\/[\d]+/.test(navigator.userAgent),u=function(t){(e.setImmediate||e.setTimeout)(function(){throw t},0)},s="application/octet-stream",d=1e3*40,c=function(e){var t=function(){if(typeof e==="string"){n().revokeObjectURL(e)}else{e.remove()}};setTimeout(t,d)},l=function(e,t,n){t=[].concat(t);var r=t.length;while(r--){var o=e["on"+t[r]];if(typeof o==="function"){try{o.call(e,n||e)}catch(a){u(a)}}}},p=function(e){if(/^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(e.type)){return new Blob([String.fromCharCode(65279),e],{type:e.type})}return e},v=function(t,u,d){if(!d){t=p(t)}var v=this,w=t.type,m=w===s,y,h=function(){l(v,"writestart progress write writeend".split(" "))},S=function(){if((f||m&&i)&&e.FileReader){var r=new FileReader;r.onloadend=function(){var t=f?r.result:r.result.replace(/^data:[^;]*;/,"data:attachment/file;");var n=e.open(t,"_blank");if(!n)e.location.href=t;t=undefined;v.readyState=v.DONE;h()};r.readAsDataURL(t);v.readyState=v.INIT;return}if(!y){y=n().createObjectURL(t)}if(m){e.location.href=y}else{var o=e.open(y,"_blank");if(!o){e.location.href=y}}v.readyState=v.DONE;h();c(y)};v.readyState=v.INIT;if(o){y=n().createObjectURL(t);setTimeout(function(){r.href=y;r.download=u;a(r);h();c(y);v.readyState=v.DONE});return}S()},w=v.prototype,m=function(e,t,n){return new v(e,t||e.name||"download",n)};if(typeof navigator!=="undefined"&&navigator.msSaveOrOpenBlob){return function(e,t,n){t=t||e.name||"download";if(!n){e=p(e)}return navigator.msSaveOrOpenBlob(e,t)}}w.abort=function(){};w.readyState=w.INIT=0;w.WRITING=1;w.DONE=2;w.error=w.onwritestart=w.onprogress=w.onwrite=w.onabort=w.onerror=w.onwriteend=null;return m}(typeof self!=="undefined"&&self||typeof window!=="undefined"&&window||this.content);if(typeof module!=="undefined"&&module.exports){module.exports.saveAs=saveAs}else if(typeof define!=="undefined"&&define!==null&&define.amd!==null){define("FileSaver.js",function(){return saveAs})}
+/* ---------------------------------------
+ Exported Module Variable: Handlebars4Code
+ Package:  handlebars4code
+ Version:  1.0.0  Date: 2018/05/17 22:35:58
+ Homepage: https://github.com/niebert/Handlebars4Code#readme
+ Author:   niebert GitHub
+ License:  MIT
+Inheritance: 'Handlebars4Code' inherits from 'Handlebars'
+ Require Module with:
+    const Handlebars4Code = require('handlebars4code');
+    var  compileCode = Handlebars4Code.compile(vTemplate);
+ JSHint: installation with 'npm install jshint -g'
+ ------------------------------------------ */
+
+/*jshint  laxcomma: true, asi: true, maxerr: 150 */
+/*global alert, confirm, console, prompt */
 /**!
 
  @license
@@ -7955,7 +7971,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ })
 /******/ ])
 });
-;/* vDataJSON is the main JSON data storage defined in index.html
+;
+/* vDataJSON is the main JSON data storage defined in index.html
   vDataJSON is provided as parameter to createHandleBarsCompiler(pDataJSON)
    * createHandleBarsCompiler() expects a hash key "tpl" containing the templates.
    * createHandleBarsCompiler() generates HandleBars compiler functions
@@ -8123,24 +8140,10 @@ Handlebars.registerHelper('listhtmlattr', function(context, options) {
   }).join("\n") + "</ul>";
 });
 
-Handlebars.registerHelper('indent', function(pContext, options) {
-  var vIndent = "";
-  var vText = "";
+Handlebars.registerHelper('indent', function(pText, pIndent) {
+  var vIndent = pIndent || "        ";
+  var vText = pText ||  "";
   var vCR = "";
-  if (options && options.hasOwnProperty("hash")) {
-    if (options.hash.hasOwnProperty("text")) {
-      //console.log("text='"+options.hash["text"]+"'");
-      vText = options.hash["text"];
-    };
-    if (options.hash.hasOwnProperty("indent")) {
-      vIndent = options.hash["indent"];
-      //console.log("[indent] Indent for Code in HandleBars: '"+vIndent+"'");
-    };
-    //vText = options.fn(pContext);
-    //console.log("codeindent: vText="+vText.substr(0,120)+"...");
-  } else {
-    console.log("[indent] options in helper undefined");
-  };
   //vIndent = "\n" + vIndent;
   if (vText && (vText != "")) {
     vText = vText.replace(/\n/g,"\n"+vIndent);
@@ -8204,15 +8207,16 @@ Handlebars.registerHelper('requirelibs', function(pArray, options) {
 
   for (var i = 0; i < pArray.length; i++) {
     vFile = pArray[i];
-    ret += options.fn({"variable":filename2var(vFile),"module":vFile})
+    //ret += options.fn({"variable":filename2var(vFile),"module":vFile})
+    ret += options.fn(pArray[i])
   };
   //return new Handlebars.SafeString(ret);
   console.log("Require List:\n"+ret);
   return ret
 });
 
-Handlebars.registerHelper('requireclass', function(pSuperClass,pAttribs,pMethods,pBaseClasses,pLocalClasses,pRequirePath, options) {
-  var vRequirePath = pRequirePath || "./libs/";
+Handlebars.registerHelper('requireclass', function(pData,pSettings, options) {
+  var vRequirePath = pData.reposinfo.require_path || "./libs/";
   var ret = "";
   // vRequire is a Hash that collects all classes
   // that are needed to create attributes or
@@ -8226,12 +8230,12 @@ Handlebars.registerHelper('requireclass', function(pSuperClass,pAttribs,pMethods
     // so class/library is added if an only if it is not a base class
     console.log("("+pCheckTitle+") addlib_check('"+pLib+"')");
     if (pLib != "") {
-      console.log("Base Class '"+pLib+"' index="+value_in_array(pLib,pBaseClasses));
-      if ((value_in_array(pLib,pBaseClasses) >= 0) || (pLib == pSuperClass)) {
+      console.log("Base Class '"+pLib+"' index="+value_in_array(pLib,pSettings.baseclasslist));
+      if ((value_in_array(pLib,pSettings.baseclasslist) >= 0) || (pLib == pData.superclassname)) {
         console.log("("+pCheckTitle+") Library '"+pLib+"' is a Base Class - no required");
       } else {
-        console.log("Local Class '"+pLib+"' index="+value_in_array(pLib,pLocalClasses));
-        if (value_in_array(pLib,pLocalClasses) >= 0) {
+        console.log("Local Class '"+pLib+"' index="+value_in_array(pLib,pSettings.localclasslist));
+        if (value_in_array(pLib,pSettings.localclasslist) >= 0) {
           // pLib is a local library
           vRequire[pLib] = vRequirePath + name2filename(pLib);
           console.log("("+pCheckTitle+") Library '"+pLib+"' is a Local Class - require('"+vRequire[pLib]+"')");
@@ -8243,19 +8247,19 @@ Handlebars.registerHelper('requireclass', function(pSuperClass,pAttribs,pMethods
     };
   }; //END: addlib_check()
 
-  console.log("Call Helper: requireclasslist - superclass='"+pSuperClass+"' require_path='"+vRequirePath+"'");
-  for (var i=0; i<pAttribs.length; i++) {
+  console.log("Call Helper: requireclasslist - superclass='"+pData.superclassname+"' require_path='"+vRequirePath+"'");
+  for (var i=0; i<pData.attributes.length; i++) {
     // populate vRequire with classes that a needed as
     // constructors for attributes
-    addlib_check("Attribute",pAttribs[i].class);
+    addlib_check("Attribute",pData.attributes[i].class);
   };
-  for (var i=0; i<pMethods.length; i++) {
+  for (var i=0; i<pData.methods.length; i++) {
     // populate vRequire with classes that a needed as
     // constructors for returned instances of those classes
-    addlib_check("Method "+pMethods[i].name+"() Return",pMethods[i].return);
-    vPars = pMethods[i].parameter;
+    addlib_check("Method "+pData.methods[i].name+"() Return",pData.methods[i].return);
+    vPars = pData.methods[i].parameter;
     for (var k=0; k<vPars.length; k++) {
-      addlib_check("Parameter "+pMethods[i].name+"()",vPars[k].class);
+      addlib_check("Parameter "+pData.methods[i].name+"()",vPars[k].class);
     };
   };
   // vRequire is a Hash therefore double usage of classes
@@ -8434,6 +8438,37 @@ function parameterListString(pParamArray,pIndent) {
 Handlebars.registerHelper('parameterlist', parameterListString);
 
 // -----------
+//---- Define the static class Handlebars4Code
+// The class was extended by src/libs/handlebars_helpers.js
+// build.js creates main.js
+
+function create_compiler(pTplJSON) {
+  var vTemplate = "";
+  for (var tplID in pTplJSON) {
+    if (pTplJSON.hasOwnProperty(tplID)) {
+      vTemplate = pTplJSON[tplID];
+      vCodeCompiler[tplID] = Handlebars.compile(vTemplate);
+    };
+  };
+};
+
+function get_compiler () {
+  return vCodeCompiler;
+};
+
+
+function compile_code(pTplID,pJSON) {
+  // pJSON is JSON data of the UML Class
+  var vCode = vCodeCompiler[pTplID](pJSON);
+  return vCode;
+};
+
+
+var Handlebars4Code = {
+  "create_compiler": create_compiler,
+  "compile_code": compile_code,
+  "get_compiler": get_compiler
+};
 /*! JSON Editor v0.7.28 - JSON Schema -> HTML Editor
  * By Jeremy Dorn - https://github.com/jdorn/json-editor/
  * Released under the MIT license
