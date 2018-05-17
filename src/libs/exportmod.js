@@ -58,9 +58,9 @@ function JSONEditor4Code (pDocument) {
      console.log("Loaded JSON:\n"+JSON.stringify(vJSON,null,3));
   }
 
-  this.submit2callback = function() {
+  this.submit2callback = function(pLink) {
     var vJSONstring = JSON.stringify(this.getValue());
-    var vLink = "receiver.html"; // is a default HTML as callback
+    var vLink = pLink || "receiver.html"; // is a default HTML as callback
     // to check the LinkParam communication between HTML documents
     if (this.aLinkParam.exists("callback")) {
       vLink = this.aLinkParam.getValue("callback");
@@ -79,7 +79,7 @@ function JSONEditor4Code (pDocument) {
   this.el = function (pID) {
     return this.aDoc.getElementById(pID);
   };
-  /*
+/*
   defined in /src/libs/handlebars_helpers
 
   function compileCode(pTplID,pJSON) {
@@ -126,7 +126,7 @@ function JSONEditor4Code (pDocument) {
       if (this.aTemplates.hasOwnProperty(tplID)) {
         console.log("Compile Template ["+tplID+"]");
         vTemplate = this.aTemplates[tplID];
-        vTemplate = preProcessHandlebars(vTemplate,this.aJSON);
+        //vTemplate = preProcessHandlebars(vTemplate,this.aJSON);
         this.compileCode[tplID] = Handlebars.compile(vTemplate);
       }
     };
@@ -222,6 +222,18 @@ function JSONEditor4Code (pDocument) {
       vThis.validate_errors();
       vThis.saveLS("jsondata");
       vThis.update_filename();
+      //update_editor();
+    });
+    this.aEditor.watch('root.settings.baseclasslist',function() {
+      vThis.update_schema();
+      //update_editor();
+    });
+    this.aEditor.watch('root.settings.localclasslist',function() {
+      vThis.update_schema();
+      //update_editor();
+    });
+    this.aEditor.watch('root.settings.remoteclasslist',function() {
+      vThis.update_schema();
       //update_editor();
     });
   };
@@ -443,7 +455,7 @@ function JSONEditor4Code (pDocument) {
     } else {
       console.log("compileCode['"+pTplCode+"'] undefined");
     };
-    vContent = postProcessHandlebars(vContent,vJSON);
+    //vContent = postProcessHandlebars(vContent,vJSON);
     console.log("save4Template() vContent="+vContent.substr(0,120)+"...");
     //--Textarea Output----------------
     var vOutNode = this.el("tOutput");

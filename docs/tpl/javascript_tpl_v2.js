@@ -1,19 +1,10 @@
 vDataJSON["tpl"]["javascript"] = `
 //#################################################################
-{{#ifcond data.reposinfo.static "!=" "yes"}}
 //# Javascript Class: {{data.classname}}()
 {{#ifcond data.superclassname "!=" ""}}
 //#       SuperClass: {{data.superclassname}}
 {{/ifcond}}
 //#   Class Filename: {{filename data.classname}}.js
-{{/ifcond}}
-{{#ifcond data.reposinfo.static "==" "yes"}}
-//# Javascript Module: {{data.classname}}
-{{#ifcond data.superclassname "!=" ""}}
-//#           Extends: {{data.superclassname}}
-{{/ifcond}}
-//#       Filename: {{filename data.classname}}.js
-{{/ifcond}}
 //#
 //# Author of Class:      {{data.reposinfo.author}}
 //# email:                {{data.reposinfo.email}}
@@ -25,7 +16,7 @@ vDataJSON["tpl"]["javascript"] = `
 //#     https://niebert.github.io/ClassEditorUML
 //#################################################################
 
-{{#ifcond data.reposinfo.require_classes "!=" "yes"}}
+{{#ifcond data.reposinfo.require_classes "==" "no"}}
 //---------------------------------------------------------------------
 //---Store File in Subdirectory /js and import this Class in HTML-File with
 // SCRIPT-Tag:  LANGUAGE="JavaScript" SRC="js/{{filename classname}}.js"
@@ -33,22 +24,21 @@ vDataJSON["tpl"]["javascript"] = `
 {{#ifcond data.reposinfo.require_classes "==" "yes"}}
 {{#ifcond data.superclassname "!=" ""}}
 //---------------------------------------------------------------------
+
 // NodeJS: require the super class
 const {{data.superclassname}} = require('{{filename data.superclassname}}');
 {{/ifcond}}
 
 // NodeJS: Require used classes
-{{#requirelibs data.superclassname data.attributes data.methods settings.baseclasslist settings.localclasslist data.reposinfo.require_path}}
+{{#requireclass data.superclassname data.attributes data.methods settings.baseclasslist settings.localclasslist data.reposinfo.require_path}}
 const {{variable}} = require('{{module}}'); // Class: {{variable}}
-{{/requirelibs}}
+{{/requireclass}}
 
 // NodeJS: Require additional Modules
 {{#requirelibs data.reposinfo.requirelist}}
 const {{variable}} = require('{{module}}'); // Module: {{variable}}
 {{/requirelibs}}
-
 {{/ifcond}}
-{{#ifcond data.reposinfo.static "!=" "yes"}}
 //---------------------------------------------------------------------
 //---Constructor of Class {{data.classname}}()
 // Call the constructor for creating an instance of class {{data.classname}}
@@ -91,7 +81,6 @@ function {{data.classname}} () {
     //---------------------------------------------------------------------
     //---Attributes of Class "{{data.classname}}()"
     //---------------------------------------------------------------------
-
 {{#foreach data.attributes data}}
     // ------------------------------------------
     // {{visibility}}: {{name}}   Class: {{class}}
@@ -141,75 +130,7 @@ function {{data.classname}} () {
 //-------------------------------------------------------------------------
 //---END Constructor of Class "{{data.classname}}()"
 //-------------------------------------------------------------------------
-{{/ifcond}}
-{{#ifcond data.reposinfo.static "==" "yes"}}
-{{#ifcond data.superclassname "==" ""}}
-//--------------------------------------
-//---Define Static Class - Export Variable ---
-// A static class '{{data.classname}}' does not need a constructor 'new {{data.classname}}()'
-//--------------------------------------
-var {{data.classname}} = {};
-{{/ifcond}}
-{{#ifcond data.superclassname "!=" ""}}
-//--------------------------------------
-//---Extend Static Class----------------
-// A static class '{{data.classname}}' does not need a constructor 'new {{data.classname}}()'
-// to create an instance of the class.
-// Extend static class: '{{data.classname}}' inherits from static class '{{data.superclassname}}' by:
-var {{data.classname}} = {{data.superclassname}};
-// The following definitions extend/overwrite the existing attributes and methods of '{{data.superclassname}}'
-//--------------------------------------
-{{/ifcond}}
-//---------------------------------------------------------------------
-//---Attributes: "{{data.classname}}"
-//---------------------------------------------------------------------
 
-{{#foreach data.attributes data}}
-    // ------------------------------------------
-    // {{visibility}}: {{name}}   Class: {{class}}
-{{#ifcond comment "!=" ""}}
-{{#indent comment indent="    // " text=comment}}{{/indent}}
-{{/ifcond}}
-{{#ifcond visibility "==" "public"}}
-    {{data.classname}}.{{name}} = {{init}};   // Class: {{class}}
-{{/ifcond}}
-{{#ifcond visibility "==" "private"}}
-    var {{name}} = {{init}};   // Class: {{class}}
-{{/ifcond}}
-{{/foreach}}
-//---------------------------------------------------------------------
-//---Methods of Class "{{data.classname}}()"
-//---------------------------------------------------------------------
-
-{{#foreach data.methods data}}
-
-    //#################################################################
-    //# {{visibility}} Method: {{name}}()  Class: {{data.classname}}
-    //# Parameter:
-    //#    {{parameterlist parameter "    //#    "}}
-    //# Comment:
-{{#indent comment indent="    //#    " text=comment}}{{/indent}}
-    //# {{{returncomment}}}
-    //#################################################################
-
-{{#ifcond visibility "==" "public"}}
-    {{data.classname}}.{{name}} = function ({{#paramcall parameter}}{{/paramcall}}) {
-{{/ifcond}}
-{{#ifcond visibility "==" "private"}}
-    function {{name}}({{#paramcall parameter}}{{/paramcall}}) {
-{{/ifcond}}
-      //----Debugging------------------------------------------
-      // console.log("{{filename data.classname}}.js - Call: {{data.classname}}.{{name}}({{#paramcall parameter}}{{/paramcall}})");
-      //----Call Function {{name}}()----
-      //    {{data.classname}}.{{name}}({{#paramcall parameter}}{{/paramcall}});
-      //-------------------------------------------------------
-{{#indent code indent="      " text=code}}{{/indent}}
-    }
-    // ---- Method: {{name}}() Class: {{data.classname}} ------
-{{/foreach}}
-
-
-{{/ifcond}}
 {{#ifcond data.reposinfo.require_classes "==" "yes"}}
 
 // NodeJS: export class constructor '{{data.classname}}' for module {{filename data.classname}}.js

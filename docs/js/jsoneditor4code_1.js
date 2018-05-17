@@ -1,13 +1,13 @@
 /* ---------------------------------------
  Exported Module Variable: JSONEditor4Code
  Package:  jsoneditor4code
- Version:  0.9.1  Date: 2018/05/17 22:28:00
+ Version:  0.9.1
  Homepage: https://niebert.github.io/ClassEditorUML
  Author:   Engelbert Niehaus
  License:  MIT
  Require Module with:
     const JSONEditor4Code = require('jsoneditor4code');
-    var  compileCode = JSONEditor4Code.compile(vTemplate);
+    var  vJSONEditor4Code = new JSONEditor4Code(document);
  JSHint: installation with 'npm install jshint -g'
  ------------------------------------------ */
 
@@ -17457,7 +17457,7 @@ function JSONEditor4Code (pDocument) {
       if (this.aTemplates.hasOwnProperty(tplID)) {
         console.log("Compile Template ["+tplID+"]");
         vTemplate = this.aTemplates[tplID];
-        //vTemplate = preProcessHandlebars(vTemplate,this.aJSON);
+        vTemplate = preProcessHandlebars(vTemplate,this.aJSON);
         this.compileCode[tplID] = Handlebars.compile(vTemplate);
       }
     };
@@ -17786,7 +17786,7 @@ function JSONEditor4Code (pDocument) {
     } else {
       console.log("compileCode['"+pTplCode+"'] undefined");
     };
-    //vContent = postProcessHandlebars(vContent,vJSON);
+    vContent = postProcessHandlebars(vContent,vJSON);
     console.log("save4Template() vContent="+vContent.substr(0,120)+"...");
     //--Textarea Output----------------
     var vOutNode = this.el("tOutput");
@@ -17817,3 +17817,18 @@ function JSONEditor4Code (pDocument) {
     };
   }
 }; // end JSONEditor4Code
+/* ---------------------------------------
+ Exported Module Variable: JSONEditor4Code
+ Package:  jsoneditor4code
+ Version:  0.9.1
+ Homepage: https://niebert.github.io/ClassEditorUML
+ Author:   Engelbert Niehaus
+ License:  MIT
+ Require Module with:
+    const JSONEditor4Code = require('jsoneditor4code');
+    var  vJSONEditor4Code = new JSONEditor4Code(document);
+ JSHint: installation with 'npm install jshint -g'
+ ------------------------------------------ */
+
+/*jshint  laxcomma: true, asi: true, maxerr: 150 */
+/*global alert, confirm, console, prompt */

@@ -1,4 +1,4 @@
-vDataJSON["tpl"]["docugithub"] = `
+vDataJSON["tpl"]["docu4github"] = `
 ## Javascript Class: \`{{data.classname}}\`
 
 {{data.comment}}

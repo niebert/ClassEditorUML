@@ -6,6 +6,7 @@ vDataJSON["uml_default"]={
       "reposinfo": {
           "repository": "",
           "require_classes": "yes",
+          "static": "no",
           "author": "",
           "email": "",
           "created": getDateTime(),

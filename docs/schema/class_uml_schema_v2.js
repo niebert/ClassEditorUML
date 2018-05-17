@@ -177,29 +177,13 @@ vDataJSON["class_schema"] = {
                               "collapsed": true
                             },
                             "items": {
-                              "type": "object",
-                              "id": "/properties/requirelist/items",
-                              "defaultProperties": [
-                                  "module",
-                                  "variable"
-                              ],
-                              "properties": {
-                                "variable": {
-                                    "type": "string",
-                                    "id": "/properties/requirelist/items/properties/variable",
-                                    "title": "Variable",
-                                    "default": "Handlebars",
-                                    "format": "text"
-                                },
-                                "module": {
-                                      "type": "string",
-                                      "id": "/properties/requirelist/items/properties/module",
-                                      "title": "Require Module",
-                                      "default": "handlebars",
-                                      "format": "text"
-                                  }
-                              }
-                          }
+                                "type": "string",
+                                "headerTemplate": "Module {{self}}",
+                                "id": "/properties/data/properties/reposinfo/properties/requirelist/items",
+                                "title": "Module",
+                                "default": "",
+                                "format": "text"
+                            }
                         },
                         "author": {
                             "type": "string",

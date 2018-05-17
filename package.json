@@ -16,9 +16,11 @@
   },
   "scripts": {
     "watch": "watchify src/main.js -o dist/jsoneditor4code.js -v",
-    "build4main": "browserify src/main.js  | uglifyjs -mc warnings=false > dist/jsoneditor4code.min.js",
-    "test": "node-lint dist/jsoneditor4code.js",
-    "build": "node build.js; uglifyjs dist/jsoneditor4code.js --compress -o dist/jsoneditor4code.min.js"
+    "browserify": "browserify src/main.js  > dist/jsoneditor4code.js",
+    "build2dist": "node ./build.js; browserify src/main.js > docs/js/jsoneditor4code.js",
+    "buildmin": "uglifyjs dist/jsoneditor4code.js --compress -o dist/jsoneditor4code.min.js",
+    "test": "jshint dist/jsoneditor4code.js",
+    "build": "node ./build.js; browserify src/main.js > docs/js/jsoneditor4code.js"
   },
   "repository": {
     "type": "git",
