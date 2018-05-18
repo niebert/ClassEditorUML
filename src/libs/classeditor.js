@@ -9,31 +9,6 @@ function deleteClass() {
   //editor.setValue(vDataJSON["UML_DEFAULT"]);
 }
 
-function X_validate_errors() {
-  // Get an array of errors from the validator
-  var errors = editor.validate();
-
-  var indicator = document.getElementById('valid_indicator');
-
-  // Not valid
-  if(errors.length) {
-    indicator.style.color = 'red';
-    indicator.textContent = "not valid";
-  }
-  // Valid
-  else {
-    indicator.style.color = 'green';
-    indicator.textContent = "valid";
-  };
-  var vErrors = "";
-  var vCR = "";
-  for (var i = 0; i < errors.length; i++) {
-    vErrors +=  vCR + errors[i].path + " - " +errors[i].property +" - "+errors[i].message;
-    vCR = "\n";
-  };
-  document.getElementById("tErrors").value = vErrors;
-}
-
 function update_editor(pJSON) {
   var vJSON = pJSON || editor.getValue();
   $('#display_filename').html(class2filename(vJSON.data.classname,".json"));
@@ -111,46 +86,6 @@ function class2filename(pClassName,pExt) {
   return vFilename+vExt;
 }
 
-
-function X_exportCode() {
-  //-- Javascript Class Output --
-  //-- Template: tpl/javascript_class_tpl.js
-  var vJSON = editor.getValue();
-  updateModified(vJSON);
-  //-- HandleBars: Compile with javascript-template ---
-  // vDataJSON["out"]["javascript"] is HandleBars compiler function
-  // Compile functions was generated from "tpl/javascript_class_tpl.js"
-  var vContent = vDataJSON["out"]["javascript"](vJSON);
-  //--JSON Output----------------
-  var vExt = vJSON.settings.extension4code || ".json";
-  var vFile = class2filename(vJSON.data.classname,vExt);
-  vContent = postProcessHandlebars(vContent,vJSON);
-  //--Textarea Output----------------
-  var vOutNode = document.getElementById("tOutput");
-  vOutNode.value = vContent;
-  saveFile2HDD(vFile,vContent);
-  alert("Export Code for Class to '"+vFile+"'");
-};
-
-
-function X_exportDocumentation() {
-  //-- GitHub Class Documentation Output in GitHub Markdown--
-  //-- Template: tpl/docu4github_tpl.js
-  var vJSON = editor.getValue();
-  updateModified(vJSON);
-  //-- HandleBars: Compile with javascript-template ---
-  // vDataJSON["out"]["javascript"] is HandleBars compiler function
-  // Compile functions was generated from "tpl/docu4github_tpl.js"
-  var vContent = vDataJSON["out"]["docugithub"](vJSON);
-  vContent = postProcessHandlebars(vContent,vJSON);
-  //--Textarea Output----------------
-  var vOutNode = document.getElementById("tOutput");
-  vOutNode.value = vContent;
-  //--JSON Output----------------
-  var vFile = "README_"+class2filename(vJSON.classname,".md");
-  saveFile2HDD(vFile,vContent);
-  alert("Export GitHub Documentation for Class to '"+vFile+"'");
-};
 
 function loader4JSON(pFileID4DOM) {
   var fileToLoad = document.getElementById(pFileID4DOM).files[0]; //for input type=file

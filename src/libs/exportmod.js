@@ -5,10 +5,11 @@ function JSONEditor4Code (pDocument) {
   this.aJSON = {};
   this.aDefaultJSON = {};
   this.aSchema = null;
-  this.aOptions = Options = {
+  this.aOptions = {
     "editor_id": "editor_holder",
     "validator_id":"valid_indicator",
     "load_file_id" : "load_filename",
+    "filename_key" : "filename",
     "out_json": "tOutJSON",
     "out_code": "tOutput",
     "out_errors": "tErrors"
@@ -281,7 +282,12 @@ function JSONEditor4Code (pDocument) {
     var vNode = this.el(this.aOptions["filename_id"]); // e.g. filename_id = "load_filename";
     if (vNode) {
         var vJSON = this.getValue();
-        vNode.innerHTML = class2filename(vJSON.data.classname)+vJSON.settings.extension4code;
+        var vPath = this.aOptions["filename_key"];
+        if (vJSON.data) {
+          if (vJSON.data.hasOwnProperty()) {
+            vNode.innerHTML = class2filename(vJSON.data.classname)+vJSON.settings.extension4code;
+          }
+        };
     } else {
         console.log("DOM node ["+this.aOptions["filename_id"]+"] not found");
     };
@@ -397,7 +403,7 @@ function JSONEditor4Code (pDocument) {
           //document.getElementById("inputTextToSave").value = textFromFileLoaded;
           //alert("textFromFileLoaded="+textFromFileLoaded);
           try {
-            vThis.aEtditor.setValue(JSON.parse(vTextFromFileLoaded));
+            vThis.aEditor.setValue(JSON.parse(vTextFromFileLoaded));
             alert("File JSON '"+fileToLoad.name+"' loaded successfully!");
             vThis.validate_errors();
           } catch(e) {
@@ -413,12 +419,38 @@ function JSONEditor4Code (pDocument) {
     this.saveLS("jsondata");
   }
 
+  this.getClassname4File = function () {
+    return class2filename(this.aJSON.data.classname,"_uml.json");
+  }
+
+  this.getFilename = function() {
+    var vFilename = "jsondata.json";
+    if (this.aJSON) {
+      if (this.aJSON.data) {
+        if (this.aJSON.data.classname) {
+          vFilename = this.getClassname4File(this.aJSON.data.classname);
+        }
+      }
+    };
+    return vFilename;
+  }
+
+  this.setFilename = function (pFilename) {
+    if (this.aJSON) {
+      if (this.aJSON.data) {
+        if (this.aJSON.data.classname) {
+          this.aJSON.data.classname = pFilename;
+        }
+      }
+    };
+  }
+
   this.saveJSON = function () {
     // Get the value from the editor
     //alert("saveJSON()-Call");
     var vJSON = this.aEditor.getValue();
     this.saveLS("jsondata");
-    var vFile = class2filename(this.aJSON.data.classname,"_uml.json");
+    var vFile = this.getFilename();
    // set modified date in reposinfo.modified
     this.update_modified();
     var vContent = JSON.stringify(vJSON,null,4);
@@ -482,7 +514,10 @@ function JSONEditor4Code (pDocument) {
       if (this.aJSON.reposinfo) {
         this.aJSON.reposinfo.modified = getDateTime();
         console.log("reposinfo.modified updated with: '"+this.aJSON.reposinfo.modified+"'");
+      } else {
+        console.log("this.aJSON.reposinfo.modified was undefined - src/libs/exportmod.js:518");
       }
     };
   }
+
 }; // end JSONEditor4Code
