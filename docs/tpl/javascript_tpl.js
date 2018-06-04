@@ -217,6 +217,3 @@ var {{data.classname}} = {{data.superclassname}};
 module.exports = {{data.classname}};
 {{/ifcond}}
 `;
-
-// NodeJS: uncomment modules.export in last line
-// module.export = {{classname}};
