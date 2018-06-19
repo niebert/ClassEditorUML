@@ -13,6 +13,10 @@
      <script src="jquery/external/jquery/jquery.js" type="text/javascript"></script>
      <!-- JSON Editor for Code Generation -->
      <script src="js/jsoneditor4code.js"></script>
+     <!-- iFrame Handling of Data -->
+     <script src="js/iframe.js"></script>
+     <!-- Write Content to DOM -->
+     <script src="js/writedom.js"></script>
 
     <script>
     // vDataJSON is the main JSON storage for the privacy friendly WebApp
@@ -64,6 +68,16 @@
             "out_json": "tOutJSON",
             "out_code": "tOutput",
             "out_errors": "tErrors"
+    };
+
+    function onChangeACE(pID,pContent) {
+            // handles the onchange events in ACE Editors
+            // the id "pID" is the returned parameter "domid" send to ACE editor
+            // via URL, e.g. "ace/ace.html?domid=jsoninput"  pID="jsoninput"
+            // pID is especially import, when different ACE editors in iFrames
+            // fire "onchange" events
+            write2value(pID,pContent);
+            //saveLocalStorage4ArrayID([pID]);
     };
 
     var vDefaultID4JSON = "uml_default"; //see file "db/uml_default.js"
@@ -159,6 +173,9 @@
 </center>
     <div id="divTemplates" style="display:none">
       <b>Output</b> <tt>[tOutput]</tt><br>
+      <div id="iJSONinput" style="text-align: center">
+        <iframe src="ace/ace.html?domid=tOutput&mode=javascript" id="iACEinput" width="90%" height="150px"></iframe>
+      </div>
       <form id="fSubmitJSONdata" action="jsondata2submit.html" method="get" target="_blank">
         <textarea id="tOutput" name="jsondata" cols="125" rows="10"></textarea>
         <br>

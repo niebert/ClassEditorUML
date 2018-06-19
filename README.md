@@ -117,16 +117,19 @@ vJSON_UML.data = {
 ```
 ## Template Engine and Code Generation
 [HandleBars4Code]() is used as Template Engine for generating the code in `JSONEditor4Code`. The are currently two available templates in `ClassEditorUML`:
-* **(Class Javascript)** Code Generation for the programming language in `Javascript`.
-* **(Documentation for Class)** `ClassEditorUML` is able to generate a `README.md` in the GitHub markup language.
+* **(Class Javascript)** Code Generation for the programming language in `Javascript` (Template `docs/tpl/javascript_tpl.js`).
+* **(Documentation for Class)** `ClassEditorUML` is able to generate a `README.md` in the GitHub markdown language (Template `docs/tpl/docu4github_tpl.js`).
 
 ### Storage of Templates
 The templates are stored and imported as Javascript libraries in the file `docs/index.html`, which is the file to launch locally in your browser even without internet access.
 * The template for code generation is stored in the folder `docs/tpl`.
 * In the file `docs/index.html` the template will be accessible via the hash `vDocJSON.tpl`.
+* The folder `docs/tpl` contains two Handlebars templates.
+* **(Class Source Code)** One for the generation of the Javascript source code of the class `vDataJSON.tpl.["docu4github"]` and
+* **(Class Documentation)** the other creates the GitHub markdown as documentation `vDataJSON.tpl.["javascript"]`
 
 ## Handlebars4Code
-`Handlebars4Code` extends the great templates engine `Handlebars` ()
+`Handlebars4Code` extends the templates engine of `Handlebars` with additional helper functions tailored for code generation.
 The following section explains how to access each item by index in the Handlebars template.
 
 ### each Iteration
