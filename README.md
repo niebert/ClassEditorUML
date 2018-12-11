@@ -115,6 +115,9 @@ vJSON_UML.data = {
     ]
 }
 ```
+## Update Editor and Watching Class Lists
+The list of classes for defining the type of attributes and parameters of methods can be extended by the user-defined activity (see `src/libs/classeditor.js`) 
+
 ## Template Engine and Code Generation
 [HandleBars4Code]() is used as Template Engine for generating the code in `JSONEditor4Code`. The are currently two available templates in `ClassEditorUML`:
 * **(Class Javascript)** Code Generation for the programming language in `Javascript` (Template `docs/tpl/javascript_tpl.js`).

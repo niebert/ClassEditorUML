@@ -82,7 +82,6 @@ vDataJSON["class_schema"] = {
                 "classname": {
                     "type": "string",
                     "id": "/properties/data/properties/classname",
-                    "propertyOrder": 10,
                     "title": "Class:",
                     "default": "NewClass",
                     "format": "text",
@@ -91,22 +90,24 @@ vDataJSON["class_schema"] = {
                 "superclassname": {
                     "type": "string",
                     "id": "/properties/data/properties/superclassname",
-                    "propertyOrder": 20,
                     "title": "Super Class",
                     "default": "",
-                    "$ref": "#/definitions/selectorclass"
+                    //"$ref": "#/definitions/selectorclass",
+                    "enumSource" : ["localclasslist"],
+                   "watch" :
+                   {
+                       "localclasslist" : "root.settings.properties.localclasslist"
+                   }
                 },
                 "comment": {
                     "type": "string",
                     "id": "/properties/data/properties/comment",
-                    "propertyOrder": 30,
                     "title": "Description of Class",
                     "description": "Describe the main application of this class for the software development. This description will be used to generate a documentation of the UML definition.",
                     "$ref": "#/definitions/comment"
                 },
                 "reposinfo": {
                     "type": "object",
-                    "propertyOrder": 40,
                     "title": "Repository Info",
                     "id": "/properties/data/properties/reposinfo",
                     "options": {
@@ -114,7 +115,6 @@ vDataJSON["class_schema"] = {
                       "disable_properties": true
                     },
                     "defaultProperties": [
-                        "extension4code",
                         "JSCC_type",
                         "JSCC_version",
                         "repository",
@@ -127,20 +127,9 @@ vDataJSON["class_schema"] = {
                         "requirelist"
                     ],
                     "properties": {
-                        "extension4code": {
-                          "type": "string",
-                          "id": "/properties/settings/properties/extension4code",
-                          "title": "Extension for Generated Code:",
-                          "default": ".js",
-                          "format": "text",
-                          "propertyOrder": 10,
-                          "size":12,
-                          "description": "When ClassEditorUML generates code, it stores a generated file in the programming language '"+vProgLanguage+"' with this file extension"
-                        },
                         "JSCC_type": {
                           "type": "string",
                           "id": "/properties/data/properties/reposinfo/properties/JSCC_type",
-                          "propertyOrder": 20,
                           "title": "JSCC Type",
                           "options": {
                             "hidden": true
@@ -152,7 +141,6 @@ vDataJSON["class_schema"] = {
                         "JSCC_version": {
                           "type": "string",
                           "id": "/properties/data/properties/reposinfo/properties/JSCC_type",
-                          "propertyOrder": 30,
                           "title": "JSCC Version",
                           "options": {
                             "hidden": true
@@ -165,7 +153,6 @@ vDataJSON["class_schema"] = {
                             "type": "string",
                             "id": "/properties/data/properties/reposinfo/properties/repository",
                             "title": "URL Repository",
-                            "propertyOrder": 40,
                             "default": "https://www.github.com/author/NewClass",
                             "format": "text",
                             "description": "Enter e.g. the Link to your GitHub repository."
@@ -173,7 +160,6 @@ vDataJSON["class_schema"] = {
                         "require_classes": {
                             "type": "string",
                             "id": "/properties/data/properties/reposinfo/properties/require_classes",
-                            "propertyOrder": 50,
                             "$ref": "#/definitions/yesno",
                             "title": "Require Classes NPM:",
                             "description": "Set to 'Yes' if you want to insert the require commands for used classes in the generated code and add a 'module.exports' at the end of the generated code"
@@ -181,7 +167,6 @@ vDataJSON["class_schema"] = {
                         "static": {
                             "type": "string",
                             "id": "/properties/data/properties/reposinfo/properties/static",
-                            "propertyOrder": 60,
                             "$ref": "#/definitions/yesno",
                             "title": "Static Class:",
                             "default": "no",
@@ -190,7 +175,6 @@ vDataJSON["class_schema"] = {
                         "requirelist": {
                             "title":"Require List",
                             "type": "array",
-                            "propertyOrder": 70,
                             "id": "/properties/data/properties/reposinfo/properties/requirelist",
                             "format": "table",
                             "description": "Add required modules for the definition of the class. This creates a require('modulename') in the generated code.",
@@ -208,7 +192,6 @@ vDataJSON["class_schema"] = {
                                 "variable": {
                                     "type": "string",
                                     "id": "/properties/requirelist/items/properties/variable",
-                                    "propertyOrder": 10,
                                     "title": "Variable",
                                     "default": "Handlebars",
                                     "format": "text"
@@ -216,7 +199,6 @@ vDataJSON["class_schema"] = {
                                 "module": {
                                       "type": "string",
                                       "id": "/properties/requirelist/items/properties/module",
-                                      "propertyOrder": 20,
                                       "title": "Require Module",
                                       "default": "handlebars",
                                       "format": "text"
@@ -257,7 +239,6 @@ vDataJSON["class_schema"] = {
                 "attributes": {
                     "title": "Attribute",
                     "type": "array",
-                    "propertyOrder": 50,
                     "format": "table",
                     "uniqueItems": true,
                     "id": "/properties/data/properties/attributes",
@@ -317,7 +298,6 @@ vDataJSON["class_schema"] = {
                     "type": "array",
                     "title":"Methods",
                     "id": "/properties/data/properties/methods",
-                    "propertyOrder": 60,
                     "format": "tabs",
                     "uniqueItems": true,
                     "options": {
@@ -431,142 +411,165 @@ vDataJSON["class_schema"] = {
                 }
             }
         },
-        "classlist": {
-            "type": "array",
-            "id": "/properties/settings/properties/classlist",
-            "title": "Select List of Classes",
-            "format": "table",
-            "propertyOrder": 120,
+        "settings": {
+            "title":"Settings Editor",
+            "type": "object",
+            "id": "/properties/config",
             "options": {
-              "collapsed": true,
-              "hidden": false
+              "collapsed": true
             },
-            "items": {
-                "type": "string",
-                "id": "/properties/settings/properties/classlist/items",
-                "title": "Class",
-                "default": "",
-                "format": "text"
-            },
-            "default": [
-                "",
-                "Array",
-                "Boolean",
-                "Document",
-                "Float",
-                "Function",
-                "Hash",
-                "Integer",
-                "Object",
-                "RegularExp",
-                "String"
-              ],
-        },
-        "localclasslist": {
-            "type": "array",
-            "id": "/properties/settings/properties/localclasslist",
-            "title": "Local List of Classes",
-            "description":"A local class is a module required from local repository. The path name defined in the 'Repository Info' is used as prefix to require those local definition of classes.",
-            "format": "table",
-            "propertyOrder": 130,
-            "options": {
-              "collapsed": true,
-              "hidden": false
-            },
-            "items": {
-                "type": "string",
-                "id": "/properties/settings/properties/localclasslist/items",
-                "title": "Class",
-                "default": "App",
-                "format": "text"
-            },
-            "default": [
-                "App",
-                "AppAbstract"
+            "defaultProperties": [
+                "extension4code",
+                "classlist",
+                "localclasslist",
+                "remoteclasslist",
+                "baseclasslist",
+                "baseclasses"
             ],
-        },
-        "remoteclasslist": {
-            "type": "array",
-            "id": "/properties/settings/properties/remoteclasslist",
-            "title": "Remote List of Classes",
-            "format": "table",
-            "propertyOrder": 140,
-            "options": {
-              "collapsed": true,
-              "hidden": false
-            },
-            "description":"A remote class is a module required from a package manager like NPM.",
-            "items": {
-                "type": "string",
-                "id": "/properties/settings/properties/remoteclasslist/items",
-                "title": "Remote Class",
-                "default": "LinkParam",
-                "format": "text"
-            },
-            "default": [
-                "LinkParam",
-                "JSONEditor"
-            ],
-        },
-        "baseclasslist": {
-            "type": "array",
-            "id": "/properties/settings/properties/baseclasslist",
-            "title": "List of Base Classes - Watch Auto Update",
-            "format": "table",
-            "propertyOrder": 150,
-            "options": {
-              "collapsed": true,
-              "hidden": false
-            },
-            "description":"A base class is provide by the programming language '"+vProgLanguage+"' itself, so using these classes in a module does not imply that the special module must be required locally of from a package manager.",
-            "items": {
-                "type": "string",
-                "id": "/properties/settings/properties/baseclasslist/items",
-                "title": "Base Class List",
-                "default": "",
-                "format": "text"
-            }
-        },
-        "baseclasses": {
-            "type": "array",
-            "id": "/properties/settings/properties/baseclasses",
-            "title": "List of Base Classes",
-            "format": "table",
-            "propertyOrder": 160,
-            "options": {
-              "collapsed": true,
-              "hidden": false
-            },
-            "description":"A base class is provide by the programming language '"+vProgLanguage+"' itself, so using these classes in a module does not imply that the special module must be required locally of from a package manager.",
-            "items": {
-                "type": "object",
-                "id": "/properties/settings/properties/baseclasses/items",
-                "title": "Base Class",
-                "headerTemplate": "{{self.name}}()",
-                "defaultProperties": [
-                    "name",
-                    "initvalue"
-                ],
-                "properties": {
-                    "name": {
+            "properties": {
+                "extension4code": {
+                  "type": "string",
+                  "id": "/properties/settings/properties/extension4code",
+                  "title": "Extension for Generated Code:",
+                  "default": ".js",
+                  "format": "text",
+                  "propertyOrder": 10,
+      						"size":12,
+                  "description": "When ClassEditorUML generates code, it stores a generated file in the programming language '"+vProgLanguage+"' with this file extension"
+                },
+                "classlist": {
+                    "type": "array",
+                    //"id": "/properties/settings/properties/classlist",
+                    "title": "Select List of Classes",
+                    "format": "table",
+                    "propertyOrder": 20,
+        						"options": {
+                      "collapsed": true,
+                      "hidden": true
+                    },
+                    "items": {
                         "type": "string",
-                        "id": "/properties/settings/properties/baseclasses/items/properties/name",
-                        "title": "Base Class Name",
+                        "id": "/properties/settings/properties/classlist/items",
+                        "title": "Class",
                         "default": "",
-                        "propertyOrder": 10,
                         "format": "text"
                     },
-                    "initvalue": {
+                    "default": [
+                        "",
+                        "Array",
+                        "Boolean",
+                        "Document",
+                        "Float",
+                        "Function",
+                        "Hash",
+                        "Integer",
+                        "Object",
+                        "RegularExp",
+                        "String"
+                      ],
+                },
+                "localclasslist": {
+                    "type": "array",
+                    "id": "/properties/settings/properties/localclasslist",
+                    "title": "Local List of Classes",
+                    "description":"A local class is a module required from local repository. The path name defined in the 'Repository Info' is used as prefix to require those local definition of classes.",
+                    "format": "table",
+                    "propertyOrder": 30,
+        						"options": {
+                      "collapsed": true
+                    },
+                    "items": {
                         "type": "string",
-                        "id": "/properties/settings/properties/baseclasses/items/properties/initvalue",
-                        "title": "Init Value",
-                        "default": "",
-                        "propertyOrder": 20,
+                        "id": "/properties/settings/properties/localclasslist/items",
+                        "title": "Class",
+                        "default": "App",
                         "format": "text"
+                    },
+                    "default": [
+                        "App",
+                        "AppAbstract"
+                    ],
+                },
+                "remoteclasslist": {
+                    "type": "array",
+                    "id": "/properties/settings/properties/remoteclasslist",
+                    "title": "Remote List of Classes",
+                    "format": "table",
+                    "propertyOrder": 40,
+        						"options": {
+                      "collapsed": true
+                    },
+                    "description":"A remote class is a module required from a package manager like NPM.",
+                    "items": {
+                        "type": "string",
+                        "id": "/properties/settings/properties/remoteclasslist/items",
+                        "title": "Remote Class",
+                        "default": "LinkParam",
+                        "format": "text"
+                    },
+                    "default": [
+                        "LinkParam",
+                        "JSONEditor"
+                    ],
+                },
+                "baseclasslist": {
+                    "type": "array",
+                    "id": "/properties/settings/properties/baseclasslist",
+                    "title": "List of Base Classes - Watch Auto Update",
+                    "format": "table",
+                    "propertyOrder": 50,
+        						"options": {
+                      "collapsed": true
+                    },
+                    "description":"A base class is provide by the programming language '"+vProgLanguage+"' itself, so using these classes in a module does not imply that the special module must be required locally of from a package manager.",
+                    "items": {
+                        "type": "string",
+                        "id": "/properties/settings/properties/baseclasslist/items",
+                        "title": "Base Class List",
+                        "default": "",
+                        "format": "text"
+                    }
+                },
+                "baseclasses": {
+                    "type": "array",
+                    "id": "/properties/settings/properties/baseclasses",
+                    "title": "List of Base Classes",
+                    "format": "table",
+                    "propertyOrder": 50,
+        						"options": {
+                      "collapsed": true
+                    },
+                    "description":"A base class is provide by the programming language '"+vProgLanguage+"' itself, so using these classes in a module does not imply that the special module must be required locally of from a package manager.",
+                    "items": {
+                        "type": "object",
+                        "id": "/properties/settings/properties/baseclasses/items",
+                        "title": "Base Class",
+                        "headerTemplate": "{{self.name}}()",
+                        "defaultProperties": [
+                            "name",
+                            "initvalue"
+                        ],
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "id": "/properties/settings/properties/baseclasses/items/properties/name",
+                                "title": "Base Class Name",
+                                "default": "",
+                                "propertyOrder": 10,
+                    						"format": "text"
+                            },
+                            "initvalue": {
+                                "type": "string",
+                                "id": "/properties/settings/properties/baseclasses/items/properties/initvalue",
+                                "title": "Init Value",
+                                "default": "",
+                                "propertyOrder": 20,
+                                "format": "text"
+                            }
+                        }
                     }
                 }
             }
         }
-
     }
 }

@@ -10,20 +10,17 @@
      <link href="css/font-awesome.min.css" rel="stylesheet">
      <!-- ACE Editor -->
      <script src="ace/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
-     <script src="jquery/external/jquery/jquery.js" type="text/javascript"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
      <!-- JSON Editor for Code Generation -->
      <script src="js/jsoneditor4code.js"></script>
-     <!-- ClassUML Library with add_watch() -->
-     <script src="js/classuml.js"></script>
      <!-- iFrame Handling of Data -->
      <script src="js/iframe.js"></script>
      <!-- Write Content to DOM -->
      <script src="js/writedom.js"></script>
 
 
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.1/js/standalone/selectize.js"></script>
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.1/css/selectize.bootstrap3.css">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.1/js/standalone/selectize.js"></script>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.1/css/selectize.bootstrap3.css">
 
     <script>
     // vDataJSON is the main JSON storage for the privacy friendly WebApp
@@ -57,6 +54,9 @@
       * set the default CSS theme and icon library globally
       * see https://www.github.com/niebert/json-editor for further details
     */
+    //---- Initialize Editor with JSON --------------
+    // The JSON data is defined in file "db/umljs.js"
+    var vJSON = vDataJSON["umljs"];
     //---- Create one JSON Editor for Code ---------
     var vJSONEditor = new JSONEditor4Code();
     /*
@@ -113,9 +113,6 @@
     <script>
     // Delete JSON load the following default JSON into JSON Editor for Code
     var vDefaultJSON = vDataJSON[vDefaultID4JSON]; //see file "db/uml_default.js"
-    //---- Initialize Editor with JSON --------------
-    // The JSON data is defined in file "db/umljs.js"
-    var vJSON = vDataJSON["umljs"];
     </script>
   </head>
   <body  style="margin:20px">
@@ -138,9 +135,6 @@
 		&nbsp;
     <b>File: </b>  <tt id="display_filename">class.json</tt>
 		&nbsp;
-    <button id='bSettings' style="color: white;background-color: #A0A0A0"  onclick="toggleSettings();return false">
-      <i class="fa fa-cog" aria-hidden="true"></i> Settings
-   </button>
 		&nbsp;
     <!-- Function: exportCode() is defined in js/classeditor.js -->
     <button id='bExportHTML' style="color: white;background-color: #225988"  onclick="saveCode4Class();return false">
@@ -148,7 +142,7 @@
 	 </button>
    <!-- Function: exportDocumentation() is defined in js/classeditor.js -->
    <button id='bExportDoc' style="color: white;background-color: #225988"  onclick="saveDocu4Class();return false">
-     <i class="fa fa-floppy-o" aria-hidden="true"></i> Export Documentation
+     <i class="fa fa-floppy-o" aria-hidden="true"></i> Export Documentaion
   </button>
     <!--
 		<button id='bAddRecord' style="color: white;background-color: #225988"  onclick="vEditor4JSON.add();return false">
@@ -158,12 +152,11 @@
       <i class="fa fa-minus-square" aria-hidden="true"></i> Init DB
     </button>
     -->
-		<button id='bDeleteClass' style="color: white;background-color: #c10303"  onclick="vJSONEditor.init_ask();return false">
-			<i class="fa fa-trash" aria-hidden="true"></i> Delete
+		<button id='bDeleteClass' style="color: white;background-color: #c10303;display:none"  onclick="vJSONEditor.init_ask();return false">
+			<i class="fa fa-minus-square" aria-hidden="true"></i> Delete Class
 		</button>
 
     <span id='valid_indicator'></span>
-
 	</div>
 	<!-- BEGIN of JSON Editor -->
     <div id='editor_holder' style="margin:20px"></div>

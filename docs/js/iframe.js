@@ -1,15 +1,56 @@
-function saveTemplate2Editor(pID,pTemplateID) {
+function saveJSON4Class() {
+  console.log("Saver the JSON for Class");
+  vJSONEditor.saveJSON();
+  var vJSON = vJSONEditor.getValue();
+  write2editor("Output",JSON.stringify(vJSON,null,4))
+}
 
+function saveCode4Class() {
+  console.log("Saver the Code for Class");
+  var vTplID = 'javascript';
+  var vMode = "ace/mode/javascript";
+  vJSONEditor.save4Template(vTplID,'.js','Javascript Code for Class');
+  var vContent = vJSONEditor.getOutput4Template(vTplID);
+  write2editor("Output",vContent,vMode)
+}
+
+function saveDocu4Class() {
+  console.log("Saver the Github Documentation for Class");
+  var vTplID = 'docu4github';
+  var vMode = "ace/mode/markdown";
+  vJSONEditor.save4Template(vTplID,'_github.md','Github Documentation for Class');
+  var vContent = vJSONEditor.getOutput4Template(vTplID);
+  write2editor("Output",vContent,vMode)
+}
+
+
+function saveTemplate2Editor(pID,pTemplateID) {
+  // (1) Get the template content as string
+  var vContent = vDataJSON.tpl[pTemplateID] || "Template undefined";
+  var vEditorMode = "ace/mode/javascript";
+  switch (pTemplateID) {
+    case "docu4github":
+        vEditorMode = "ace/mode/markdown"
+    break;
+    default:
+      vEditorMode = "ace/mode/javascript"
+  };
+  write2editor(pID,vContent);
 };
 
 function onChangeACE(pID,pContent) {
-        // handles the onchange events in ACE Editors
-        // the id "pID" is the returned parameter "domid" send to ACE editor
-        // via URL, e.g. "ace/ace.html?domid=jsoninput"  pID="jsoninput"
-        // pID is especially import, when different ACE editors in iFrames
-        // fire "onchange" events
-        write2value(pID,pContent);
-        //saveLocalStorage4ArrayID([pID]);
+        // handles the onchange events called ACE Editors in the iFrame
+        // (1) onchange event updates in general an invisible textarea in
+        //     parent document of the iframe.
+        // (2) the id "pID" in the onChangeACE() parameter was send before
+        //     as "domid" link parameter to the ACE editor
+        //     via URL of the iFrame, e.g. "ace/ace.html?domid=myinput"  pID="myinput"
+        // Remark: the pID is especially important, when different ACE editors
+        //     in iFrames fire "onchange" events
+        top.write2value(pID,pContent);
+        // this function is called from ACE inside the iFrame to "top." was
+        // added to refer to the function write2value in the top document object.
+        // write the content of ACE in the iFrame to the DOM value with the id pID;
 };
 
 function write2editor(pID,pValue,pMode) {
@@ -72,90 +113,9 @@ function getIFrameEditor(pIFrameName) {
   return vEditor;
 };
 
-function initEditorContent(pClassID) {
-  console.log("initEditorContent('"+pClassID+"') - Call");
-  writePage2Editor();
-  writePageType2Editor();
-  writeMethodCode2Editor(pClassID);
+function initEditorContent(pEditorID) {
+  console.log("initEditorContent('"+pEditorID+"') - Call");
 };
-
-function writePage2Editor() {
-  var vID = getValueDOM("sPageHTML");
-  var vValue = "Page '"+vID+"' undefined";
-  if (existsPageJS(vID)) {
-    if (vJSCC_DB["PageList"][vID]["content"]) {
-      vValue = vJSCC_DB["PageList"][vID]["content"];
-      write2value("tPageHTML",vValue);
-      write2value("tPageID",vID);
-    };
-  };
-}
-
-function getPageTypeCode4Editor(pPageTypeID) {
-  var vID = pPageTypeID || vJSCC_DB["sPageTypeHTML"] || getValueDOM("sPageTypeHTML") || "";
-  var vValue;
-  if (vJSCC_DB["PageTypeList"][vID]) {
-    if (vJSCC_DB["PageTypeList"][vID]["template"]) {
-      console.log("PageType template for ["+vID+"] FOUND");
-      vValue = vJSCC_DB["PageTypeList"][vID]["template"];
-    }
-  } else {
-    console.log("PagType content for ["+vID+"] undefined");
-  };
-  return vValue
-}
-
-
-
-function getMethodCode4Editor(pClass) {
-  var vValue = "MethodCode for '"+pClass+"' undefined";
-  if (existsClassJS(pClass)) {
-    var vClassJS = getClassJSON(pClass);
-    var vID = vClassJS["sMethodList"];
-    vValue = "MethodCode for '"+pClass+"."+vID+"()' undefined";
-    if (reduceVarName(vID) == "") {
-      vValue = "";
-    } else if (vClassJS["MethodCode"][vID]) {
-      vValue = vClassJS["MethodCode"][vID];
-      console.log("getMethodCode2Editor('"+pClass+"') FOUND MethodCode for "+vID+"()");
-    } else {
-      console.log("writeMethodCode2Editor('"+pClass+"') undefined MethodCode for '"+vID+"()'");
-    };
-  };
-  return vValue
-}
-
-
-function writeMethodCode2Editor(pClass) {
-  if (vJSCC_DB["ClassList"][pClass]) {
-    var vID = vJSCC_DB["ClassList"][pClass]["sMethodList"];
-    var vValue = "MethodCode for '"+vID+"()' undefined";
-    if (reduceVarName(vID) == "") {
-      vValue = "";
-    } else if (vJSCC_DB["ClassList"][pClass]["MethodCode"][vID]) {
-      vValue = vJSCC_DB["ClassList"][pClass]["MethodCode"][vID];
-      console.log("writeMethodCode2Editor('"+pClass+"') FOUND MethodCode for "+vID+"()");
-      write2value("tMethodCode",vValue);
-    } else {
-      console.log("writeMethodCode2Editor('"+pClass+"') undefined MethodCode for '"+vID+"()'");
-    };
-  } else {
-
-  };
-  //write2value("tMethodID",vID);
-}
-
-function writePageType2Editor() {
-  var vID = getValueDOM("sPageTypeHTML");
-  //setEditorValue("iPageHTML",vValue);
-  var vValue = getPageTypeCode4Editor(vID);
-  if (vValue) {
-    write2value("tPageTypeHTML",vValue);
-    write2value("tPageTypeID",vID);
-  } else {
-    console.log("writePageType2Editor() Content undefined");
-  }
-}
 
 
 function setEditorMode(pIFrameName,pMode) {

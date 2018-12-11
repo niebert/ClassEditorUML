@@ -4,6 +4,7 @@ vDataJSON["umljs"]= {
     "superclassname": "",
     "comment": "The class provides an constructor for a JSON Editor for Code Generation. The work is based on Jeremy Dorns great JSON editor. This class adds the HandleBars template engine for generation of source based on a UML class definition. ",
     "reposinfo": {
+      "extension4code":".js",
       "repository": "https://www.github.com/author/NewClass",
       "require_classes": "yes",
       "static": "no",
@@ -117,36 +118,35 @@ vDataJSON["umljs"]= {
       }
     ]
   },
-  "settings": {
-    "extension4code":".js",
-    "classlist": [
+  "classlist": [
       "",
+      "Array",
+      "Boolean",
+      "Float",
+      "Function",
+      "Hash",
+      "Integer",
+      "Object",
+      "RegularExp",
+      "String",
       "App",
       "AppAbstract",
-      "Array",
-      "Boolean",
-      "Float",
-      "Function",
-      "Hash",
-      "Integer",
-      "JSONEditor",
-      "LinkParam",
-      "Object",
-      "RegularExp",
-      "String"
-    ],
-    "localclasslist": [
-      "App",
-      "AppAbstract"
-    ],
-    "remoteclasslist": [
+      "Document",
       "LinkParam",
       "JSONEditor"
-    ],
-    "baseclasslist": [
+  ],
+  "localclasslist": [
+      "LoadSaver",
+      "LinkParam"
+  ],
+  "remoteclasslist": [
+      "JSONEditor"
+  ],
+  "baseclasslist": [
       "",
       "Array",
       "Boolean",
+      "Document",
       "Float",
       "Function",
       "Hash",
@@ -154,6 +154,47 @@ vDataJSON["umljs"]= {
       "Object",
       "RegularExp",
       "String"
-    ]
-  }
+  ],
+  "baseclasses": [
+      {
+        "name": "Array",
+        "initvalue": "[]"
+      },
+      {
+          "name": "Boolean",
+          "initvalue": "true"
+      },
+      {
+          "name": "Float",
+          "initvalue": "0.0"
+      },
+      {
+          "name": "Function",
+          "initvalue": "function my_fun() {}"
+      },
+      {
+          "name": "Document",
+          "initvalue": "document"
+      },
+      {
+          "name": "Integer",
+          "initvalue": "0"
+      },
+      {
+          "name": "String",
+          "initvalue": "\"\""
+      },
+      {
+          "name": "Hash",
+          "initvalue": "{}"
+      },
+      {
+          "name": "Object",
+          "initvalue": "null"
+      },
+      {
+          "name": "RegularExp",
+          "initvalue": "/search/g"
+      }
+  ]
 }
