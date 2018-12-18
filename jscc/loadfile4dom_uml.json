@@ -1,0 +1,57 @@
+{
+    "data": {
+        "classname": "LoadFile4DOM",
+        "superclassname": "",
+        "comment": "Creates hidden file tag in the DOM to emulated loading interactively files from the local file system of you computer or mobile device into the browser for further processing\n",
+        "reposinfo": {
+            "extension4code": ".js",
+            "JSCC_type": "CLASS",
+            "JSCC_version": "2",
+            "repository": "",
+            "static": "no",
+            "require_classes": "yes",
+            "author": "",
+            "email": "",
+            "created": "2018/12/12 14:49:10",
+            "modified": "2018/12/12 14:49:10",
+            "requirelist": []
+        },
+        "attributes": [
+            {
+                "visibility": "public",
+                "name": "aMyAttrib",
+                "init": "",
+                "class": "",
+                "comment": "This attribute stores ..."
+            }
+        ],
+        "methods": [
+            {
+                "visibility": "public",
+                "name": "myMethod",
+                "parameter": [],
+                "return": "",
+                "comment": "the method performs ...",
+                "code": "// insert your code here"
+            }
+        ]
+    },
+    "settings": null,
+    "classlist": [
+        "",
+        "Array",
+        "Boolean",
+        "Document",
+        "Float",
+        "Function",
+        "Hash",
+        "Integer",
+        "Object",
+        "RegularExp",
+        "String",
+        "JSONEditor",
+        "Document",
+        "LinkParam",
+        "JSONEditor"
+    ]
+}

@@ -4,7 +4,6 @@ vDataJSON["umljs"]= {
     "superclassname": "",
     "comment": "The class provides an constructor for a JSON Editor for Code Generation. The work is based on Jeremy Dorns great JSON editor. This class adds the HandleBars template engine for generation of source based on a UML class definition. ",
     "reposinfo": {
-      "extension4code":".js",
       "repository": "https://www.github.com/author/NewClass",
       "require_classes": "yes",
       "static": "no",
@@ -118,83 +117,78 @@ vDataJSON["umljs"]= {
       }
     ]
   },
-  "classlist": [
-      "",
-      "Array",
-      "Boolean",
-      "Float",
-      "Function",
-      "Hash",
-      "Integer",
-      "Object",
-      "RegularExp",
-      "String",
-      "App",
-      "AppAbstract",
-      "Document",
-      "LinkParam",
-      "JSONEditor"
-  ],
-  "localclasslist": [
-      "LoadSaver",
-      "LinkParam"
-  ],
-  "remoteclasslist": [
-      "JSONEditor"
-  ],
-  "baseclasslist": [
-      "",
-      "Array",
-      "Boolean",
-      "Document",
-      "Float",
-      "Function",
-      "Hash",
-      "Integer",
-      "Object",
-      "RegularExp",
-      "String"
-  ],
-  "baseclasses": [
+  "settings": {
+    "extension4code":".js",
+    "localclasslist": [
       {
-        "name": "Array",
-        "initvalue": "[]"
+        "name":"LinkParam",
+        "initvalue":"new LinkParam()",
+        "repo":"linkparam"
       },
       {
-          "name": "Boolean",
-          "initvalue": "true"
+        "name":"AppLSAC",
+        "initvalue":"new AppLSAC(document)",
+        "repo":"applsac"
       },
       {
-          "name": "Float",
-          "initvalue": "0.0"
-      },
-      {
-          "name": "Function",
-          "initvalue": "function my_fun() {}"
-      },
-      {
-          "name": "Document",
-          "initvalue": "document"
-      },
-      {
-          "name": "Integer",
-          "initvalue": "0"
-      },
-      {
-          "name": "String",
-          "initvalue": "\"\""
-      },
-      {
-          "name": "Hash",
-          "initvalue": "{}"
-      },
-      {
-          "name": "Object",
-          "initvalue": "null"
-      },
-      {
-          "name": "RegularExp",
-          "initvalue": "/search/g"
+        "name":"AppAbstract",
+        "initvalue":"new AppAbstract(document)",
+        "repo":"appabstract"
       }
-  ]
+    ],
+    "remoteclasslist": [
+      {
+        "name":"Handlebars",
+        "initvalue":"new HandleBars()",
+        "repo":"handlebars"
+      },
+      {
+        "name":"JSONEditor",
+        "initvalue":"new JSONEditor()",
+        "repo":"jsoneditor"
+      }
+    ],
+    "baseclasslist": [
+        {
+          "name": "Array",
+          "initvalue": "[]"
+        },
+        {
+            "name": "Boolean",
+            "initvalue": "true"
+        },
+        {
+            "name": "Float",
+            "initvalue": "0.0"
+        },
+        {
+            "name": "Function",
+            "initvalue": "function my_fun() {}"
+        },
+        {
+            "name": "Document",
+            "initvalue": "document"
+        },
+        {
+            "name": "Integer",
+            "initvalue": "0"
+        },
+        {
+            "name": "String",
+            "initvalue": "\"\""
+        },
+        {
+            "name": "Hash",
+            "initvalue": "{}"
+        },
+        {
+            "name": "Object",
+            "initvalue": "null"
+        },
+        {
+            "name": "RegularExp",
+            "initvalue": "/search/g"
+        }
+    ]
+  }
 }

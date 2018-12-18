@@ -13,6 +13,17 @@
      <script src="jquery/external/jquery/jquery.js" type="text/javascript"></script>
      <!-- JSON Editor for Code Generation -->
      <script src="js/jsoneditor4code.js"></script>
+     <!-- ClassUML Library with add_watch() -->
+     <script src="js/classuml.js"></script>
+     <!-- iFrame Handling of Data -->
+     <script src="js/iframe.js"></script>
+     <!-- Write Content to DOM -->
+     <script src="js/writedom.js"></script>
+
+
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.1/js/standalone/selectize.js"></script>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.1/css/selectize.bootstrap3.css">
 
     <script>
     // vDataJSON is the main JSON storage for the privacy friendly WebApp
@@ -46,14 +57,8 @@
       * set the default CSS theme and icon library globally
       * see https://www.github.com/niebert/json-editor for further details
     */
-    //---- Initialize Editor with JSON --------------
-    // The JSON data is defined in file "db/umljs.js"
-    var vJSON = vDataJSON["umljs"];
     //---- Create one JSON Editor for Code ---------
-    if (JSONEditor4Code) {
-      var vJSONEditor = new JSONEditor4Code();
-      vJSONEditor.initDoc(document);
-    }
+    var vJSONEditor = new JSONEditor4Code();
     /*
       "editor_id": DOM id where the editor will be injected,
     */
@@ -69,9 +74,19 @@
             "out_errors": "tErrors"
     };
 
+    function onChangeACE(pID,pContent) {
+            // handles the onchange events in ACE Editors
+            // the id "pID" is the returned parameter "domid" send to ACE editor
+            // via URL, e.g. "ace/ace.html?domid=jsoninput"  pID="jsoninput"
+            // pID is especially import, when different ACE editors in iFrames
+            // fire "onchange" events
+            write2value(pID,pContent);
+            //saveLocalStorage4ArrayID([pID]);
+    };
+
+    var vDefaultID4JSON = "uml_default"; //see file "db/uml_default.js"
     //console.log("Edit JSON:\n"+JSON.stringify(vJSON,null,3));
     // vJSONEditor.init(...) will be called at very end of this file
-    var vDefaultID4JSON = "umljs"; //see file "db/uml_default.js"
     </script>
     <!-- ### UML Default File  #####################
     used for initializing afte delete class command
@@ -92,13 +107,15 @@
     <!-- ### SCHEMA LOADER ############################
     script tag stores the JSON schema in
     vDataJSON["class_schema"]
-    <script src="schema/settings_schema.js"></script>
     -->
     <script src="schema/class_uml_schema.js"></script>
     <!-- ############################################## -->
     <script>
     // Delete JSON load the following default JSON into JSON Editor for Code
     var vDefaultJSON = vDataJSON[vDefaultID4JSON]; //see file "db/uml_default.js"
+    //---- Initialize Editor with JSON --------------
+    // The JSON data is defined in file "db/umljs.js"
+    var vJSON = vDataJSON["umljs"];
     </script>
   </head>
   <body  style="margin:20px">
@@ -114,24 +131,24 @@
  	 	<button id='bOpenJSON' style="color: white;background-color: #225988"  onclick="$( '#fileJSON' ).trigger('click');return false">
 			<i class="fa fa-folder-open-o" aria-hidden="true"></i> Load
 		</button>
-    <button id='bSaveJSON' style="color: white;background-color: #225988"  onclick="vJSONEditor.saveJSON();return false">
+    <button id='bSaveJSON' style="color: white;background-color: #225988"  onclick="saveJSON4Class();return false">
 			<i class="fa fa-floppy-o" aria-hidden="true"></i> Save
 		</button>
    &nbsp;
 		&nbsp;
     <b>File: </b>  <tt id="display_filename">class.json</tt>
 		&nbsp;
+    <button id='bSettings' style="color: white;background-color: #A0A0A0"  onclick="toggleSettings();return false">
+      <i class="fa fa-cog" aria-hidden="true"></i> Settings
+   </button>
 		&nbsp;
     <!-- Function: exportCode() is defined in js/classeditor.js -->
-    <button id='bExportHTML' style="color: white;background-color: #225988"  onclick="vJSONEditor.save4Template('javascript','.js','Javascript Code for Class');return false">
+    <button id='bExportHTML' style="color: white;background-color: #225988"  onclick="saveCode4Class();return false">
 			<i class="fa fa-floppy-o" aria-hidden="true"></i> Export Code
 	 </button>
    <!-- Function: exportDocumentation() is defined in js/classeditor.js -->
-   <button id='bExportDoc' style="color: white;background-color: #225988"  onclick="vJSONEditor.save4Template('docu4github','_github.md','Github Documentation for Class');return false">
+   <button id='bExportDoc' style="color: white;background-color: #225988"  onclick="saveDocu4Class();return false">
      <i class="fa fa-floppy-o" aria-hidden="true"></i> Export Documentation
-  </button>
-  <button id='bSettings' style="color: white;background-color: #A0A0A0"  onclick="vJSONEditor.toggleSettings('root.settings','root.data');return false">
-    <i class="fa fa-cog" aria-hidden="true"></i> Settings
   </button>
     <!--
 		<button id='bAddRecord' style="color: white;background-color: #225988"  onclick="vEditor4JSON.add();return false">
@@ -146,11 +163,16 @@
 		</button>
 
     <span id='valid_indicator'></span>
+
 	</div>
 	<!-- BEGIN of JSON Editor -->
-  <div id='editor_holder' style="margin:20px"></div>
-  <div id='settings_holder' style="margin:20px"></div>
-<!-- END of JSON Editor -->
+    <div id='editor_holder' style="margin:20px"></div>
+    <div id="divOutput" style="text-align: center">
+      <b>Output</b> <tt style="display:none">[tOutput]</tt><br>
+      <iframe src="ace/ace.html?domid=tOutput&mode=javascript" id="iOutput" width="90%" height="150px"></iframe>
+    </div>
+
+	<!-- END of JSON Editor -->
     <button id='restore' style="display:none" onclick="vJSONEditor.restore();return false">Restore to Default</button>
     <button id='enable_disable' style="display:none" onclick="vJSONEditor.toggleEnable();return false">Disable/Enable</button>
     <button id='submit' Xstyle="display:none" onclick="vJSONEditor.submit2callback();return false">Submit</button>
@@ -170,7 +192,7 @@
       <form id="fSubmitJSONdata" action="jsondata2submit.html" method="get" target="_blank">
         <textarea id="tOutput" name="jsondata" cols="125" rows="10"></textarea>
         <br>
-        <input type="submit">
+        <input type="submit" value="Submit to Server">
       </form>
       <hr>
       <b>JSON</b> <tt>[tOutJSON]</tt><br>
@@ -190,11 +212,13 @@
       // Therefore the init method is called
       // at the very end of the HTML file.
 
+      vJSONEditor.initDoc(document);
       vJSONEditor.init(vJSON,
         vDefaultJSON,
         vDataJSON["class_schema"],
         vDataJSON["tpl"],
         vOptions);
+      add_watch(vJSONEditor);
     </script>
 
 
