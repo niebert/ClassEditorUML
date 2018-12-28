@@ -63,7 +63,6 @@ vDataJSON["class_schema"] = {
     "properties": {
         "data": {
             "title":"JSON Data",
-            "propertyOrder": 10,
             "type": "object",
             "headerTemplate": "Class: {{self.classname}}",
             "id": "/properties/data",
@@ -84,7 +83,6 @@ vDataJSON["class_schema"] = {
                     "type": "string",
                     "id": "/properties/data/properties/classname",
                     "title": "Class:",
-                    "propertyOrder": 10,
                     "default": "NewClass",
                     "format": "text",
                     "description": "Use a classname with uppercase first character e.g. 'Myclass' or 'MyClass' and not 'myclass'."
@@ -93,7 +91,6 @@ vDataJSON["class_schema"] = {
                     "type": "string",
                     "id": "/properties/data/properties/superclassname",
                     "title": "Super Class",
-                    "propertyOrder": 20,
                     "default": "",
                     "$ref": "#/definitions/selectorclass"
                 },
@@ -101,14 +98,12 @@ vDataJSON["class_schema"] = {
                     "type": "string",
                     "id": "/properties/data/properties/comment",
                     "title": "Description of Class",
-                    "propertyOrder": 30,
                     "description": "Describe the main application of this class for the software development. This description will be used to generate a documentation of the UML definition.",
                     "$ref": "#/definitions/comment"
                 },
                 "reposinfo": {
                     "type": "object",
                     "title": "Repository Info",
-                    "propertyOrder": 40,
                     "id": "/properties/data/properties/reposinfo",
                     "options": {
                       "collapsed": true,
@@ -119,13 +114,11 @@ vDataJSON["class_schema"] = {
                         "JSCC_version",
                         "repository",
                         "static",
-                        "debugheader",
                         "require_classes",
                         "author",
                         "email",
                         "created",
                         "modified",
-                        "configcode",
                         "requirelist"
                     ],
                     "properties": {
@@ -136,7 +129,6 @@ vDataJSON["class_schema"] = {
                           "options": {
                             "hidden": true
                           },
-                          "propertyOrder": 10,
                           "default": "CLASS",
                           "format": "text",
                           "description": "Hidden JSON attribute to handle with JavascriptClassCreator JSCC as CLASS - allows integration into UML based Software Development Framework"
@@ -145,7 +137,6 @@ vDataJSON["class_schema"] = {
                           "type": "string",
                           "id": "/properties/data/properties/reposinfo/properties/JSCC_type",
                           "title": "JSCC Version",
-                          "propertyOrder": 20,
                           "options": {
                             "hidden": true
                           },
@@ -157,7 +148,6 @@ vDataJSON["class_schema"] = {
                             "type": "string",
                             "id": "/properties/data/properties/reposinfo/properties/repository",
                             "title": "URL Repository",
-                            "propertyOrder": 30,
                             "default": "https://www.github.com/author/NewClass",
                             "format": "text",
                             "description": "Enter e.g. the Link to your GitHub repository."
@@ -167,7 +157,6 @@ vDataJSON["class_schema"] = {
                             "id": "/properties/data/properties/reposinfo/properties/require_classes",
                             "$ref": "#/definitions/yesno",
                             "title": "Require Classes NPM:",
-                            "propertyOrder": 40,
                             "description": "Set to 'Yes' if you want to insert the require commands for used classes in the generated code and add a 'module.exports' at the end of the generated code"
                         },
                         "static": {
@@ -175,22 +164,11 @@ vDataJSON["class_schema"] = {
                             "id": "/properties/data/properties/reposinfo/properties/static",
                             "$ref": "#/definitions/yesno",
                             "title": "Static Class:",
-                            "propertyOrder": 50,
                             "default": "no",
                             "description": "If set to 'Yes' the generated class will be an Object (hash) with attributes and assigned functions. You do not need to instantiate a class with new MyClass()"
                         },
-                        "debugheader": {
-                            "type": "string",
-                            "id": "/properties/data/properties/reposinfo/properties/debugheader",
-                            "$ref": "#/definitions/yesno",
-                            "title": "Debug Header Methods:",
-                            "propertyOrder": 60,
-                            "default": "no",
-                            "description": "If set to 'Yes' the generated methods of the class will be have a debug header for assigned functions. The debug header will create an commented alert-call and a console.log command with the method name for easier debugging"
-                        },
                         "requirelist": {
                             "title":"Require List",
-                            "propertyOrder": 70,
                             "type": "array",
                             "id": "/properties/data/properties/reposinfo/properties/requirelist",
                             "format": "table",
@@ -200,7 +178,6 @@ vDataJSON["class_schema"] = {
                             },
                             "items": {
                               "type": "object",
-                              "title": "Module",
                               "id": "/properties/requirelist/items",
                               "defaultProperties": [
                                   "module",
@@ -228,7 +205,6 @@ vDataJSON["class_schema"] = {
                             "type": "string",
                             "id": "/properties/data/properties/reposinfo/properties/author",
                             "title": "Author of Class",
-                            "propertyOrder": 80,
                             "default": "My Name",
                             "format": "text"
                         },
@@ -236,13 +212,11 @@ vDataJSON["class_schema"] = {
                             "type": "string",
                             "id": "/properties/data/properties/reposinfo/properties/email",
                             "title": "e-Mail:",
-                            "propertyOrder": 90,
                             "default": "name@example.com",
                             "format": "text"
                         },
                         "created": {
                             "title": "Created:",
-                            "propertyOrder": 100,
                             "type": "string",
                             "default": getDate(),
                             "id": "/properties/data/properties/reposinfo/properties/created",
@@ -250,27 +224,15 @@ vDataJSON["class_schema"] = {
                         },
                         "modified": {
                             "title": "Modified:",
-                            "propertyOrder": 110,
                             "type": "string",
                             "default": getDate(),
                             "id": "/properties/data/properties/reposinfo/properties/modified",
                             "format": "text"
-                        },
-                        "configcode": {
-                            "type": "string",
-                            "id": "/properties/data/properties/reposinfo/properties/configcode",
-                            "title": "Configuration Code",
-                            "description": "The configuration code will be placed before the constructor of class and could contain e.g. some constants of some functions that are not methods of the class and are accessible in the class only.",
-                            "default": "// the configuration code can be used to create some constants or local functions",
-                            "propertyOrder": 120,
-                            "format": vProgLanguage
                         }
-
                     }
                 },
                 "attributes": {
                     "title": "Attribute",
-                    "propertyOrder": 50,
                     "type": "array",
                     "format": "table",
                     "uniqueItems": true,
@@ -330,7 +292,6 @@ vDataJSON["class_schema"] = {
                 "methods": {
                     "type": "array",
                     "title":"Methods",
-                    "propertyOrder": 60,
                     "id": "/properties/data/properties/methods",
                     "format": "tabs",
                     "uniqueItems": true,
@@ -447,7 +408,6 @@ vDataJSON["class_schema"] = {
         },
         "settings": {
             "title":"Settings Editor",
-            "propertyOrder": 20,
             "type": "object",
             "id": "/properties/settings",
             "options": {
@@ -462,27 +422,17 @@ vDataJSON["class_schema"] = {
                 "baseclasses"
             ],
             "properties": {
-              "extension4code": {
-                "type": "string",
-                "id": "/properties/settings/properties/extension4code",
-                "title": "Extension for Generated Code:",
-                "default": ".js",
-                "format": "text",
-                "propertyOrder": 10,
-                "size":12,
-                "description": "When ClassEditorUML generates code, it stores a generated file in the programming language '"+vProgLanguage+"' with this file extension"
-              },
-              "extension4json": {
-                "type": "string",
-                "id": "/properties/settings/properties/extension4json",
-                "title": "Extension for saved JSON:",
-                "default": ".json",
-                "format": "text",
-                "propertyOrder": 10,
-                "size":12,
-                "description": "JSON Editor stores a JSON file with this file extension"
-              },
-              "classlist": {
+                "extension4code": {
+                  "type": "string",
+                  "id": "/properties/settings/properties/extension4code",
+                  "title": "Extension for Generated Code:",
+                  "default": ".js",
+                  "format": "text",
+                  "propertyOrder": 10,
+      						"size":12,
+                  "description": "When ClassEditorUML generates code, it stores a generated file in the programming language '"+vProgLanguage+"' with this file extension"
+                },
+                "classlist": {
                     "type": "array",
                     //"id": "/properties/settings/properties/classlist",
                     "title": "Select List of Classes",
@@ -496,11 +446,11 @@ vDataJSON["class_schema"] = {
                         "type": "string",
                         "id": "/properties/settings/properties/classlist/items",
                         "title": "Class",
-                        "default": " ",
+                        "default": "",
                         "format": "text"
                     },
                     "default": [
-                        " ",
+                        "",
                         "Array",
                         "Boolean",
                         "Document",
@@ -651,4 +601,4 @@ vDataJSON["class_schema"] = {
             }
         }
     }
-};
+}

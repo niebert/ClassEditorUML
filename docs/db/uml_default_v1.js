@@ -11,7 +11,6 @@ vDataJSON["uml_default"]={
           "email": "",
           "created": getDateTime(),
           "modified": getDateTime(),
-          "debugheader": "no",
           "requirelist": []
       },
       "attributes": [],
@@ -19,7 +18,6 @@ vDataJSON["uml_default"]={
     },
     "settings":{
       "extension4code":".js",
-      "extension4json":"_uml.json",
       "localclasslist": [
           "LoadSaver",
           "LinkParam"
@@ -70,4 +68,4 @@ vDataJSON["uml_default"]={
           }
       ]
     }
-};
+}
