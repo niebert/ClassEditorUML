@@ -116,7 +116,7 @@ vJSON_UML.data = {
 }
 ```
 ## Update Editor and Watching Class Lists
-The list of classes for defining the type of attributes and parameters of methods can be extended by the user-defined activity (see `src/libs/classeditor.js`) 
+The list of classes for defining the type of attributes and parameters of methods can be extended by the user-defined activity (see `src/libs/classeditor.js`)
 
 ## Template Engine and Code Generation
 [HandleBars4Code]() is used as Template Engine for generating the code in `JSONEditor4Code`. The are currently two available templates in `ClassEditorUML`:
@@ -250,7 +250,7 @@ https://github.com/niebert/ClassEditorUML/tree/master/docs
 
 ## JSON to Schema Generator
 
-Used the following tool that creates a [JSON schema](http://json-schema.org/) for a provided JSON file. Used the given JSON file to create the JSON Schema with [JSON2schema.html](https://niebert.github.io/json-editor/plugins/json2schema.html).
+Used the following tool that creates a [JSON schema](http://json-schema.org/) for a provided JSON file. Used the given JSON file to create the JSON Schema with [JSON2Schema](https://niebert.github.io/JSON2Schema).
 
 ## Additional Modules created/used for this Repository
 Some code may be useful for other developers and so the following packages are create on GitHub and as NPM module:
@@ -258,10 +258,11 @@ Some code may be useful for other developers and so the following packages are c
 * [LoadSaverLS](https://www.github.com/niebert/LoadSaverLS) [NPM-Module](https://www.npmjs.com/package/loadsaverls) (ToDO)
 * [Handlebars4Code](https://www.github.com/niebert/Handlebars4Code) [NPM-Module](https://www.npmjs.com/package/handlebars4code)
 * [Javascript2UML](https://www.github.com/niebert/Javascript2UML) [NPM-Module](https://www.npmjs.com/package/javascript2uml)
+* [JSON2SChema](https://www.github.com/niebert/JSON2Schema) [Demo Link](https://niebert.github.io/JSON2Schema)
 
 ## Acknowledgement
 Special thanks to the following individual developers and teams of OpenSource JavaScript projects:
-* [HandleBars](http://handlebarsjs.com/) the code generation in Javascript was implemented
+* [HandleBars](http://handlebarsjs.com/) the code generation in Javascript was developed by Yehuda Katz.
 * [JSON-Editor](https://github.com/jdorn/json-editor) by Jeremy Dorn. The JSON Editor takes a JSON Schema and uses it to generate an HTML form. The JSON-Editor is partially used to edit JSON file of the [JavascriptClassCreator Project](https://niebert.github.io/JavascriptClassCreator) `JSCC`.
 The JSON-Editor of Jeremy Dorn has full support for JSON Schema version 3 and 4 and can integrate with several popular CSS frameworks (bootstrap, foundation, and jQueryUI). This would lead to major code reduction of `JSCC` . Refactoring of `JSCC` would make more use of the JSON-Editor features. Check out an interactive demo (demo.html): http://jeremydorn.com/json-editor/
 * Developer [Mihai Bazon](http://lisperator.net/) create UglifyJS, a great tool to handle and parse Javascript Code and minify the Javascript code (see [Source Code of UglifyJS](https://github.com/mishoo/UglifyJS2)).
