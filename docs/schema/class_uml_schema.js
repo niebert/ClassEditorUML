@@ -574,7 +574,7 @@ vDataJSON["class_schema"] = {
                     "items": {
                         "type": "object",
                         "id": "/properties/settings/properties/remoteclasslist/items",
-                        "title": "Base Class",
+                        "title": "Remote Class",
                         "headerTemplate": "{{self.name}}()",
                         "defaultProperties": [
                             "name",

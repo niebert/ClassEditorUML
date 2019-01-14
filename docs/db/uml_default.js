@@ -18,6 +18,7 @@ vDataJSON["uml_default"]={
       "methods": []
     },
     "settings":{
+      "umleditor": "https://niebert.github.io/ClassEditorUML",
       "extension4code":".js",
       "extension4json":"_uml.json",
       "localclasslist": [
