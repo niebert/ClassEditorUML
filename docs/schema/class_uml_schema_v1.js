@@ -8,7 +8,7 @@ vDataJSON["class_schema"] = {
               enum: [10,11,12,14,16,18,20,22,24,36,48,60,72,100],
               default: 24,
               options: {
-                // Override defaullt options
+                // Override default options
                 select2_options: {
                   width: 'off'
                 }

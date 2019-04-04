@@ -174,8 +174,21 @@ vDataJSON["umljs"] = {
             "RegularExp",
             "String"
         ],
-        "localclasslist": [],
-        "remoteclasslist": [],
+        "localclasslist": [
+          {
+            "name": "LinkParam",
+            "initvalue": "new LinkParam()",
+            "repo": "handlebars4code"
+          }
+
+        ],
+        "remoteclasslist": [
+          {
+            "name": "JSONEditor",
+            "initvalue": "new JSONEditor4Code()",
+            "repo": "jsoneditor4code"
+          }
+        ],
         "baseclasslist":  [
             {
               "name": "Array",
