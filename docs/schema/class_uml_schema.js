@@ -454,8 +454,9 @@ vDataJSON["class_schema"] = {
               "collapsed": true
             },
             "defaultProperties": [
-                "extension4code",
-                "classlist",
+              "extension4code",
+              "extension4json",
+              "classlist",
                 "localclasslist",
                 "remoteclasslist",
                 "baseclasslist",
@@ -478,7 +479,7 @@ vDataJSON["class_schema"] = {
                 "title": "Extension for saved JSON:",
                 "default": ".json",
                 "format": "text",
-                "propertyOrder": 10,
+                "propertyOrder": 12,
                 "size":12,
                 "description": "JSON Editor stores a JSON file with this file extension"
               },
