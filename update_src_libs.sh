@@ -1,4 +1,8 @@
 #!/bin/sh
+wget https://niebert.github.io/icons4menu/wget_icons.sh -O ./docs/wget_icons.sh
+
+wget https://niebert.github.io/jsoneditor4code/js/jsoneditor4code.js -O ./docs/js/jsoneditor4code.js
+
 wget https://raw.githubusercontent.com/niebert/json-editor/master/dist/jsoneditor.min.js -O ./src/libs/jsoneditor.min.js
 wget https://raw.githubusercontent.com/niebert/json-editor/master/dist/jsoneditor.js -O ./src/libs/jsoneditor.js
 wget https://raw.githubusercontent.com/niebert/LinkParam/master/dist/linkparam.js -O ./src/libs/linkparam.js
