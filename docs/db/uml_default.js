@@ -1,4 +1,4 @@
-vDataJSON["uml_default"]={
+vDataJSON.uml_default = {
     "data":{
       "classname": "MyClass",
       "superclassname": "",
@@ -18,10 +18,15 @@ vDataJSON["uml_default"]={
       "methods": []
     },
     "settings":{
-      "umleditor": "https://niebert.github.io/ClassEditorUML",
-      "extension4code":".js",
+       "umleditor": "https://niebert.github.io/ClassEditorUML",
+       "extension4code":".js",
       "extension4json":"_uml.json",
       "localclasslist": [
+        {
+          "name": "LoadFile4DOM",
+          "initvalue": "new LoadFile4DOM()",
+          "repo": "loadfile4dom"
+        },
         {
           "name": "LinkParam",
           "initvalue": "new LinkParam()",
@@ -31,8 +36,8 @@ vDataJSON["uml_default"]={
       "remoteclasslist": [
         {
           "name": "JSONEditor",
-          "initvalue": "new JSONEditor4Code()",
-          "repo": "jsoneditor4code"
+          "initvalue": "new JSONEditor()",
+          "repo": "jsoneditor"
         }
       ],
       "baseclasslist": [

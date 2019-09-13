@@ -12,7 +12,7 @@ vDataJSON["class_schema"] = {
           "title": "Comment:",
           "type": "string",
           "format": "textarea",
-          "default": " "
+          "default": ""
       },
       "visibility": {
           "title": "Visibility",
@@ -454,9 +454,9 @@ vDataJSON["class_schema"] = {
               "collapsed": true
             },
             "defaultProperties": [
-                "extension4code",
-                "extension4json",
-                "classlist",
+              "extension4code",
+              "extension4json",
+              "classlist",
                 "localclasslist",
                 "remoteclasslist",
                 "baseclasslist",

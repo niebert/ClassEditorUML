@@ -3,31 +3,35 @@
   <head>
     <meta charset="utf-8" />
     <title>Class Editor UML</title>
-    <!--
-    <link href="jquery/jquery-ui.css" rel="stylesheet">
-    -->
-    <!-- Bootstrap Core CSS -->
-     <link href="css/bootstrap.min.css" rel="stylesheet">
-     <!-- Font-Awesome CSS
-     <link href="css/font-awesome.min.css" rel="stylesheet">
-     -->
-     <!-- ACE Editor -->
-     <script src="ace/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
-     <!-- JSON Editor for Code Generation -->
-     <script src="js/jsoneditor4code.js"></script>
+     <!-- Bootstrap Core CSS -->
+      <link href="css/bootstrap.min.css" rel="stylesheet">
+      <!-- ACE Editor -->
+      <script src="ace/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+      <!-- JQuery -->
+      <script src="js/jquery.js" type="text/javascript"></script>
+      <!-- BootsTrap -->
+      <script src="js/bootstrap.js" type="text/javascript"></script>
+      <!-- JSON Editor for Code Generation -->
+      <script src="js/jsoneditor4code.js"></script>
+      <script>
+         // ACE Editor is used in JSONEditor for Code Editor
+         var vProgLanguage = "javascript";
+      </script>
 
-  <script language="javascript">
-   // vDataJSON is the main JSON storage for the privacy friendly WebApp
-   // File Loaded into vDataJSON by script tag
-   var vDataJSON = {};
-   vDataJSON.tpl = {};
-   /* TEMPLATES
-   vDataJSON.tpl contains the following templates:
-     * vDataJSON.tpl["javascript"] File: tpl/javascript_tpl.js
-       for creating the the Source Code for the UML class in javascript
-     * vDataJSON.tpl["docu4github"] File: tpl/docu4github_tpl.js
-       for creating the GitHub documentation from the UML source of the class
-   */
+       <title>JSONEditor4Code</title>
+       <meta http-equiv="author" content="Engelbert Niehaus">
+   <script language="javascript">
+    // vDataJSON is the main JSON storage for the privacy friendly WebApp
+    // File Loaded into vDataJSON by script tag
+    var vDataJSON = {};
+    vDataJSON.tpl = {};
+    /* TEMPLATES
+    vDataJSON.tpl contains the following templates:
+      * vDataJSON.tpl["javascript"] File: tpl/javascript_tpl.js
+        for creating the the Source Code for the UML class in javascript
+      * vDataJSON.tpl["docu4github"] File: tpl/docu4github_tpl.js
+        for creating the GitHub documentation from the UML source of the class
+    */
 
     vDataJSON.out = {};
     /* HANDLEBARS COMPILERS
@@ -40,68 +44,70 @@
         This compiler is used in the compileCode() method
         var mySource = vJSONEditor.compileCode.docu4github(pJSON)
     */
-    var vFileBase = "class";
-    // ACE Editor is used in JSONEditor for Code Editor
-    var vProgLanguage = "javascript";
-    /*
-    Defined the Syntax Highlighting for ACE Editor - Used in Schema "schema/class_schema.js"
-      * set the default CSS theme and icon library globally
-      * see https://www.github.com/niebert/json-editor for further details
-    */
-    //---- Initialize Editor with JSON --------------
-    // The JSON data is defined in file "db/umljs.js"
-    var vJSON = vDataJSON["umljs"];
-    //---- Create one JSON Editor for Code ---------
-    if (JSONEditor4Code) {
-      var vJSONEditor = new JSONEditor4Code();
-      vJSONEditor.initDoc(document);
-    }
-    /*
-      "editor_id": DOM id where the editor will be injected,
-    */
-    var vOptions = {
-            "editor_var": "vJSONEditor", // Variable in index.html that stores the JSONeditor
-            "editor_id": "editor_holder", // ID of DOM element, that stores the editor.
-            "validator_id":"valid_indicator",  // ID of DOM, that contains the validator result "valid" or "not valid"
-            "filejson_id" : "fileJSON", // ID of DOM element that contains the JSON file upload
-            "filename_id" : "display_filename", // innerHTML for DOM element to display the loaded filename
-            "filename_key" : "data.classname",  // key that stores the basename for the filename
-            "out_json": "tOutJSON",
-            "out_code": "tOutput",
-            "out_errors": "tErrors"
-    };
+   </script>
+ <script language="javascript">
+     var vFileBase = "class";
+     /*
+     Defined the Syntax Highlighting for ACE Editor - Used in Schema "schema/class_schema.js"
+       * set the default CSS theme and icon library globally
+       * see https://www.github.com/niebert/json-editor for further details
+     */
+     //---- Initialize Editor with JSON --------------
+     // The JSON data is defined in file "db/umljs.js"
+     var vJSON = vDataJSON["umljs"];
+     //---- Create one JSON Editor for Code ---------
+     if (JSONEditor4Code) {
+       var vJSONEditor = new JSONEditor4Code();
+       vJSONEditor.initDoc(document);
+     }
+     /*
+       "editor_id": DOM id where the editor will be injected,
+     */
+     var vOptions = {
+             "editor_var": "vJSONEditor", // Variable in index.html that stores the JSONeditor
+             "editor_id": "editor_holder", // ID of DOM element, that stores the editor.
+             "validator_id":"valid_indicator",  // ID of DOM, that contains the validator result "valid" or "not valid"
+             "filejson_id" : "fileJSON", // ID of DOM element that contains the JSON file upload
+             "filename_id" : "display_filename", // innerHTML for DOM element to display the loaded filename
+             "filename_key" : "data.classname",  // key that stores the basename for the filename
+             "out_json": "tOutJSON",
+             "out_code": "tOutput",
+             "out_errors": "tErrors"
+     };
 
-    //console.log("Edit JSON:\n"+JSON.stringify(vJSON,null,3));
-    // vJSONEditor.init(...) will be called at very end of this file
-    </script>
-    <!-- ### UML Default File  #####################
-    used for initializing afte delete class command
-    -->
-    <script src="db/uml_default.js"></script>
-    <script>
-    // Delete JSON load the following default JSON into JSON Editor for Code
-    var vDefaultJSON = vDataJSON["uml_default"]; //see file "db/uml_default.js"
-    //console.log("vDefaultJSON:"+JSON.stringify(vDefaultJSON,null,4));
-    </script>
-    <!-- ### UML Loaded File  ##################### -->
-    <script src="db/umljs.js"></script>
-    <!-- ### HANDLEBARS TEMPLATE  #####################
-    Template ID: "javascript"
-    Template: vDataJSON["tpl"]["javascript"]
-    -->
-    <script src="tpl/javascript_tpl.js"></script>
-    <!-- ### COMPILE HANDLEBARS TEMPLATES  ############
-    Template ID: "docu4github"
-    Template: vDataJSON["tpl"]["docu4github"]
-    -->
-    <script src="tpl/docu4github_tpl.js"></script>
-    <!-- ### SCHEMA LOADER ############################
-    script tag stores the JSON schema in
-    vDataJSON["class_schema"]
-    <script src="schema/settings_schema.js"></script>
-    -->
-    <script src="schema/class_uml_schema.js"></script>
-    <!-- ############################################## -->
+     //console.log("Edit JSON:\n"+JSON.stringify(vJSON,null,3));
+     // vJSONEditor.init(...) will be called at very end of this file
+     // var vID4JSON = "umljs"; //see file "db/uml_default.js"
+     //var vDefaultID4JSON = "uml_default"; //see file "db/uml_default.js"
+
+   </script>
+   <!-- ### UML Default File  #####################
+   used for initializing afte delete class command -->
+   <script src="db/uml_default.js"></script>
+   <!-- ### UML Loaded File  ##################### -->
+   <script src="db/umljs.js"></script>
+   <!-- ### HANDLEBARS TEMPLATE  #####################
+   Template ID: "javascript"
+   Template: vDataJSON["tpl"]["javascript"]
+   -->
+   <script src="tpl/javascript_tpl.js"></script>
+   <!-- ### COMPILE HANDLEBARS TEMPLATES  ############
+   Template ID: "docu4github"
+   Template: vDataJSON["tpl"]["docu4github"]
+   -->
+   <script src="tpl/docu4github_tpl.js"></script>
+   <!-- ### SCHEMA LOADER ############################
+   script tag stores the JSON schema in
+   vDataJSON.tpl.["class_schema"]
+   <script src="schema/class_uml_schema.js"></script>
+   -->
+   <script src="schema/class_uml_schema.js"></script>
+   <!-- ############################################## -->
+   <script>
+     // Delete JSON load the following default-JSON into JSON Editor
+     var vDefaultJSON = vDataJSON.uml_default; //see file "db/uml_default.js"
+     var vJSON = vDataJSON.umljs; //see file "db/umljs.js"
+   </script>
   </head>
   <body  style="margin:20px">
   	<div>
