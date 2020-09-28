@@ -33,7 +33,7 @@ https://niebert.github.io/ClassEditorUML
 
 ## Files, Folders and Structure of Repository
 The following enumeration explains the structure of the repository and folders.
-* `dist/` folder contains all
+* `dist/` folder contains the used `jsoneditor4menu` and the adaptions of the JSON editor for an UML editor with `class_editor_uml.js`.
 * `docs/` folder contains all the web content that you can access via https://niebert.github.io/ClassEditorUML
   * `docs/ace` folder contains files for the editor ACE, that is used in JSON-Editor to edit source code.
   * `docs/db` folder contains JSON database which initializes the JSON-Editor with the default JSON data. If the user saves the file, the current JSON data is stored in the LocalStorage of the browser.
@@ -46,7 +46,7 @@ The following enumeration explains the structure of the repository and folders.
   * `docs/index.html` files starts the JSON-Editor  [ClassEditorUML](https://niebert.github.io/ClassEditorUML) also offline, when the repository was [downloaded](https://github.com/niebert/ClassEditorUML/archive/master.zip) to your device and started locally in your browser.
 * `jscc/` folder contains the [JavascriptClassCreator](https://niebert.github.io/JavascriptClassCreator) files that are used to create object-oriented Javascript class files.  
 * `src/` folder contains the file `main.js` and other source files in the future, to create a the library in the folder `dist/` with `browsersify` and `watchify`.
-* `update_libs.sh` is a shell script that works on Linux and MAcOSX to perform some library updates from the web.
+* `update_libs.sh` is a shell script that works on Linux and MacOSX to perform some library updates from the web.
 
 ## Structure of the UML JSON
 
