@@ -28,6 +28,8 @@ vDataJSON.tpl.javascript = `
 {{#ifcond data.reposinfo.require_classes "!=" "yes"}}
    SCRIPT-Tag:  src="js/{{filename classname}}.js"
 {{/ifcond}}
+*/
+
 {{#ifcond data.reposinfo.require_classes "==" "yes"}}
 {{#ifcond data.superclassname "!=" ""}}
 {{#ifcond data.superclassname "!=" " "}}
