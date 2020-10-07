@@ -3135,7 +3135,7 @@ exports.SourceNode = require('./lib/source-node').SourceNode;
 /* ---------------------------------------
  Exported Module Variable: JSONEditor4Code
  Package:  jsoneditor4code
- Version:  0.9.8  Date: 2020/10/07 15:12:27
+ Version:  0.9.8  Date: 2020/10/07 15:14:16
  Homepage: https://niebert.github.io/ClassEditorUML
  Author:   Engelbert Niehaus
  License:  MIT
