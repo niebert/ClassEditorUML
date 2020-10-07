@@ -1,7 +1,7 @@
 /* ---------------------------------------
  Exported Module Variable: JSONEditor4Code
  Package:  jsoneditor4code
- Version:  0.9.9  Date: 2020/10/07 15:19:40
+ Version:  0.9.10  Date: 2020/10/07 15:20:47
  Homepage: https://niebert.github.io/ClassEditorUML
  Author:   Engelbert Niehaus
  License:  MIT
