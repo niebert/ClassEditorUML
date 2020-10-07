@@ -3660,7 +3660,7 @@ define(function (require, exports, module) {
 /* ---------------------------------------
  Exported Module Variable: JSONEditor4Code
  Package:  jsoneditor4code
- Version:  0.9.3  Date: 2020/10/07 13:26:11
+ Version:  0.9.4  Date: 2020/10/07 14:29:34
  Homepage: https://niebert.github.io/ClassEditorUML
  Author:   Engelbert Niehaus
  License:  MIT
