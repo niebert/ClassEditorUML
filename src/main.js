@@ -1,7 +1,7 @@
 /* ---------------------------------------
  Exported Module Variable: JSONEditor4Code
  Package:  jsoneditor4code
- Version:  0.9.8  Date: 2020/10/07 15:14:16
+ Version:  0.9.8  Date: 2020/10/07 15:17:18
  Homepage: https://niebert.github.io/ClassEditorUML
  Author:   Engelbert Niehaus
  License:  MIT
@@ -3090,11 +3090,11 @@ var saveAs=saveAs||function(e){"use strict";if(typeof e==="undefined"||typeof na
 /* ---------------------------------------
  Exported Module Variable: Handlebars4Code
  Package:  handlebars4code
- Version:  1.2.36  Date: 2020/10/07 8:22:20
+ Version:  1.2.38  Date: 2020/10/07 14:51:21
  Homepage: https://gitlab.com/niehausbert/handlebars4code#readme
  Author:   Engelbert Niehaus
  License:  MIT
- Date:     2020/10/07 8:22:20
+ Date:     2020/10/07 14:51:21
  Require Module with:
     const Handlebars4Code = require('handlebars4code');
  JSHint: installation with 'npm install jshint -g'
