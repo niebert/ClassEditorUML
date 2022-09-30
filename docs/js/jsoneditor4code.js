@@ -15285,6 +15285,7 @@ function JSONEditor4Code () {
         }
       	console.log("JSON-DB for UML class '"+getClassName(this.aJSON)+"' not saved - data deleted!");
         this.aEditor.setValue(this.aDefaultJSON); // defined e.g. in /db/uml_default.js
+        this.aJSON = this.aDefaultJSON;
     } else {
         console.log("initialize JSON-DB cancelled");
     }
