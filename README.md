@@ -137,7 +137,7 @@ The following section explains how to access each item by index in the Handlebar
 
 ### each Iteration
 #### JSON
-```json
+```javascript
 var myclasslist = [
   ["first_var","first_type"],
   ["second_var","seconf_type"],
