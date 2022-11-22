@@ -108,11 +108,44 @@
        vJSONEditor.save4Template(vExportSelectID,vExportTypeList[vExportSelectID].extension,vExportTypeList[vExportSelectID].comment)
      }
 
+	 function removeComments(string){
+         	out_arr =[];
+     		var arr = string.split("\n");
+     		for (var i = 0; i < arr.length; i++) {
+     			if (arr[i].indexOf("console.log(\"") >= 0) {
+     				arr[i] = "";
+     			} else {
+     				out_arr.push(arr[i]);
+     			}
+     		}
+     		string = out_arr.join("\n");
+     		//----- remove empty else-block ----
+     		string = string.replace(/^else((?:.|\s)*){((?:.|\s)*)}/g,"");
+     		string = string.replace(/http:\/\//g,"___HTTP_URL_PREFIX___");
+     		string = string.replace(/https:\/\//g,"___HTTPS_URL_PREFIX___");
+     		string = string.replace(/\/\/W3C\/\/DTD/g,"___W3C_DTD_PREFIX___");
+     		string = string.replace(/\/\/EN/gi,"___EN_LANG_PREFIX___");
+
+     		string = string.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g,'').trim();//Strip comments
+
+     		string = string.replace(/___HTTP_URL_PREFIX___/g,"http://");
+     		string = string.replace(/___HTTPS_URL_PREFIX___/g,"http://");
+     		string = string.replace(/___W3C_DTD_PREFIX___/g,"//W3C//DTD");
+     		string = string.replace(/___EN_LANG_PREFIX___/g,"//EN");
+     		// remove multiple empty line by a single empty line
+     		string = string.replace(/^\s*[\r\n]\s*[\r\n]/gm,"\n");
+
+     		return string
+     }
+
      function previewCode4Selector() {
        console.log("Preview for '"+vExportSelectID+"'");
        var vContent = vJSONEditor.getOutput4Template(vExportSelectID);
        //alert(vContent);
        var vNode = document.getElementById("ta_preview_code");
+       if (vExportSelectID == "javascript0docu") {
+           vContent = removeComments(vContent);
+       }
        if (vNode) {
          vNode.value = vContent;
       } else {
